@@ -34,7 +34,7 @@ html {
   -webkit-transition-duration : 0.7s;
 }
 
-.slide.image {
+.slide.image, .slide.video {
   text-align: center;
 }
 
@@ -47,5 +47,6 @@ html {
 }
 
 .slide.video video {
-  min-width: 100%;
+  width: 100%;
+  height: 100%;
 }
