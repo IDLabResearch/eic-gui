@@ -4,14 +4,14 @@
   <meta charset='utf-8'>
   <title>Everything Is Connected — Slide Presenter demo</title>
   <script>
-    function startApplication($, SlidePresenter, TitleSlideGenerator, TopicSlideGenerator, CombinedSlideGenerator) {
+    function startApplication($, SlidePresenter, TitleSlideGenerator, GoogleImageSlideGenerator, CombinedSlideGenerator) {
       var generators = new CombinedSlideGenerator();
       var presenter = new SlidePresenter('#main .slides', generators);
       $('#start').click(function() {
         var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
           generators.addGenerator(new TitleSlideGenerator(topic));
-          generators.addGenerator(new TopicSlideGenerator(topic));
+          generators.addGenerator(new GoogleImageSlideGenerator(topic));
         });
         presenter.start();
       });

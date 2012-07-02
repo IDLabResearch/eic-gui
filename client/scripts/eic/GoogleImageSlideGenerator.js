@@ -1,13 +1,13 @@
 define(['lib/jquery'], function ($) {
   "use strict";
 
-  /** Generator for images slides on a specified topic. */
-  function TopicSlideGenerator(topic) {
+  /** Generator of images slides from Google Image search results. */
+  function GoogleImageSlideGenerator(topic) {
     this.topic = topic;
     this.slides = [];
   }
 
-  TopicSlideGenerator.prototype = {
+  GoogleImageSlideGenerator.prototype = {
     /** Checks whether any slides are left. */
     hasNext: function () {
       return this.slides.length > 0;
@@ -47,5 +47,5 @@ define(['lib/jquery'], function ($) {
     },
   };
 
-  return TopicSlideGenerator;
+  return GoogleImageSlideGenerator;
 });
