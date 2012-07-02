@@ -13,6 +13,7 @@
   var scripts = [
     'lib/jquery',
     'eic/TitleSlideGenerator',
+    'eic/CombinedSlideGenerator',
   ];
 
   requirejs(scripts, function () {
