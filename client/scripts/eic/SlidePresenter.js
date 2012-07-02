@@ -8,6 +8,9 @@ define(['lib/jquery'], function ($) {
 
   SlidePresenter.prototype = {
     start: function () {
+      if (this.started)
+        return;
+
       var self = this;
 
       function showNext() {
@@ -23,6 +26,7 @@ define(['lib/jquery'], function ($) {
 
       window.setInterval(showNext, 1000);
       showNext();
+      this.started = true;
     }
   };
 
