@@ -1,16 +1,19 @@
 define(['lib/jquery'], function ($) {
   "use strict";
 
+  /** Generator for images slides on a specified topic. */
   function TopicSlideGenerator(topic) {
     this.topic = topic;
     this.slides = [];
   }
 
   TopicSlideGenerator.prototype = {
+    /** Checks whether any slides are left. */
     hasNext: function () {
       return this.slides.length > 0;
     },
 
+    /** Fetches a list of images about the topic. */
     init: function () {
       if (this.inited)
         return;
@@ -30,10 +33,12 @@ define(['lib/jquery'], function ($) {
       this.inited = true;
     },
 
+    /** Advances to the next slide. */
     next: function () {
       return this.slides.shift();
     },
 
+    /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
           $slide = $('<div>').addClass('slide image')
