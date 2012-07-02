@@ -36,3 +36,7 @@ html {
 .slide.image {
   text-align: center;
 }
+
+.slide.title {
+  padding: 1em;
+}
