@@ -1,5 +1,7 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'util/DelayedEventTriggerer'], function ($, delayedEventTriggerer) {
   "use strict";
+
+  var defaultDuration = 1000;
 
   /** Generator of images slides from Google Image search results. */
   function GoogleImageSlideGenerator(topic) {
@@ -42,7 +44,8 @@ define(['lib/jquery'], function ($) {
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
           $slide = $('<div>').addClass('slide image')
-                             .append($image);
+                             .append($image)
+                             .one('start', delayedEventTriggerer('stop', defaultDuration));
       this.slides.push($slide);
     },
   };

@@ -12,20 +12,21 @@ define(['lib/jquery'], function ($) {
         return;
 
       var self = this;
-
       function showNext() {
         if (self.generator.hasNext()) {
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
           self.$container.children().addClass('transition-out');
-          // add the next slide
-          self.$container.prepend(self.generator.next());
+          // add the next slide and start it
+          var $nextSlide = self.generator.next();
+          self.$container.prepend($nextSlide);
+          $nextSlide.trigger('start')
+                    .one('stop', showNext);
         }
       }
-
-      window.setInterval(showNext, 1000);
       showNext();
+
       this.started = true;
     }
   };

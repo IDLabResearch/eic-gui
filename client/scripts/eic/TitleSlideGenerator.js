@@ -1,5 +1,7 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'util/DelayedEventTriggerer'], function ($, delayedEventTriggerer) {
   "use strict";
+
+  var defaultDuration = 1000;
 
   /** Generator that creates title slides */
   function TitleSlideGenerator(title) {
@@ -21,7 +23,8 @@ define(['lib/jquery'], function ($) {
 
       var $title = $('<h1>').text(this.title),
           $slide = $('<div>').addClass('slide title')
-                             .append($title);
+                             .append($title)
+                             .one('start', delayedEventTriggerer('stop', defaultDuration));
 
       this.done = true;
 
