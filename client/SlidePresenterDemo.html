@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Everything Is Connected — Slide Presenter demo</title>
+  <script>
+    function startApplication($, TitleSlideGenerator) {
+      var $slides = $('#main .slides');
+      var generator = new TitleSlideGenerator("Example presentation");
+      while(generator.hasNext()) {
+        $slides.append(generator.next());
+      }
+    }
+  </script>
+  <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
+  <link rel="stylesheet" href="stylesheets/main.css" />
+</head>
+<body>
+  <div id="main">
+    <div class="slides">
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+* {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html {
+  width: 100%;
+  margin-top: 2em;
+}
+
+#main {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.slides {
+  width: 800px;
+  height: 600px;
+  border: 1px solid;
+}
