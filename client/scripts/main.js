@@ -11,10 +11,7 @@
   
   var scripts = [
     'lib/jquery',
-    'eic/SlidePresenter',
-    'eic/TitleSlideGenerator',
-    'eic/GoogleImageSlideGenerator',
-    'eic/CombinedSlideGenerator',
+    'eic/all',
   ];
 
   requirejs(scripts, function () {
