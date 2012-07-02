@@ -12,6 +12,7 @@
   
   var scripts = [
     'lib/jquery',
+    'eic/SlidePresenter',
     'eic/TitleSlideGenerator',
     'eic/TopicSlideGenerator',
     'eic/CombinedSlideGenerator',
