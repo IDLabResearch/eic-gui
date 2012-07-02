@@ -16,7 +16,10 @@ define(['lib/jquery'], function ($) {
         return;
       var self = this;
       $.ajax('https://ajax.googleapis.com/ajax/services/search/images?v=1.0', {
-        data: { q: this.topic, },
+        data: {
+          q: this.topic,
+          imgsz: 'xxlarge',
+        },
         dataType: 'jsonp',
       })
       .success(function (response) {
