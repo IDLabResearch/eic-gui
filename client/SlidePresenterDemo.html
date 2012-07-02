@@ -13,8 +13,12 @@
       var $slides = $('#main .slides');
       function showNext() {
         if(generator.hasNext()) {
-          $slides.empty();
-          $slides.append(generator.next());
+          // remove children that were transitioning out
+          $slides.children('.transition-out').remove();
+          // start the transition of other children
+          $slides.children().addClass('transition-out');
+          // add the next slide
+          $slides.prepend(generator.next());
         }
       }
       window.setInterval(showNext, 1000);

@@ -19,6 +19,19 @@ html {
   overflow: hidden;
 }
 
+.slide {
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.slide.transition-out {
+  opacity : 0;
+  -webkit-transition-property : opacity;
+  -webkit-transition-duration : 0.7s;
+}
+
 .slide.image {
   text-align: center;
 }
