@@ -8,7 +8,9 @@
       var generator = new CombinedSlideGenerator();
       for (var i = 1; i <= 5; i ++)
         generator.addGenerator(new TitleSlideGenerator("Example " + i));
-      generator.addGenerator(new TopicSlideGenerator('stones'));
+      ['stones', 'trees', 'ocean'].forEach(function (topic) {
+        generator.addGenerator(new TopicSlideGenerator(topic));
+      });
       
       var presenter = new SlidePresenter('#main .slides', generator);
       presenter.start();
