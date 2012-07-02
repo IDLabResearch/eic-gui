@@ -6,7 +6,7 @@ define(['lib/jquery'], function ($) {
     this.generators = [];
     if (generators)
       for (var i = 0; i < generators.length; i++)
-        this.addGenerator(generators[i]);
+        this.addGenerator(generators[i], true);
   }
 
   CombinedSlideGenerator.prototype = {
@@ -35,8 +35,9 @@ define(['lib/jquery'], function ($) {
     },
     
     /** Add a child generator add the end of the list. */
-    addGenerator: function (generator) {
-      generator.init();
+    addGenerator: function (generator, suppressInit) {
+      if (!suppressInit)
+        generator.init();
       this.generators.push(generator);
     }
   };
