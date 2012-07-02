@@ -3,6 +3,9 @@ define(['lib/jquery'], function ($) {
 
   /** Generator that provides slides from child generators */
   function CombinedSlideGenerator(generators) {
+    var $this = $(this);
+    this.triggerNewSlides = function () { $this.trigger('newSlides'); };
+
     this.generators = [];
     if (generators)
       for (var i = 0; i < generators.length; i++)
@@ -36,9 +39,16 @@ define(['lib/jquery'], function ($) {
     
     /** Add a child generator add the end of the list. */
     addGenerator: function (generator, suppressInit) {
+      // initialize the generator and add it to the list
       if (!suppressInit)
         generator.init();
       this.generators.push(generator);
+
+      // signal the arrival of new slides
+      var $this = this.$this;
+      $(generator).bind('newSlides', this.triggerNewSlides);
+      if (generator.hasNext())
+        this.triggerNewSlides();
     }
   };
   

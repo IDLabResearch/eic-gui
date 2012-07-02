@@ -13,6 +13,7 @@ define(['lib/jquery'], function ($) {
 
       var self = this;
       function showNext() {
+        // if slides are available, show them
         if (self.generator.hasNext()) {
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
@@ -23,6 +24,10 @@ define(['lib/jquery'], function ($) {
           self.$container.prepend($nextSlide);
           $nextSlide.trigger('start')
                     .one('stop', showNext);
+        }
+        // else, wait for new slides to arrive
+        else {
+          $(self.generator).one('newSlides', showNext);
         }
       }
       showNext();

@@ -5,6 +5,7 @@ define(['lib/jquery', 'util/DelayedEventTriggerer'], function ($, delayedEventTr
 
   /** Generator of images slides from Google Image search results. */
   function GoogleImageSlideGenerator(topic) {
+    this.$this = $(this);
     this.topic = topic;
     this.slides = [];
   }
@@ -47,6 +48,7 @@ define(['lib/jquery', 'util/DelayedEventTriggerer'], function ($, delayedEventTr
                              .append($image)
                              .one('start', delayedEventTriggerer('stop', defaultDuration));
       this.slides.push($slide);
+      this.$this.trigger('newSlides');
     },
   };
 
