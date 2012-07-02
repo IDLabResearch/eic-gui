@@ -4,15 +4,21 @@
   <meta charset='utf-8'>
   <title>Everything Is Connected — Slide Presenter demo</title>
   <script>
-    function startApplication($, TitleSlideGenerator, CombinedSlideGenerator) {
+    function startApplication($, TitleSlideGenerator, TopicSlideGenerator, CombinedSlideGenerator) {
       var generator = new CombinedSlideGenerator();
       for (var i = 1; i <= 5; i ++)
         generator.addGenerator(new TitleSlideGenerator("Example " + i));
+      generator.addGenerator(new TopicSlideGenerator('stones'));
       
       var $slides = $('#main .slides');
-      while(generator.hasNext()) {
-        $slides.append(generator.next());
+      function showNext() {
+        if(generator.hasNext()) {
+          $slides.empty();
+          $slides.append(generator.next());
+        }
       }
+      window.setInterval(showNext, 1000);
+      showNext();
     }
   </script>
   <script data-main="scripts/main" src="scripts/lib/require.js" async></script>

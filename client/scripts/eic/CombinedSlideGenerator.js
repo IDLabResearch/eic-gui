@@ -13,17 +13,25 @@ define(['lib/jquery'], function ($) {
       return this.generators.some(function (g) { return g.hasNext(); });
     },
 
+    init: function () {
+      if (!this.inited) {
+        this.generators.each(function (g) { g.init(); });
+        this.inited = true;
+      }
+    },
+
     next: function () {
-      var generator = this.generators[0];
       while (this.generators.length) {
+        var generator = this.generators[0];
         if (generator.hasNext())
           return generator.next();
         else
-          generator = this.generators.shift();
+          this.generators.shift();
       }
     },
     
     addGenerator: function (generator) {
+      generator.init();
       this.generators.push(generator);
     }
   };

@@ -10,6 +10,8 @@ define(['lib/jquery'], function ($) {
       return this.done !== true;
     },
 
+    init: function () {},
+
     next: function () {
       if (!this.hasNext())
         return;
