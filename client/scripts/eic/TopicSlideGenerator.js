@@ -12,7 +12,7 @@ define(['lib/jquery'], function ($) {
     },
 
     init: function () {
-      if(this.inited)
+      if (this.inited)
         return;
       var self = this;
       $.ajax('https://ajax.googleapis.com/ajax/services/search/images?v=1.0', {
