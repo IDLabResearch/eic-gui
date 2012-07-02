@@ -37,9 +37,23 @@
       next() : Slide\\
     }
   \umlclass[x=5,y=-3]{Slide}{}{}
+  \umlclass[x=11,y=2]{CombinedSlideGenerator}{
+      generators : SlideGenerator[]
+    }{
+      addGenerator(Generator) : void\\
+    }
+  \umlclass[x=11,y=0]{TitleSlideGenerator}{
+      generators : SlideGenerator[]\\
+    }{}
+  \umlclass[x=11,y=-2]{TopicSlideGenerator}{
+      topic : URI\\
+    }{}
 
   \umluniaggreg[mult1=1,mult2=1]{SlidePresenter}{SlideGenerator}
   \umlunicompo[mult1=*,mult2=1]{SlideGenerator}{Slide}
+  \umlinherit[geometry=-|-]{CombinedSlideGenerator}{SlideGenerator}
+  \umlinherit{TitleSlideGenerator}{SlideGenerator}
+  \umlinherit[geometry=-|-]{TopicSlideGenerator}{SlideGenerator}
 \end{tikzpicture}
 
 \end{document}
