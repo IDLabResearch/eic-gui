@@ -4,9 +4,8 @@
   requirejs.config({
     baseUrl: 'scripts',
     shim: {
-      'lib/jquery': {
-        exports: 'jQuery',
-      }
+      'lib/jquery': { exports: 'jQuery' },
+      'lib/jvent': { exports: 'jvent' },
     },
   });
   

@@ -27,7 +27,7 @@ define(['lib/jquery'], function ($) {
         }
         // else, wait for new slides to arrive
         else {
-          $(self.generator).one('newSlides', showNext);
+          self.generator.once('newSlides', showNext);
         }
       }
       showNext();

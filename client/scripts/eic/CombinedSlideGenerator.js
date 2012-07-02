@@ -1,10 +1,10 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
   "use strict";
 
   /** Generator that provides slides from child generators */
   function CombinedSlideGenerator(generators) {
-    var $this = $(this);
-    this.triggerNewSlides = function () { $this.trigger('newSlides'); };
+    EventEmitter.call(this);
+    this.emitNewSlidesEvent = $.proxy(function () { this.emit('newSlides'); }, this);
 
     this.generators = [];
     if (generators)
@@ -45,10 +45,9 @@ define(['lib/jquery'], function ($) {
       this.generators.push(generator);
 
       // signal the arrival of new slides
-      var $this = this.$this;
-      $(generator).bind('newSlides', this.triggerNewSlides);
+      generator.on('newSlides', this.emitNewSlidesEvent);
       if (generator.hasNext())
-        this.triggerNewSlides();
+        this.emitNewSlidesEvent();
     }
   };
   

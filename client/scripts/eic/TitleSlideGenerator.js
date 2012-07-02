@@ -1,10 +1,12 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer'], function ($, delayedEventTriggerer) {
+define(['lib/jquery', 'util/DelayedEventTriggerer', 'lib/jvent'],
+function ($, delayedEventTriggerer, EventEmitter) {
   "use strict";
 
   var defaultDuration = 1000;
 
   /** Generator that creates title slides */
   function TitleSlideGenerator(title) {
+    EventEmitter.call(this);
     this.title = title;
   }
 
