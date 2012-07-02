@@ -18,3 +18,7 @@ html {
   border: 1px solid;
   overflow: hidden;
 }
+
+.slide.image {
+  text-align: center;
+}
