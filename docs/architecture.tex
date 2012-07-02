@@ -1,0 +1,45 @@
+\documentclass[a4paper]{report}
+
+% Input format
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Page setup
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+% Fonts and typography
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage[tracking,kerning,spacing]{microtype}
+
+% Drawings
+\usepackage{tikz}
+\usepackage{tikz-uml}
+
+\title{Everything Is Connected: Architecture}
+\author{Multimedia Lab — {\scshape ibbt} / Ghent University}
+\date{}
+
+\begin{document}
+\maketitle
+
+\chapter{{\scshape uml} diagrams}
+\section{Client}
+\begin{tikzpicture}
+  \umlclass[x=0,y=0]{SlidePresenter}{
+      generator : SlideGenerator\\
+    }{
+      start() : void\\
+    }
+  \umlclass[x=5,y=0]{SlideGenerator}{
+    }{
+      hasNext() : bool\\
+      next() : Slide\\
+    }
+  \umlclass[x=5,y=-3]{Slide}{}{}
+
+  \umluniaggreg[mult1=1,mult2=1]{SlidePresenter}{SlideGenerator}
+  \umlunicompo[mult1=*,mult2=1]{SlideGenerator}{Slide}
+\end{tikzpicture}
+
+\end{document}
