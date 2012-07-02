@@ -5,6 +5,7 @@
     './GoogleImageSlideGenerator',
     './SlidePresenter',
     './TitleSlideGenerator',
+    './VideoSlideGenerator',
   ];
   define(all, function () {
     var eic = {};

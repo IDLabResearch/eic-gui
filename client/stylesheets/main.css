@@ -25,6 +25,7 @@ html {
   height: 600px;
   overflow: hidden;
   position: absolute;
+  background-color: white;
 }
 
 .slide.transition-out {
@@ -37,6 +38,14 @@ html {
   text-align: center;
 }
 
-.slide.title {
+.slide.title h1 {
   padding: 1em;
+}
+
+.slide.video {
+  background-color: black;
+}
+
+.slide.video video {
+  min-width: 100%;
 }
