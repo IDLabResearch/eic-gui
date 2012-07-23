@@ -1,9 +1,9 @@
-define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
+define(['lib/jquery', 'eic/BaseSlideGenerator'], function ($, BaseSlideGenerator) {
   "use strict";
 
   /** Generator that provides slides from child generators */
   function CombinedSlideGenerator(generators) {
-    EventEmitter.call(this);
+    BaseSlideGenerator.call(this);
     this.emitNewSlidesEvent = $.proxy(function () { this.emit('newSlides'); }, this);
 
     this.generators = [];
@@ -12,7 +12,9 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
         this.addGenerator(generators[i], true);
   }
 
-  CombinedSlideGenerator.prototype = {
+  $.extend(CombinedSlideGenerator.prototype,
+           BaseSlideGenerator.prototype,
+  {
     /** Checks whether at least one child generator has a next slide. */
     hasNext: function () {
       return this.generators.some(function (g) { return g.hasNext(); });
@@ -49,7 +51,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       if (generator.hasNext())
         this.emitNewSlidesEvent();
     }
-  };
+  });
   
   return CombinedSlideGenerator;
 });

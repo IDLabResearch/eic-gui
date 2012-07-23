@@ -1,22 +1,22 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer', 'lib/jvent'],
-function ($, delayedEventTriggerer, EventEmitter) {
+define(['lib/jquery', 'util/DelayedEventTriggerer', 'eic/BaseSlideGenerator'],
+function ($, delayedEventTriggerer, BaseSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
 
   /** Generator that creates title slides */
   function TitleSlideGenerator(title) {
-    EventEmitter.call(this);
+    BaseSlideGenerator.call(this);
     this.title = title;
   }
 
-  TitleSlideGenerator.prototype = {
+  $.extend(TitleSlideGenerator.prototype,
+    BaseSlideGenerator.prototype,
+  {
     /** Checks whether the title slide has been shown. */
     hasNext: function () {
       return this.done !== true;
     },
-
-    init: function () {},
 
     /** Advances to the title slide. */
     next: function () {
@@ -24,15 +24,16 @@ function ($, delayedEventTriggerer, EventEmitter) {
         return;
 
       var $title = $('<h1>').text(this.title),
-          $slide = $('<div>').addClass('slide title')
-                             .append($title)
-                             .one('start', delayedEventTriggerer('stop', defaultDuration));
+          $slide = this.createBaseSlide('title')
+                          .append($title)
+                          .one('start', delayedEventTriggerer('stop', defaultDuration));
 
       this.done = true;
 
       return $slide;
     },
-  };
+  });
+  
   
   return TitleSlideGenerator;
 });

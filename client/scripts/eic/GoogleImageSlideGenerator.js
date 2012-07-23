@@ -1,17 +1,19 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer', 'lib/jvent'],
-function ($, delayedEventTriggerer, EventEmitter) {
+define(['lib/jquery', 'util/DelayedEventTriggerer', 'eic/BaseSlideGenerator'],
+function ($, delayedEventTriggerer, BaseSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
 
   /** Generator of images slides from Google Image search results. */
   function GoogleImageSlideGenerator(topic) {
-    EventEmitter.call(this);
+    BaseSlideGenerator.call(this);
     this.topic = topic;
     this.slides = [];
   }
 
-  GoogleImageSlideGenerator.prototype = {
+  $.extend(GoogleImageSlideGenerator.prototype,
+           BaseSlideGenerator.prototype,
+  {
     /** Checks whether any slides are left. */
     hasNext: function () {
       return this.slides.length > 0;
@@ -45,13 +47,13 @@ function ($, delayedEventTriggerer, EventEmitter) {
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
-          $slide = $('<div>').addClass('slide image')
-                             .append($image)
-                             .one('start', delayedEventTriggerer('stop', defaultDuration));
+          $slide = this.createBaseSlide('image')
+                          .append($image)
+                          .one('start', delayedEventTriggerer('stop', defaultDuration));
       this.slides.push($slide);
       this.emit('newSlides');
     },
-  };
+  });
 
   return GoogleImageSlideGenerator;
 });

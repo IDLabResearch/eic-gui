@@ -1,6 +1,7 @@
 (function (define) {
   "use strict";
   var all = [
+    './BaseSlideGenerator',
     './CombinedSlideGenerator',
     './GoogleImageSlideGenerator',
     './SlidePresenter',

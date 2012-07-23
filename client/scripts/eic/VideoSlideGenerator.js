@@ -1,14 +1,16 @@
-define(['lib/jquery', 'lib/jvent'],
-function ($, EventEmitter) {
+define(['lib/jquery', 'eic/BaseSlideGenerator'],
+function ($, BaseSlideGenerator) {
   "use strict";
 
   /** Generator that creates video slides */
   function VideoSlideGenerator(videoUrl) {
-    EventEmitter.call(this);
+    BaseSlideGenerator.call(this);
     this.videoUrl = videoUrl;
   }
 
-  VideoSlideGenerator.prototype = {
+  $.extend(VideoSlideGenerator.prototype,
+           BaseSlideGenerator.prototype,
+  {
     /** Checks whether the video slide has been shown. */
     hasNext: function () {
       return this.$video !== undefined;
@@ -24,15 +26,15 @@ function ($, EventEmitter) {
         return;
 
       var video = this.$video[0],
-          $slide = $('<div>').addClass('slide video')
-                             .append(video)
-                             .on('start', function () { video.play(); });
+          $slide = this.createBaseSlide('video')
+                          .append(video)
+                          .on('start', function () { video.play(); });
       video.addEventListener('ended', function () { $slide.trigger('stop'); });
       delete this.$video;
 
       return $slide;
     },
-  };
+  });
   
   return VideoSlideGenerator;
 });
