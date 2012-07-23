@@ -47,8 +47,8 @@ function ($, BaseSlideGenerator) {
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
-          $slide = this.createBaseSlide('image', $image, defaultDuration);
-      this.slides.push($slide);
+          slide = this.createBaseSlide('image', $image, defaultDuration);
+      this.slides.push(slide);
       this.emit('newSlides');
     },
   });

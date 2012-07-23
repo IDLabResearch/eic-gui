@@ -37,9 +37,11 @@
       hasNext() : bool\\
       next() : Slide\\
     }
-  \umlclass[x=5,y=-3]{Slide}{
-      start : Event\\
-      stop : Event\\
+  \umlclass[x=5,y=-4]{Slide}{
+      \$element : jQuery\\
+      start : function\\
+      stop : function\\
+      stopped : Event\\
   }{}
   \umlclass[x=11,y=2]{CombinedSlideGenerator}{
       generators : SlideGenerator[]

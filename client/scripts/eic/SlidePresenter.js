@@ -20,10 +20,10 @@ define(['lib/jquery'], function ($) {
           // start the transition of other children
           self.$container.children().addClass('transition-out');
           // add the next slide and start it
-          var $nextSlide = self.generator.next();
-          self.$container.prepend($nextSlide);
-          $nextSlide.trigger('start')
-                    .one('stop', showNext);
+          var nextSlide = self.generator.next();
+          self.$container.prepend(nextSlide.$element);
+          nextSlide.once('stopped', showNext);
+          nextSlide.start();
         }
         // else, wait for new slides to arrive
         else {

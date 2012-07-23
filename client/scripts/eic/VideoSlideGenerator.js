@@ -26,11 +26,11 @@ function ($, BaseSlideGenerator) {
         return;
 
       var video = this.$video[0],
-          $slide = this.createBaseSlide('video', video, function () { video.play(); });
-      video.addEventListener('ended', function () { $slide.trigger('stop'); });
+          slide = this.createBaseSlide('video', video, function () { video.play(); });
+      video.addEventListener('ended', slide.stop);
       delete this.$video;
 
-      return $slide;
+      return slide;
     },
   });
   

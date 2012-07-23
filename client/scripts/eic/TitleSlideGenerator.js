@@ -24,11 +24,11 @@ function ($, BaseSlideGenerator) {
         return;
 
       var $title = $('<h1>').text(this.title),
-          $slide = this.createBaseSlide('title', $title, defaultDuration);
+          slide = this.createBaseSlide('title', $title, defaultDuration);
       
       this.done = true;
 
-      return $slide;
+      return slide;
     },
   });
   

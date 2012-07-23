@@ -15,23 +15,25 @@ function ($, EventEmitter) {
     next: function () { return null; },
     
     createBaseSlide: function (cssClass, content, onStart) {
-      var $slide = $('<div>').addClass('slide')
-                             .addClass(cssClass)
-                             .append(content);
+      var slide = new EventEmitter();
       
-      if (onStart) {
-        if (typeof(onStart) === 'number') {
-          var duration = onStart;
-          onStart = function (event) {
-            window.setTimeout(function () {
-              $(event.target).trigger('stop');
-            }, duration);
-          };
-        }
-        $slide.one('start', onStart);
+      // Create slide element.
+      slide.$element = $('<div>').addClass('slide')
+                                 .addClass(cssClass)
+                                 .append(content);
+      
+      // If `onStart` is a number, it is the duration of the slide,
+      // thus create a stop callback that fires after that duration.
+      if (typeof(onStart) === 'number') {
+        var duration = onStart;
+        onStart = function (event) { window.setTimeout(slide.stop, duration); };
       }
+
+      // Set start and stop functions.
+      slide.start = onStart || $.noop;
+      slide.stop = function () { slide.emit('stopped'); };
       
-      return $slide;
+      return slide;
     },
   };
   
