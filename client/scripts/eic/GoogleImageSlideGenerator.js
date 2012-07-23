@@ -1,5 +1,5 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer', 'eic/BaseSlideGenerator'],
-function ($, delayedEventTriggerer, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/BaseSlideGenerator'],
+function ($, BaseSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
@@ -47,9 +47,7 @@ function ($, delayedEventTriggerer, BaseSlideGenerator) {
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
-          $slide = this.createBaseSlide('image')
-                          .append($image)
-                          .one('start', delayedEventTriggerer('stop', defaultDuration));
+          $slide = this.createBaseSlide('image', $image, defaultDuration);
       this.slides.push($slide);
       this.emit('newSlides');
     },

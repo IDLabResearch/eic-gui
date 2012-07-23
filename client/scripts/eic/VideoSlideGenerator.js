@@ -26,9 +26,7 @@ function ($, BaseSlideGenerator) {
         return;
 
       var video = this.$video[0],
-          $slide = this.createBaseSlide('video')
-                          .append(video)
-                          .on('start', function () { video.play(); });
+          $slide = this.createBaseSlide('video', video, function () { video.play(); });
       video.addEventListener('ended', function () { $slide.trigger('stop'); });
       delete this.$video;
 

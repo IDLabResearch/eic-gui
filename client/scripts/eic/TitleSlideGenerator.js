@@ -1,5 +1,5 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer', 'eic/BaseSlideGenerator'],
-function ($, delayedEventTriggerer, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/BaseSlideGenerator'],
+function ($, BaseSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
@@ -24,10 +24,8 @@ function ($, delayedEventTriggerer, BaseSlideGenerator) {
         return;
 
       var $title = $('<h1>').text(this.title),
-          $slide = this.createBaseSlide('title')
-                          .append($title)
-                          .one('start', delayedEventTriggerer('stop', defaultDuration));
-
+          $slide = this.createBaseSlide('title', $title, defaultDuration);
+      
       this.done = true;
 
       return $slide;

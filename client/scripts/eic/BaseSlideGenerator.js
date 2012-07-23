@@ -1,5 +1,5 @@
-define(['lib/jquery', 'util/DelayedEventTriggerer', 'lib/jvent'],
-function ($, delayedEventTriggerer, EventEmitter) {
+define(['lib/jquery', 'lib/jvent'],
+function ($, EventEmitter) {
   "use strict";
 
   /** Generator that serves as a base for other generators. */
@@ -14,9 +14,23 @@ function ($, delayedEventTriggerer, EventEmitter) {
 
     next: function () { return null; },
     
-    createBaseSlide: function (cssClass) {
+    createBaseSlide: function (cssClass, content, onStart) {
       var $slide = $('<div>').addClass('slide')
-                             .addClass(cssClass);
+                             .addClass(cssClass)
+                             .append(content);
+      
+      if (onStart) {
+        if (typeof(onStart) === 'number') {
+          var duration = onStart;
+          onStart = function (event) {
+            window.setTimeout(function () {
+              $(event.target).trigger('stop');
+            }, duration);
+          };
+        }
+        $slide.one('start', onStart);
+      }
+      
       return $slide;
     },
   };
