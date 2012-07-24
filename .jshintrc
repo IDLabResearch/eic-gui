@@ -8,5 +8,6 @@
   "trailing": true, // Do not leave trailing whitespace.
   "white": true,    // Enable scrict whitespace checking.
   "indent": 2,      // The code uses an indentation width of 2 spaces.
+  "scripturl": true, // Don't check for script URLs.
   "browser": true   // A browser is present
 }

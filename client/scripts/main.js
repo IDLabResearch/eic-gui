@@ -8,14 +8,8 @@
       'lib/jvent': { exports: 'jvent' },
     },
   });
-  
-  var scripts = [
-    'lib/jquery',
-    'eic/all',
-  ];
 
-  requirejs(scripts, function () {
-    if (window.startApplication)
-      window.startApplication.apply(window, arguments);
+  require(['eic/Application'], function (Application) {
+    new Application().start();
   });
 })(window.requirejs);

@@ -5,21 +5,28 @@
   <title>Everything Is Connected</title>
   <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
   <link rel="stylesheet" href="stylesheets/main" />
+  <link href="http://fonts.googleapis.com/css?family=Lilita+One|Shanti" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <header>
-    <h1>Everything Is Connected</h1>
-    <h2>The movie that connects you to anything else in the world.</h2>
-  </header>
   <div id="main">
+    <header>
+      <h1>Everything Is Connected</h1>
+      <h2>The movie that connects <em>you</em><br>to anything else in the world.</h2>
+    </header>
     <div class="step one">
-      <h2>Tell something about you</h2>
+      <h2>Tell about yourself</h2>
+      <p>Connect with your Facebook account.</p>
+      <p id="facebook"><a id="facebook-connect" href="#">Connect</a></p>
     </div>
-    <div class="step two">
-      <h2>Choose what you want to connect to</h2>
+    <div class="step two inactive">
+      <h2>Choose your topic</h2>
+      <p>Select who or what you want to connect to by typing below.</p>
+      <p><input id="topic" disabled /></p>
     </div>
-    <div class="step three">
+    <div class="step three inactive">
       <h2>Watch your movie</h2>
+      <p>Have a seat, relax, and enjoy your personal movie.</p>
+      <p><input id="play" type="button" value="Play my movie" disabled /></p>
     </div>
   </div>
   <footer>
