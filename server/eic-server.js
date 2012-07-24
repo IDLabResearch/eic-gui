@@ -12,10 +12,6 @@ app.start = function (port, staticFolder) {
   console.log('Everything Is Connected server running at http://localhost:' + port + '/');
 };
 
-app.get('/', function (req, res) {
-  res.send('Everything Is Connected');
-});
-
-app.get(/^\/(?:\w+\/)*\w+\.\w+$/, function (req, res) {
+app.get(/^\/(?:\w+\/)*(?:\w+\.\w+)?$/, function (req, res) {
   res.sendfile(app.staticFolder + req.url);
 });
