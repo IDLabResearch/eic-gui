@@ -1,47 +1,48 @@
 define(['lib/jquery','lib/jvent'],
-  function ($,EventEmitter){
+  function ($, EventEmitter) {
     "use strict";
-    
-    function TTSGenerator(){
+
+    function TTSGenerator() {
       EventEmitter.call(this);
-            
-      this.VOICE_LIST = new Array();
-      VOICE_LIST["ar_SA"] = "leila22k";
-      VOICE_LIST["ca_ES"] = "laia22k";
-      VOICE_LIST["cs_CZ"] = "eliska22k";
-      VOICE_LIST["da_DK"] = "mette22k";
-      VOICE_LIST["nl_BE"] = "sofie22k";
-      VOICE_LIST["nl_NL"] = "daan22k";
-      VOICE_LIST["en_IN"] = "deepa22k";
-      VOICE_LIST["en_GB"] = "rachel22k";
-      VOICE_LIST["en_US"] = "heather22k";
-      VOICE_LIST["fi_FI"] = "sanna22k";
-      VOICE_LIST["fr_BE"] = "justine22k";
-      VOICE_LIST["fr_CA"] = "louise22k";
-      VOICE_LIST["fr_FR"] = "alice22k";
-      VOICE_LIST["de_DE"] = "andreas22k";
-      VOICE_LIST["el_GR"] = "dimitris22k";
-      VOICE_LIST["it_IT"] = "chiara22k";
-      VOICE_LIST["no_NO"] = "bente22k";
-      VOICE_LIST["pl_PL"] = "ania22k";
-      VOICE_LIST["pt_BR"] = "marcia22k";
-      VOICE_LIST["pt_PT"] = "celia22k";
-      VOICE_LIST["ru_RU"] = "andreas22k";
-      VOICE_LIST["sc_SE"] = "mia22k";
-      VOICE_LIST["es_ES"] = "antonio22k";
-      VOICE_LIST["es_US"] = "rosa22k";
-      VOICE_LIST["sv_SE"] = "elin22k";
-      VOICE_LIST["sv_FI"] = "samuel22k";
-      VOICE_LIST["gb_SE"] = "kal22k";
-      VOICE_LIST["tr_TR"] = "ipek22k";
-    }
     
+      this.VOICE_LIST = {
+        "ar_SA" : "leila22k",
+        "ca_ES" : "laia22k",
+        "cs_CZ" : "eliska22k",
+        "da_DK" : "mette22k",
+        "nl_BE" : "sofie22k",
+        "nl_NL" : "daan22k",
+        "en_IN" : "deepa22k",
+        'en_GB' : 'rachel22k',
+        'en_US' : 'heather22k',
+        'fi_FI' : 'sanna22k',
+        'fr_BE' : 'justine22k',
+        'fr_CA' : 'louise22k',
+        'fr_FR' : 'alice22k',
+        'de_DE' : 'andreas22k',
+        'el_GR' : 'dimitris22k',
+        'it_IT' : 'chiara22k',
+        'no_NO' : 'bente22k',
+        'pl_PL' : 'ania22k',
+        'pt_BR' : 'marcia22k',
+        'pt_PT' : 'celia22k',
+        'ru_RU' : 'andreas22k',
+        'sc_SE' : 'mia22k',
+        'es_ES' : 'antonio22k',
+        'es_US' : 'rosa22k',
+        'sv_SE' : 'elin22k',
+        'sv_FI' : 'samuel22k',
+        'gb_SE' : 'kal22k',
+        'tr_TR' : 'ipek22k'
+      };
+    }
+
     TTSGenerator.prototype = {
       retrieveVoice:function (lang){
-        if (VOICE_LIST[lang]){
-          return VOICE_LIST[lang];
+        if (this.VOICE_LIST[lang]){
+          return this.VOICE_LIST[lang];
         }
-        return VOICE_LIST['en_GB'];
+        return this.VOICE_LIST.en_GB;
       },
       getSpeech: function (text,lang){
         var self = this;
@@ -59,7 +60,7 @@ define(['lib/jquery','lib/jvent'],
           },
           dataType: 'jsonp',
           success: function(data){
-            if (data.res == 'OK'){
+            if (data.res === 'OK'){
               self.emit('speechReady',data);
             } else {
               self.emit('speechError',data);
@@ -68,11 +69,9 @@ define(['lib/jquery','lib/jvent'],
           error: function(error){
             self.emit('speechError',data);
           }
-        });    
+        });   
       }
     }
     
     return TTSGenerator;
   });
-
-
