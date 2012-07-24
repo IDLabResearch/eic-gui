@@ -4,10 +4,16 @@ function ($, BaseSlideGenerator) {
 
   var defaultDuration = 1000;
 
-  /** Generator of images slides from Google Image search results. */
-  function GoogleImageSlideGenerator(topic) {
+  /** Generator of images slides from Google Image search results. 
+   * Parameters: a topic and the maximum number of results to return
+   */
+  function GoogleImageSlideGenerator(topic, maxrsz) {
     BaseSlideGenerator.call(this);
     this.topic = topic;
+    if(maxrsz === undefined)
+    	this.maxrsz = 4;
+    else
+    	this.maxrsz = maxrsz;
     this.slides = [];
   }
 
@@ -28,6 +34,7 @@ function ($, BaseSlideGenerator) {
         data: {
           q: this.topic,
           imgsz: 'xxlarge',
+          rsz: this.maxrsz,
         },
         dataType: 'jsonp',
       })

@@ -30,7 +30,7 @@ function ($, EventEmitter) {
       }
 
       // Set start and stop functions.
-      slide.start = onStart || $.noop;
+      slide.start = onStart || $.noop;
       slide.stop = function () { slide.emit('stopped'); };
       
       return slide;
