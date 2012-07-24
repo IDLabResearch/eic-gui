@@ -1,0 +1,35 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <script>
+      function startApplication($, eic) {
+        var tts = new eic.TTSGenerator();
+        $('#send').click(function() {
+          var text = $('#text').val();
+                                  
+          tts.once('speechReady',function(data){
+            $("#result").append('Length: '+data.snd_time+' ms<br>');
+            $("#result").append("<audio src='"+data.snd_url+"' controls='controls' />");
+          });
+          tts.getSpeech(text); 
+        });
+      }
+    </script>
+    <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
+  </head>
+  <body>
+    <div><textarea id="text"></textarea><input id="send" type="submit" value="Send" /></div>
+    <div id="result">
+
+    </div>
+
+
+
+  </body>
+</html>

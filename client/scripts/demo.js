@@ -11,11 +11,21 @@
   
   var scripts = [
     'lib/jquery',
-    'eic/all',
+    'eic/BaseSlideGenerator',
+    'eic/IntroductionSlideGenerator',
+    'eic/CombinedSlideGenerator',
+    'eic/GoogleImageSlideGenerator',
+    'eic/SlidePresenter',
+    'eic/TitleSlideGenerator',
+    'eic/VideoSlideGenerator',
+    'eic/TTSGenerator'
   ];
 
-  requirejs(scripts, function () {
+  requirejs(scripts, function (jQuery) {
+    var scriptHolder = {};
+    for (var i = 0; i < scripts.length; i++)
+      scriptHolder[scripts[i].replace(/^\w+\//, '')] = arguments[i];
     if (window.startApplication)
-      window.startApplication.apply(window, arguments);
+      window.startApplication(jQuery, scriptHolder);
   });
 })(window.requirejs);
