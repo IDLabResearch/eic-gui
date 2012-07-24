@@ -1,1 +1,39 @@
 @import "reset.less";
+
+body {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h1 {
+ font-size: 2em;
+ margin: 1em 0 .5em 0;
+}
+
+h2 {
+ font-size: 1.5em;
+ margin: .5em 0;
+}
+
+header {
+  margin: 2em 0;
+}
+
+footer {
+  font-size: small;
+  margin: 1em 0;
+}
+
+div.step {
+  &.one {
+    counter-reset: step-counter;
+  }
+  &:before {
+    content: counter(step-counter) ".";
+    counter-increment: step-counter;
+    float: left;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-right: 8pt;
+  }
+}
