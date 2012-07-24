@@ -29,6 +29,9 @@ function ($) {
     attachEventHandlers: function () {
       $('#facebook-connect').click($.proxy(this, 'connectToFacebook'));
       $('#topic').on('change keyup', $.proxy(this, 'updateMovieStatus'));
+
+      // Don't let empty links trigger a location change.
+      $('a[href=#]').prop('href', 'javascript:;');
     },
   };
   
