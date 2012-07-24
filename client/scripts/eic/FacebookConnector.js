@@ -60,6 +60,12 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 
 			console.log("hello facebook");
 		},
+		
+		connect: function(callback) {
+		  window.setTimeout(function () {
+        callback(null, { name: "John Doe" });
+      }, 500);
+		},
 
 		get : function(item_type, callback) {
 			FB.api('/me/' + item_type, function(response) {

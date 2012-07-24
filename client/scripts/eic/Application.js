@@ -1,5 +1,5 @@
-define(['lib/jquery'],
-function ($) {
+define(['lib/jquery', 'eic/FacebookConnector'],
+function ($, FacebookConnector) {
   "use strict";
   
   function Application() { }
@@ -11,13 +11,13 @@ function ($) {
     },
     
     connectToFacebook: function () {
-      window.setTimeout(function () {
-        var profile = { name: "John Doe" };
+      $('#facebook').text('Connecting…');
+      new FacebookConnector().connect(function (error, profile) {
         $('#facebook').text('Connected as ' + profile.name + '.');
         $('.step.two').removeClass('inactive');
         $('#topic').prop('disabled', false)
                    .focus();
-      }, 100);
+      });
     },
     
     updateMovieStatus: function () {
