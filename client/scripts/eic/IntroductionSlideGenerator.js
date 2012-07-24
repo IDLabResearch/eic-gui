@@ -1,34 +1,47 @@
-define(['lib/jquery', 'eic/BaseSlideGenerator'],
-function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/BaseSlideGenerator','eic/CombinedSlideGenerator', 'eic/TitleSlideGenerator', 'eic/GoogleImageSlideGenerator'],
+function ($, BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator, GoogleImageSlideGenerator) {
 	"use strict";
 	 
-	var defaultDuration = 1000;
 	
 	/** Generator that creates introductory slides */
 	  function IntroductionSlideGenerator() {
-	    BaseSlideGenerator.call(this);
+		CombinedSlideGenerator.call(this);
+	    this.slides = [{content: "Earth. Our home planet ...", type: "text"},
+	                          {content: "earth", type: "image"},
+	                          {content: "... It's filled with data and things ...", type: "text"},
+	                          {content: "earth luminous network", type: "image"},
+	                          {content: "... and EVERYTHING IS CONNECTED.", type: "text"},
+	                          {content: "Don't believe us? Just wait and see...", type: "text"},];
+	    this.generators = [];
 	  }
 	  
-
 	  $.extend(IntroductionSlideGenerator.prototype,
-	    BaseSlideGenerator.prototype,
+			  CombinedSlideGenerator.prototype,
 	  {
-	    /** Checks whether the title slide has been shown. */
-	    hasNext: function () {
-	      return this.done !== true;
-	    },
+		
+		/** Initiates the introductory slides */
+		init : function() {
+		    if (!this.inited) {
 
-	    /** Advances to the title slide. */
-	    next: function () {
-	      if (!this.hasNext())
-	        return;
+			    var self = this;
+				$.each(this.slides, function(index, slide){
+					if(slide.type == 'text'){
+						//Create a text-slide with the TitleSlideGenerator
+						var titleSlideGenerator = new TitleSlideGenerator(slide.content);
+						titleSlideGenerator.init();
+						self.generators.push(titleSlideGenerator);
+					}else if (slide.type == 'image'){
+						//Create a text-slide with the GoogleImageSlideGenerator
+						var googleImageSlideGenerator = new GoogleImageSlideGenerator(slide.content,1);
+						googleImageSlideGenerator.init();
+						self.generators.push(googleImageSlideGenerator);
+					}
 
-	      var slide = this.createBaseSlide('introduction', $('<h1>').text("Introduction"), defaultDuration);
-	      
-	      this.done = true;
-
-	      return slide;
-	    },
+			    this.inited = true;
+				});
+		    }
+		},  
+		
 	  });
 	  
 	  return IntroductionSlideGenerator;
