@@ -1,21 +1,24 @@
 @import "reset.less";
 
-@accent: #0338A8;
+@accent: #1543a3;
+@foreground: #333333;
 @background: #aab7e3;
 
 @heading-font: "Lilita One", Verdana, sans-serif;
 @body-font: Shanti, "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 html {
-  background-color: @background;
+  background: @background url(http://farm6.staticflickr.com/5087/5263021903_76632f5d90_o.jpg) no-repeat center center;
 }
 
 body {
   max-width: 600px;
   margin: 0 auto;
-  background-color: rgba(255,255,255,.8);
+  color: @foreground;
+  background-color: rgba(255,255,255,.85);
   padding: 20px 40px;
-  border-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   
   font-family: @body-font;
   font-size: 13pt;
@@ -47,6 +50,7 @@ header {
   h2 {
     font-size: 2em;
     margin-top: 0;
+    color: @foreground;
   }
 }
 
