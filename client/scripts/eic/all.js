@@ -8,6 +8,7 @@
     './SlidePresenter',
     './TitleSlideGenerator',
     './VideoSlideGenerator',
+    './TTSGenerator'
   ];
   define(all, function () {
     var eic = {};
