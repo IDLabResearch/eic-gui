@@ -28,7 +28,14 @@ function ($) {
     },
     
     playMovie: function () {
+      var $slides = $('<div>').addClass('slides'),
+          $wrapper = $('<div>').addClass('slides-wrapper')
+                               .append($slides);
       $('#main').slideUp();
+      $('body').append($wrapper);
+
+      $slides.hide();
+      $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
     },
     
     attachEventHandlers: function () {
