@@ -10,26 +10,24 @@ and open the template in the editor.
     <script>
       function startApplication($, eic) {       
         var tts = new eic.TTSGenerator();
+        
         $('#send').click(function() {
           var text = $('#text').val();
-                                  
-          tts.once('speechReady',function(data){
+                      
+          tts.once('speechReady',function(event,data){
             $("#result").append('Length: '+data.snd_time+' ms<br>');
             $("#result").append("<audio src='"+data.snd_url+"' controls='controls' />");
           });
-          tts.getSpeech(text); 
+          tts.getSpeech(text,'en_GB'); 
         });
       }
     </script>
-    <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
+    <script data-main="scripts/demo" src="scripts/lib/require.js" async></script>
   </head>
   <body>
     <div><textarea id="text"></textarea><input id="send" type="submit" value="Send" /></div>
     <div id="result">
 
     </div>
-
-
-
   </body>
 </html>

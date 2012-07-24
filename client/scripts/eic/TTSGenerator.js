@@ -13,7 +13,7 @@ define(['lib/jquery','lib/jvent'],
         "nl_BE" : "sofie22k",
         "nl_NL" : "daan22k",
         "en_IN" : "deepa22k",
-        'en_GB' : 'rachel22k',
+        'en_GB' : 'ryan22k',
         'en_US' : 'heather22k',
         'fi_FI' : 'sanna22k',
         'fr_BE' : 'justine22k',
@@ -46,7 +46,7 @@ define(['lib/jquery','lib/jvent'],
       },
       getSpeech: function (text,lang){
         var self = this;
-        
+        console.log('success');
         $.ajax({
           url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
           type: 'GET', 
@@ -61,13 +61,14 @@ define(['lib/jquery','lib/jvent'],
           dataType: 'jsonp',
           success: function(data){
             if (data.res === 'OK'){
+              console.log('success');
               self.emit('speechReady',data);
             } else {
               self.emit('speechError',data);
             }
           },
           error: function(error){
-            self.emit('speechError',data);
+            self.emit('speechError',error);
           }
         });   
       }
