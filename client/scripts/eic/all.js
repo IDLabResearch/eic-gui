@@ -8,6 +8,7 @@
     './SlidePresenter',
     './TitleSlideGenerator',
     './VideoSlideGenerator',
+    './FacebookConnector',
   ];
   define(all, function () {
     var eic = {};
