@@ -1,8 +1,26 @@
 @import "reset.less";
 
+@accent: #0338A8;
+@background: #aab7e3;
+
+@heading-font: "Lilita One", Verdana, sans-serif;
+
+html {
+  background-color: @background;
+}
+
 body {
   max-width: 600px;
   margin: 0 auto;
+  background-color: rgba(255,255,255,.8);
+  padding: 20px 40px;
+  border-radius: 20px;
+}
+
+h1, h2 {
+  font-family: @heading-font;
+  font-weight: normal;
+  color: @accent;
 }
 
 h1 {
@@ -17,6 +35,13 @@ h2 {
 
 header {
   margin: 2em 0;
+  text-align: center;
+  h1 {
+    font-size: 3em;
+  }
+  h2 {
+    font-size: 2em;
+  }
 }
 
 footer {
@@ -32,8 +57,9 @@ div.step {
     content: counter(step-counter) ".";
     counter-increment: step-counter;
     float: left;
+    font-family: @heading-font;
     font-size: 1.5em;
-    font-weight: bold;
+    color: @accent;
     padding-right: 8pt;
   }
 }
