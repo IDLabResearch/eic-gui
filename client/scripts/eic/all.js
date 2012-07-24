@@ -2,6 +2,7 @@
   "use strict";
   var all = [
     './BaseSlideGenerator',
+    './IntroductionSlideGenerator',
     './CombinedSlideGenerator',
     './GoogleImageSlideGenerator',
     './SlidePresenter',
