@@ -7,6 +7,7 @@ function ($) {
   Application.prototype = {
     start: function () {
       this.attachEventHandlers();
+      $('#topic').val('');
     },
     
     connectToFacebook: function () {
