@@ -6,9 +6,21 @@ function ($) {
   
   Application.prototype = {
     start: function () {
-      console.log('Application started.');
-    }
+      this.attachEventHandlers();
+    },
+    
+    connectToFacebook: function () {
+      window.setTimeout(function () {
+        var profile = { name: "John Doe" };
+        $('#facebook').text('Connected as ' + profile.name + '.');
+        $('.step.two').removeClass('inactive');
+      }, 100);
+    },
+    
+    attachEventHandlers: function () {
+      $('#facebook-connect').click($.proxy(this, 'connectToFacebook'));
+    },
   };
-
+  
   return Application;
 });
