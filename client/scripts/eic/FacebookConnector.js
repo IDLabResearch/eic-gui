@@ -47,12 +47,15 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 				});
 				$('#connect').hide();
 				$('.step.two').removeClass("inactive");
+				$('#topic').prop('disabled', false)
+                   .focus();
 			}
 
 			function logout() {
 				$('#info').empty();
 				$('#connect').show();
 				$('.step.two').addClass("inactive");
+				$('#topic').prop('disabled', true);
 			}
 
 			console.log("hello facebook");

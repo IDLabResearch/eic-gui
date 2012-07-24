@@ -1,6 +1,5 @@
-HTML>
 <html>
-	<head>
+  <head>
     <meta charset='utf-8'>
     <title>Everything Is Connected</title>
     <script>
@@ -17,13 +16,14 @@ HTML>
     <link href="http://fonts.googleapis.com/css?family=Lilita+One|Shanti" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <header>
-      <h1>Everything Is Connected</h1>
-      <h2>The movie that connects <em>you</em>
-      <br>
-      to anything else in the world.</h2>
-    </header>
     <div id="main">
+      <header>
+        <h1>Everything Is Connected</h1>
+        <h2>The movie that connects <em>you</em>
+        <br>
+        to anything else in the world.</h2>
+      </header>
+
       <div class="step one">
         <h2>Tell about yourself</h2>
         <p>
@@ -38,20 +38,28 @@ HTML>
         </p>
       </div>
       <div class="step two inactive">
-      <h2>Choose your topic</h2>
-      <p>Select who or what you want to connect to by typing below.</p>
-      <p><input id="topic" disabled /></p>
+        <h2>Choose your topic</h2>
+        <p>
+          Select who or what you want to connect to by typing below.
+        </p>
+        <p>
+          <input id="topic" disabled />
+        </p>
+      </div>
+      <div class="step three inactive">
+        <h2>Watch your movie</h2>
+        <p>
+          Have a seat, relax, and enjoy your personal movie.
+        </p>
+        <p>
+          <input id="play" type="button" value="Play my movie" disabled />
+        </p>
+      </div>
     </div>
-    <div class="step three inactive">
-      <h2>Watch your movie</h2>
-      <p>Have a seat, relax, and enjoy your personal movie.</p>
-      <p><input id="play" type="button" value="Play my movie" disabled /></p>
-    </div>
-  </div>
-  <footer>
-    <p>
-      &copy; 2012 Multimedia Lab &ndash; IBBT / Ghent University
-    </p>
-  </footer>
-</body>
+    <footer>
+      <p>
+        &copy; 2012 Multimedia Lab &ndash; IBBT / Ghent University
+      </p>
+    </footer>
+  </body>
 </html>

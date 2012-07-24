@@ -18,7 +18,8 @@
     'eic/SlidePresenter',
     'eic/TitleSlideGenerator',
     'eic/VideoSlideGenerator',
-    'eic/TTSGenerator'
+    'eic/TTSGenerator',
+    'eic/FacebookConnector'
   ];
 
   requirejs(scripts, function (jQuery) {
