@@ -6,21 +6,15 @@ function ($) {
     $(selector).autocomplete({
       source: function (request, response) {
         $.ajax({
-          url: "http://ws.geonames.org/searchJSON",
+          url: "http://en.wikipedia.org/w/api.php",
           dataType: "jsonp",
           data: {
-            featureClass: "P",
-            style: "full",
-            maxRows: 12,
-            name_startsWith: request.term
+            action: "opensearch",
+            format: "json",
+            search: request.term
           },
           success: function (data) {
-            response($.map(data.geonames, function (item) {
-              return {
-                label: item.name,
-                value: item.name
-              };
-            }));
+            response(data[1]);
           }
         });
       }
