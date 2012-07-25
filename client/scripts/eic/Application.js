@@ -20,11 +20,16 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
     // Lets the user connect with a Facebook account.
     connectToFacebook: function () {
       var self = this;
+      
       $('#facebook').text('Connecting…');
       
       this.facebookConnector.connect(function (error, profile) {
         self.profile = profile;
+        
+        // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
+        
+        // Enable second step.
         $('.step.two').removeClass('inactive');
         $('#topic').prop('disabled', false)
                    .focus();
