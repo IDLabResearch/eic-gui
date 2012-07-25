@@ -1,12 +1,17 @@
-define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
+define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
+  "use strict";
+  
+  var FB;
 
 	function FacebookConnector() {
 		EventEmitter.call(this);
 	}
 
 	FacebookConnector.prototype = {
-		init : function() {
-			window.fbAsyncInit = function() {
+		init: function () {
+			window.fbAsyncInit = function () {
+        FB = window.FB;
+        
 				FB.init({
 					appId : '412169445496429',
 					status : true,
@@ -15,33 +20,33 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 				});
 
 				/* All the events registered */
-				FB.Event.subscribe('auth.login', function(response) {
+				FB.Event.subscribe('auth.login', function (response) {
 					// do something with response
 					login();
 				});
-				FB.Event.subscribe('auth.logout', function(response) {
+				FB.Event.subscribe('auth.logout', function (response) {
 					// do something with response
 					logout();
 				});
 
-				FB.getLoginStatus(function(response) {
+				FB.getLoginStatus(function (response) {
 					if (response.session) {
 						// logged in and connected user, someone you know
 						login();
 					}
 				});
-			}; ( function() {
-					var e = document.createElement('script');
-					e.type = 'text/javascript';
-					e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-					e.async = true;
-					document.getElementById('fb-root').appendChild(e);
-				}());
+			};
+			
+			var e = document.createElement('script');
+			e.type = 'text/javascript';
+			e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+			e.async = true;
+			document.getElementById('fb-root').appendChild(e);
 
 			function login() {
-				FB.api('/me', function(response) {
+				FB.api('/me', function (response) {
 					var query = FB.Data.query('select name, hometown_location, birthday, sex, pic_square from user where uid={0}', response.id);
-					query.wait(function(rows) {
+					query.wait(function (rows) {
 						document.getElementById('info').innerHTML = 'Your name: ' + rows[0].name + "<br />" + '<img src="' + rows[0].pic_square + '" alt="" />' + "<br />" + rows[0].birthday + "<br />" + rows[0].hometown_location.city + "," + rows[0].hometown_location.country;
 					});
 				});
@@ -61,14 +66,14 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 			console.log("hello facebook");
 		},
 		
-		connect: function(callback) {
-		  window.setTimeout(function () {
+		connect: function (callback) {
+      window.setTimeout(function () {
         callback(null, { name: "John Doe" });
       }, 500);
 		},
 
-		get : function(item_type, callback) {
-			FB.api('/me/' + item_type, function(response) {
+		get: function (item_type, callback) {
+			FB.api('/me/' + item_type, function (response) {
 				callback(response);
 			});
 		}
