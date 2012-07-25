@@ -17,31 +17,37 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
     },
 
     // Lets the user connect with a Facebook account.
-    connectToFacebook : function () {
+    connectToFacebook: function () {
       var self = this;
       $('#facebook').text('Connecting…');
 
       facebookConnector.connect(function (error, profile) {
         self.profile = profile;
+        
+        // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
         $('.step.two').removeClass('inactive');
-        $('#topic').prop('disabled', false).focus();
+        $('#topic').prop('disabled', false)
+                   .focus();
       });
     },
 
     // Updates the goal topic.
-    updateTopic : function () {
-      var topic = this.topic = $('#topic').val(), valid = topic.trim().length > 0;
-
+    updateTopic: function () {
+      var topic = this.topic = $('#topic').val(),
+          valid = topic.trim().length > 0;
+      
       // Enable third step if the topic is valid.
       $('.step.three')[valid ? 'removeClass' : 'addClass']('inactive');
       $('#play').prop('disabled', !valid);
     },
 
     // Starts the movie about the connection between the user and the topic.
-    playMovie : function () {
-      var $slides = $('<div>').addClass('slides'), $wrapper = $('<div>').addClass('slides-wrapper').append($slides);
-
+    playMovie: function () {
+      var $slides = $('<div>').addClass('slides'),
+          $wrapper = $('<div>').addClass('slides-wrapper')
+                               .append($slides);
+      
       // Hide the main panel.
       $('#main').slideUp();
       $('body').append($wrapper);
@@ -49,10 +55,11 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       // Show the slides panel.
       $slides.hide();
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
-
+      
       // Create and start the slide show.
       var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
       var presenter = new SlidePresenter($slides, generator);
+      generator.init();
       presenter.start();
     },
 
