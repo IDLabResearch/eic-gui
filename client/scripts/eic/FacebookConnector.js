@@ -28,7 +28,6 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     });
   }
 
-
   function FacebookConnector() {
     EventEmitter.call(this);
   }
@@ -126,8 +125,8 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
 
-    findBusinessByGeoLocation : function (query,latitude,longitude,distance,callback) {
-      FB.api('/search?q=' + query + 'center=' + latitude + ',' + longitude + '&distance=' + distance + '&type=place', function(response) {
+    findBusinessByGeoLocation : function (query, latitude, longitude, distance, callback) {
+      FB.api('/search?q=' + query + 'center=' + latitude + ',' + longitude + '&distance=' + distance + '&type=place', function (response) {
         callback(response);
       });
     },
@@ -142,12 +141,12 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
     
-    findPlacesNearUser : function (facebook_id,callback) {
-      findPlacesNearUser(facebook_id,callback);
+    findPlacesNearUser : function (facebook_id, callback) {
+      findPlacesNearUser(facebook_id, callback);
     },
     
     findPlacesNearMe : function (callback) {
-			findPlacesNearUser('{0}',callback);
+			findPlacesNearUser('{0}', callback);
 		}
 
   };
