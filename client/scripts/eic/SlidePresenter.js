@@ -10,7 +10,9 @@ define(['lib/jquery'], function ($) {
     start: function () {
       if (this.started)
         return;
-
+      
+      this.generator.init();
+      
       var self = this;
       var currentSlide;
       
