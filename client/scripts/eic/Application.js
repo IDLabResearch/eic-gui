@@ -1,5 +1,6 @@
-define(['lib/jquery', 'eic/FacebookConnector'],
-function ($, FacebookConnector) {
+define(['lib/jquery', 'eic/FacebookConnector',
+        'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
+function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
   function Application() { }
@@ -11,8 +12,10 @@ function ($, FacebookConnector) {
     },
     
     connectToFacebook: function () {
+      var self = this;
       $('#facebook').text('Connecting…');
       new FacebookConnector().connect(function (error, profile) {
+        self.profile = profile;
         $('#facebook').text('Connected as ' + profile.name + '.');
         $('.step.two').removeClass('inactive');
         $('#topic').prop('disabled', false)
@@ -36,6 +39,11 @@ function ($, FacebookConnector) {
 
       $slides.hide();
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
+
+      var generator = new TopicToTopicSlideGenerator(this.profile, $('#topic').val());
+      var presenter = new SlidePresenter($slides, generator);
+      generator.init();
+      presenter.start();
     },
     
     attachEventHandlers: function () {
