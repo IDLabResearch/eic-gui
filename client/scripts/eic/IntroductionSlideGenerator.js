@@ -1,5 +1,6 @@
 define(['lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', 'eic/TitleSlideGenerator', 'eic/GoogleImageSlideGenerator'],
 function ($, BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator, GoogleImageSlideGenerator) {
+
   "use strict";
   
   /** Generator that creates introductory slides */
