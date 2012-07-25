@@ -57,7 +57,6 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
       // Create and start the slide show.
       var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
       var presenter = new SlidePresenter($slides, generator);
-      generator.init();
       presenter.start();
     },
     
