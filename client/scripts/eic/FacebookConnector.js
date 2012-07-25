@@ -1,17 +1,23 @@
-define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
-  "use strict";
-  
-  var FB;
+define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
+
+	var FB;
 
 	function FacebookConnector() {
 		EventEmitter.call(this);
 	}
 
+
 	FacebookConnector.prototype = {
-		init: function () {
-			window.fbAsyncInit = function () {
-        FB = window.FB;
-        
+		init : function(login_action, logout_action) {
+			login_action = (typeof login_action == 'undefined') ?
+     			console.log('login') : login_action;
+     			
+     		logout_action = (typeof logout_action == 'undefined') ?
+     			console.log('logout') : logout_action;
+     
+			window.fbAsyncInit = function() {
+				FB = window.FB;
+
 				FB.init({
 					appId : '412169445496429',
 					status : true,
@@ -20,23 +26,23 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 				});
 
 				/* All the events registered */
-				FB.Event.subscribe('auth.login', function (response) {
+				FB.Event.subscribe('auth.login', function(response) {
 					// do something with response
 					login();
 				});
-				FB.Event.subscribe('auth.logout', function (response) {
+				FB.Event.subscribe('auth.logout', function(response) {
 					// do something with response
 					logout();
 				});
 
-				FB.getLoginStatus(function (response) {
+				FB.getLoginStatus(function(response) {
 					if (response.session) {
 						// logged in and connected user, someone you know
 						login();
 					}
 				});
 			};
-			
+
 			var e = document.createElement('script');
 			e.type = 'text/javascript';
 			e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
@@ -44,36 +50,46 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 			document.getElementById('fb-root').appendChild(e);
 
 			function login() {
-				FB.api('/me', function (response) {
-					var query = FB.Data.query('select name, hometown_location, birthday, sex, pic_square from user where uid={0}', response.id);
-					query.wait(function (rows) {
-						document.getElementById('info').innerHTML = 'Your name: ' + rows[0].name + "<br />" + '<img src="' + rows[0].pic_square + '" alt="" />' + "<br />" + rows[0].birthday + "<br />" + rows[0].hometown_location.city + "," + rows[0].hometown_location.country;
-					});
-				});
-				$('#connect').hide();
-				$('.step.two').removeClass("inactive");
-				$('#topic').prop('disabled', false)
-                   .focus();
+				login_action();
 			}
 
 			function logout() {
-				$('#info').empty();
-				$('#connect').show();
-				$('.step.two').addClass("inactive");
-				$('#topic').prop('disabled', true);
+				logout_action();
 			}
 
 			console.log("hello facebook");
 		},
-		
-		connect: function (callback) {
-      window.setTimeout(function () {
-        callback(null, { name: "John Doe" });
-      }, 500);
+
+		connect : function(callback) {
+			FB.login(function(response) {
+			if (response.authResponse) {
+				console.log('Welcome!  Fetching your information.... ');
+				FB.api('/me', function(response) {
+					console.log('Good to see you, ' + response.name + '.');
+					callback(0, response);
+				});
+				
+			} else {
+				callback(1, null);
+				console.log('User cancelled login or did not fully authorize.');
+			}
+			}, {
+				scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday'
+			}
+			
+			);
 		},
 
-		get: function (item_type, callback) {
-			FB.api('/me/' + item_type, function (response) {
+		disconnect : function(callback) {
+			FB.logout(function(response) {
+				console.log("disconnecting")
+				callback(0, response)
+			}
+			);
+		},
+
+		get : function(item_type, callback) {
+			FB.api('/me/' + item_type, function(response) {
 				callback(response);
 			});
 		}

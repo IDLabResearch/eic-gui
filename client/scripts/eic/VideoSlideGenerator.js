@@ -1,6 +1,8 @@
 define(['lib/jquery', 'eic/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
+  
+  var defaultDuration = 5000;
 
   /** Generator that creates video slides */
   function VideoSlideGenerator(videoUrl) {
@@ -26,8 +28,9 @@ function ($, BaseSlideGenerator) {
         return;
 
       var video = this.$video[0],
-          slide = this.createBaseSlide('video', video, function () { video.play(); });
-      video.addEventListener('ended', slide.stop);
+          slide = this.createBaseSlide('video', video, 5000);
+      slide.once('started', $.proxy(video, 'play'));
+      slide.once('stopped', $.proxy(video, 'pause'));
       delete this.$video;
 
       return slide;
