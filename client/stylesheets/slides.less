@@ -1,0 +1,34 @@
+.slides {
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+  background-color: white;
+  margin: 5em auto;
+}
+
+.slide {
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  position: absolute;
+  background-color: white;
+
+  &.title {
+    h1 {
+      padding: 1em; 
+    }
+  }
+
+  &.image {
+    text-align: center;
+  }
+  
+  &.video {
+    background-color: black;
+    
+    video {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
