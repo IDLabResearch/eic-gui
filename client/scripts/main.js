@@ -1,3 +1,4 @@
+
 (function (requirejs) {
   "use strict";
   
@@ -21,6 +22,9 @@
       },
       'lib/jvent': {
         exports: 'jvent'
+      },
+      'lib/OpenLayers' : {
+        exports : 'OpenLayers'
       },
     },
   });
