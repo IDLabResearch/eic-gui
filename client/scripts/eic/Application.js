@@ -3,31 +3,27 @@ define(['lib/jquery', 'eic/FacebookConnector',
 function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
-  // The main "Everything Is Connected" application.
+  var facebookConnector;
+  
   function Application() { }
   
   Application.prototype = {
     // Initializes the application.
     init: function () {
       this.attachEventHandlers();
-      
-      // Make sure the topic is empty (browsers can cache text).
       $('#topic').val('');
+      facebookConnector = new FacebookConnector()
+	  facebookConnector.init();
     },
     
     // Lets the user connect with a Facebook account.
     connectToFacebook: function () {
       var self = this;
-      
       $('#facebook').text('Connecting…');
       
-      new FacebookConnector().connect(function (error, profile) {
+      facebookConnector.connect(function (error, profile) {
         self.profile = profile;
-        
-        // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
-        
-        // Enable second step.
         $('.step.two').removeClass('inactive');
         $('#topic').prop('disabled', false)
                    .focus();
