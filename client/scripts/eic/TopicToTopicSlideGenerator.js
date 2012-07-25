@@ -15,7 +15,7 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator) {
   {
     init: function () {
       CombinedSlideGenerator.prototype.init.call(this);
-      this.addGenerator(new IntroductionSlideGenerator(startTopic));
+      this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
     }
   });
   
