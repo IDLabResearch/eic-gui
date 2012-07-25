@@ -1,37 +1,41 @@
-define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'], function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
-	"use strict";
-
-  var facebookConnector;
-
+define(['lib/jquery', 'eic/FacebookConnector',
+        'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
+function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
+  "use strict";
+  
+  // The main "Everything Is Connected" application.
   function Application() {
+    this.facebookConnector = new FacebookConnector();
   }
-
-
+  
   Application.prototype = {
     // Initializes the application.
-    init : function () {
+    init: function () {
+      this.facebookConnector.init();
       this.attachEventHandlers();
+      // Make sure the topic is empty (browsers can cache text).
       $('#topic').val('');
-      facebookConnector = new FacebookConnector();
-      facebookConnector.init();
     },
-
+    
     // Lets the user connect with a Facebook account.
     connectToFacebook: function () {
       var self = this;
+      
       $('#facebook').text('Connecting…');
-
-      facebookConnector.connect(function (error, profile) {
+      
+      this.facebookConnector.connect(function (error, profile) {
         self.profile = profile;
         
         // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
+        
+        // Enable second step.
         $('.step.two').removeClass('inactive');
         $('#topic').prop('disabled', false)
                    .focus();
       });
     },
-
+    
     // Updates the goal topic.
     updateTopic: function () {
       var topic = this.topic = $('#topic').val(),
@@ -41,7 +45,7 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       $('.step.three')[valid ? 'removeClass' : 'addClass']('inactive');
       $('#play').prop('disabled', !valid);
     },
-
+    
     // Starts the movie about the connection between the user and the topic.
     playMovie: function () {
       var $slides = $('<div>').addClass('slides'),
@@ -51,7 +55,7 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       // Hide the main panel.
       $('#main').slideUp();
       $('body').append($wrapper);
-
+      
       // Show the slides panel.
       $slides.hide();
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
@@ -59,12 +63,11 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       // Create and start the slide show.
       var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
       var presenter = new SlidePresenter($slides, generator);
-      generator.init();
       presenter.start();
     },
-
+    
     // Attaches event handlers to the HTML controls.
-    attachEventHandlers : function () {
+    attachEventHandlers: function () {
       // Initialize the controls of each step.
       $('#facebook-connect').click($.proxy(this, 'connectToFacebook'));
       $('#topic').on('change keyup', $.proxy(this, 'updateTopic'));
@@ -74,6 +77,6 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       $('a[href=#]').prop('href', 'javascript:;');
     },
   };
-
+  
   return Application;
 });
