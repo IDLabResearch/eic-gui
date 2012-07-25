@@ -23,7 +23,7 @@ define(['lib/jquery', 'eic/BaseSlideGenerator'], function ($, BaseSlideGenerator
     /** Initialize all child generators. */
     init: function () {
       if (!this.inited) {
-        this.generators.each(function (g) { g.init(); });
+        this.generators.forEach(function (g) { g.init(); });
         this.inited = true;
       }
     },
