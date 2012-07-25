@@ -1,0 +1,91 @@
+\documentclass{article} 
+\usepackage[a4paper,margin=2cm,right=7cm]{geometry}
+\usepackage[utf8]{inputenc}
+
+% Less spacing around titles
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+% No paragraph indents
+\setlength\parindent{0pt}
+
+% No page numbers
+\thispagestyle{empty}
+\pagestyle{empty}
+
+% Colored margin notes
+\usepackage{todonotes}
+\setlength{\marginparwidth}{5cm}
+
+\begin{document}
+{\Large\bf Everything Is Connected: Example Story}
+
+\section{Facebook: Jane Doe}
+Once upon a time,
+\todo[color=red!40]{from Facebook profile}
+Jane Doe,
+\todo[color=green!40]{from Facebook likes}
+who likes pizza and ice cream,
+wondered how she was connected to the Chicago Theatre.
+Many of her friends were curious
+why she wanted to know that,
+but of course, that didn't stop
+\todo[color=red!40]{from Facebook profile}
+Jane.
+
+\section{DBpedia: David Guetta}
+The thing is,
+\todo[color=red!40]{from Facebook profile}
+Jane really likes David Guetta.
+
+\todo[color=green!40]{from DBpedia}
+Pierre David Guetta, known professionally as David Guetta, is a French house music producer and DJ. Originally a DJ at nightclubs during the 1980s and 1990s, he co-founded Gum Productions and released his first album, Just a Little More Love, in 2002.
+
+\section{DBpedia: Paris}
+\todo[color=red!40]{from DBpedia property}
+The birth place of David Guetta is Paris, France.
+
+\todo[color=green!40]{from DBpedia}
+Paris is the capital and largest city of France. It is situated on the river Seine, in northern France, at the heart of the Île-de-France region.
+
+\section{DBpedia: Eiffel Tower}
+\todo[color=red!40]{from DBpedia property}
+The Eiffel Tower is located in Paris.%
+\footnote{Ideally, subject and object of this sentence are switched.}
+
+\todo[color=green!40]{from DBpedia}
+The Eiffel Tower is a puddle iron lattice tower located on the Champ de Mars in Paris. Built in 1889 as the entrance arch to the 1889 World's Fair, it has become both a global cultural icon of France and one of the most recognizable structures in the world.
+
+\section{DBpedia: Émile Nouguier}
+\todo[color=red!40]{from DBpedia property}
+The Eiffel Tower is a significant building of Émile Nouguier.
+
+\todo[color=green!40]{from DBpedia}
+Émile Nouguier was a French civil engineer and architect.
+
+\section{DBpedia: 1898/02/20}
+\todo[color=red!40]{from DBpedia property}
+February 20th, 1898, is the death date of Émile Nouguier.
+
+\todo[color=red!40]{from DBpedia property}
+It is also the birth date of Jimmy Yancey.
+
+\section{DBpedia: Jimmy Yancey}
+\todo[color=green!40]{from DBpedia}
+James Edwards "Jimmy" Yancey was an African American boogie-woogie pianist, composer, and lyricist. One reviewer noted him as "one of the pioneers of this raucous, rapid-fire, eight-to-the-bar piano style".
+
+\section{DBpedia: Chicago}
+\todo[color=red!40]{from DBpedia property}
+The death place of Jimmy Yancey is Chicago.
+
+\todo[color=green!40]{from DBpedia}
+Chicago is the largest city in the US state of Illinois and the third most populous city in the United States after New York City and Los Angeles. The city has around 2.7 million residents.
+
+\section{DBpedia: Chicago Theatre}
+\todo[color=red!40]{from DBpedia property}
+Chicago is the location of the Chicago Theatre.
+
+\todo[color=green!40]{from DBpedia}
+The Chicago Theatre, originally known as the Balaban and Katz Chicago Theatre, is a landmark theater located on North State Street in the Loop area of Chicago, Illinois, in the United States.
+
+\end{document}
