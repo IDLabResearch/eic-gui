@@ -2,13 +2,20 @@
 \usepackage[a4paper,margin=2cm,right=7cm]{geometry}
 \usepackage[utf8]{inputenc}
 
+% Less spacing around titles
 \usepackage{titlesec}
 \titlespacing*{\section}{0pt}{1em}{0.5em}
 
+% No paragraph indents
+\setlength\parindent{0pt}
+
+% No page numbers
+\thispagestyle{empty}
+\pagestyle{empty}
+
+% Colored margin notes
 \usepackage{todonotes}
 \setlength{\marginparwidth}{5cm}
-
-\setlength\parindent{0pt}
 
 \begin{document}
 {\Large\bf Everything Is Connected: Example Story}
