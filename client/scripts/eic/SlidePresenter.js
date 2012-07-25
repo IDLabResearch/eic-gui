@@ -12,6 +12,8 @@ define(['lib/jquery'], function ($) {
         return;
 
       var self = this;
+      var currentSlide;
+      
       function showNext() {
         // if slides are available, show them
         if (self.generator.hasNext()) {
@@ -22,8 +24,12 @@ define(['lib/jquery'], function ($) {
           // add the next slide and start it
           var nextSlide = self.generator.next();
           self.$container.prepend(nextSlide.$element);
-          nextSlide.once('stopped', showNext);
           nextSlide.start();
+          window.setTimeout(showNext, nextSlide.duration);
+          // stop the previous slide
+          if (currentSlide)
+            currentSlide.stop();
+          currentSlide = nextSlide;
         }
         // else, wait for new slides to arrive
         else {
