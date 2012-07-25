@@ -1,7 +1,33 @@
 define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 	"use strict";
 
+	//TODO: Make following var and function only visible within FacebookConnector module scope
   var FB;
+
+  function findPlacesNearUser(id, callback) {
+    var place_id = '';
+
+    var latitude = '';
+    var longitude = '';
+
+    FB.api('/me', function (response) {
+      var query = FB.Data.query('select name, hometown_location from user where uid=' + id, response.id);
+      query.wait(function (rows) {
+        place_id = rows[0].hometown_location.id;
+        FB.api('/me', function (response) {
+          var query = FB.Data.query('select latitude, longitude from place where page_id=' + place_id, response.id);
+          query.wait(function (rows) {
+            latitude = rows[0].latitude;
+            longitude = rows[0].longitude;
+            FB.api('/search?center=' + latitude + ',' + longitude + '&type=place', function (response) {
+              callback(response);
+            });
+          });
+        });
+      });
+    });
+  }
+
 
   function FacebookConnector() {
     EventEmitter.call(this);
@@ -92,7 +118,38 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       FB.api('/search?q=' + query + '&type=event', function (response) {
         callback(response);
       });
-    }
+    },
+    
+    findPlace : function (query, callback) {
+      FB.api('/search?q=' + query + '&type=place', function (response) {
+        callback(response);
+      });
+    },
+
+    findBusinessByGeoLocation : function (query,latitude,longitude,distance,callback) {
+      FB.api('/search?q=' + query + 'center=' + latitude + ',' + longitude + '&distance=' + distance + '&type=place', function(response) {
+        callback(response);
+      });
+    },
+
+    findPlaceById : function (place_fb_id, callback) {
+      //Interesting parameters: description and number of times users checked in a location
+      FB.api('/me', function (response) {
+        var query = FB.Data.query('select name, latitude, longitude, description, geometry, checkin_count, display_subtext from place where page_id=' + place_fb_id, response.id);
+        query.wait(function (rows) {
+          callback(rows[0]);
+        });
+      });
+    },
+    
+    findPlacesNearUser : function (facebook_id,callback) {
+      findPlacesNearUser(facebook_id,callback);
+    },
+    
+    findPlacesNearMe : function (callback) {
+			findPlacesNearUser('{0}',callback);
+		}
+
   };
 
   return FacebookConnector;
