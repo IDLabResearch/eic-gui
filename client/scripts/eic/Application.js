@@ -3,18 +3,23 @@ define(['lib/jquery', 'eic/FacebookConnector',
 function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
+  var facebookConnector;
+  
   function Application() { }
   
   Application.prototype = {
     start: function () {
       this.attachEventHandlers();
       $('#topic').val('');
+      facebookConnector = new FacebookConnector()
+	  facebookConnector.init();
     },
     
     connectToFacebook: function () {
       var self = this;
       $('#facebook').text('Connecting…');
-      new FacebookConnector().connect(function (error, profile) {
+      
+      facebookConnector.connect(function (error, profile) {
         self.profile = profile;
         $('#facebook').text('Connected as ' + profile.name + '.');
         $('.step.two').removeClass('inactive');

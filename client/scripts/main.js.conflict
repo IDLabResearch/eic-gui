@@ -1,0 +1,29 @@
+(function (requirejs) {
+  "use strict";
+  
+  requirejs.config({
+    baseUrl: 'scripts',
+    shim: {
+      'lib/jquery': { exports: 'jQuery' },
+      'lib/jvent': { exports: 'jvent' },
+    },
+  });
+<<<<<<< HEAD
+  
+  var scripts = [
+    'lib/jquery',
+    'eic/all',
+  ];
+
+  requirejs(scripts, function () {
+    if (window.startApplication)
+      window.startApplication.apply(window, arguments);
+  });
+})(window.requirejs);
+=======
+
+  require(['eic/Application'], function (Application) {
+    new Application().start();
+  });
+})(window.requirejs);
+>>>>>>> a773be3765baba69a06f7b065ec1ae3d0480a9d9
