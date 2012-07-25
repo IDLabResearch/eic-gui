@@ -10,6 +10,6 @@
   });
 
   require(['eic/Application'], function (Application) {
-    new Application().start();
+    new Application().init();
   });
 })(window.requirejs);
