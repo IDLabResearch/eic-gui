@@ -16,6 +16,7 @@
     'eic/CombinedSlideGenerator',
     'eic/GoogleImageSlideGenerator',
     'eic/SlidePresenter',
+    'eic/StretchSlideGenerator',
     'eic/TitleSlideGenerator',
     'eic/VideoSlideGenerator',
     'eic/TTSGenerator',
