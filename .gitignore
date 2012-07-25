@@ -6,3 +6,5 @@ node_modules
 *.out
 *.pdf
 *.synctex.gz
+.project
+.settings
