@@ -5,12 +5,8 @@
   <title>Everything Is Connected — Slide Presenter demo</title>
   <script>
     function startApplication($, eic) {
-      // Make a 5 second show of a CombinedSlideGenerator.
       var generators = new eic.CombinedSlideGenerator();
-      var stretchGenerator = new eic.StretchSlideGenerator(generators, 5000);
-      stretchGenerator.init();
-      
-      var presenter = new eic.SlidePresenter('#main .slides', stretchGenerator);
+      var presenter = new eic.SlidePresenter('#main .slides', generators);
       $('#start').click(function() {
     	generators.addGenerator(new eic.IntroductionSlideGenerator());
         var topics = $('#topics').val().trim().split(/,\s*/);
