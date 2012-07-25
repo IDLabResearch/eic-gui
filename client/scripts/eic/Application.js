@@ -1,19 +1,16 @@
 define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'], function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
 	"use strict";
 
-  var facebookConnector;
-
   function Application() {
+		this.facebookConnector = new FacebookConnector();
   }
-
 
   Application.prototype = {
     // Initializes the application.
     init : function () {
       this.attachEventHandlers();
       $('#topic').val('');
-      facebookConnector = new FacebookConnector();
-      facebookConnector.init();
+      this.facebookConnector.init();
     },
 
     // Lets the user connect with a Facebook account.
@@ -21,7 +18,7 @@ define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator',
       var self = this;
       $('#facebook').text('Connecting…');
 
-      facebookConnector.connect(function (error, profile) {
+      this.facebookConnector.connect(function (error, profile) {
         self.profile = profile;
         
         // Update connection status.
