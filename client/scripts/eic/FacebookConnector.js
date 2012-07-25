@@ -9,12 +9,6 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 
 	FacebookConnector.prototype = {
 		init : function(login_action, logout_action) {
-			login_action = (typeof login_action == 'undefined') ?
-     			console.log('login') : login_action;
-     			
-     		logout_action = (typeof logout_action == 'undefined') ?
-     			console.log('logout') : logout_action;
-     
 			window.fbAsyncInit = function() {
 				FB = window.FB;
 
@@ -50,11 +44,14 @@ define(['lib/jquery', 'lib/jvent'], function($, EventEmitter) {"use strict";
 			document.getElementById('fb-root').appendChild(e);
 
 			function login() {
-				login_action();
+				(typeof login_action == 'undefined') ?
+     			console.log('login') : login_action();
 			}
 
 			function logout() {
-				logout_action();
+				(typeof logout_action == 'undefined') ?
+     			console.log('logout') : logout_action();
+     
 			}
 
 			console.log("hello facebook");
