@@ -1,4 +1,4 @@
-define(['lib/jquery','lib/jvent'],
+define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
 
@@ -38,41 +38,42 @@ define(['lib/jquery','lib/jvent'],
     }
 
     TTSGenerator.prototype = {
-      retrieveVoice:function (lang){
-        if (this.VOICE_LIST[lang]){
+      retrieveVoice: function (lang) {
+        if (this.VOICE_LIST[lang]) {
           return this.VOICE_LIST[lang];
         }
         return this.VOICE_LIST.en_GB;
       },
-      getSpeech: function (text,lang){
+      getSpeech: function (text, lang) {
         var self = this;
         console.log('success');
         $.ajax({
           url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
-          type: 'GET', 
+          type: 'GET',
           data: {
-            prot_vers: 2, 
-            cl_login: "EVAL_VAAS", 
-            cl_app: "EVAL_9289549", 
-            cl_pwd: "veuoqce4", 
-            req_voice: this.retrieveVoice(lang), 
-            req_text:text         
+            prot_vers: 2,
+            cl_login: "EVAL_VAAS",
+            cl_app: "EVAL_9289549",
+            cl_pwd: "veuoqce4",
+            req_voice: this.retrieveVoice(lang),
+            req_text: text
           },
           dataType: 'jsonp',
-          success: function(data){
-            if (data.res === 'OK'){
+          success: function (data) {
+            if (data.res === 'OK') {
               console.log('success');
-              self.emit('speechReady',data);
-            } else {
-              self.emit('speechError',data);
+              self.emit('speechReady', data);
+            }
+            else {
+              self.emit('speechError', data);
             }
           },
-          error: function(error){
-            self.emit('speechError',error);
+          error: function (error) {
+            self.emit('speechError', error);
           }
-        });   
+        });
       }
-    }
+    };
     
     return TTSGenerator;
   });
