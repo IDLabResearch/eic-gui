@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-define(['lib/jquery', 'eic/FacebookConnector', 'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'], function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
-	"use strict";
-
-  function Application() {
-		this.facebookConnector = new FacebookConnector();
-  }
-
-=======
 define(['lib/jquery', 'eic/FacebookConnector',
         'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
 function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
@@ -17,7 +8,6 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
     this.facebookConnector = new FacebookConnector();
   }
   
->>>>>>> b76b7e25ffd4ead6281d0cc8a0ac1449e5dd5ff8
   Application.prototype = {
     // Initializes the application.
     init: function () {
@@ -25,10 +15,6 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
       this.attachEventHandlers();
       // Make sure the topic is empty (browsers can cache text).
       $('#topic').val('');
-<<<<<<< HEAD
-      this.facebookConnector.init();
-=======
->>>>>>> b76b7e25ffd4ead6281d0cc8a0ac1449e5dd5ff8
     },
     
     // Lets the user connect with a Facebook account.
@@ -36,11 +22,7 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
       var self = this;
       
       $('#facebook').text('Connecting…');
-<<<<<<< HEAD
-
-=======
       
->>>>>>> b76b7e25ffd4ead6281d0cc8a0ac1449e5dd5ff8
       this.facebookConnector.connect(function (error, profile) {
         self.profile = profile;
         

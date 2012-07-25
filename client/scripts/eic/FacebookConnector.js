@@ -87,9 +87,9 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
         callback(response);
       });
     },
-    
+
     findEvent : function (query, callback) {
-    	FB.api('/search?q=' + query + '&type=event', function (response) {
+      FB.api('/search?q=' + query + '&type=event', function (response) {
         callback(response);
       });
     }
