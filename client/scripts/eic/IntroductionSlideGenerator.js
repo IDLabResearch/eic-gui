@@ -9,7 +9,7 @@ function ($, BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator, Go
 	    this.slides = [{content: "Earth. Our home planet ...", type: "text"},
 	                          {content: "earth", type: "image"},
 	                          {content: "... It's filled with data and things ...", type: "text"},
-	                          {content: "earth luminous network", type: "image"},
+	                          {content: "Modern earth in a web", type: "image"},
 	                          {content: "... and EVERYTHING IS CONNECTED.", type: "text"},
 	                          {content: "Don't believe us? Just wait and see...", type: "text"},];
 	    this.generators = [];
