@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/BaseSlideGenerator'],
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
@@ -7,14 +7,14 @@ function ($, BaseSlideGenerator) {
   /** Generator of images slides from Facebook User Profile search results.
    * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
    */
-  function FacebookUserProfilePhotosSlideGenerator(fbConnector, maxResults) {
+  function FBProfilePhotosGenerator(fbConnector, maxResults) {
     BaseSlideGenerator.call(this);
     this.fbConnector = fbConnector;
     this.maxResults = maxResults || 5;
     this.slides = [];
   }
 
-  $.extend(FacebookUserProfilePhotosSlideGenerator.prototype,
+  $.extend(FBProfilePhotosGenerator.prototype,
            BaseSlideGenerator.prototype,
   {
     /** Checks whether any slides are left. */
@@ -52,5 +52,5 @@ function ($, BaseSlideGenerator) {
     },
   });
 
-  return FacebookUserProfilePhotosSlideGenerator;
+  return FBProfilePhotosGenerator;
 });

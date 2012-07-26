@@ -85,9 +85,14 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       FB.login(function (response) {
         if (response.authResponse) {
           console.log('Welcome!  Fetching your information.... ');
-          FB.api('/me', function (response) {
-            console.log('Good to see you, ' + response.name + '.');
-            callback(0, response);
+          FB.api('/me', function (profile) {
+            console.log('Good to see you, ' + profile.name + '.');
+            
+            // Make profile behave like a Topic
+            profile.uri = profile.link;
+            profile.label = profile.name;
+            
+            callback(0, profile);
           });
 
         } else {

@@ -1,6 +1,6 @@
 define(['lib/jquery', 'eic/AutocompleteTopic',
         'eic/FacebookConnector',
-        'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
 function ($, autocompleteTopic,
           FacebookConnector,
           TopicToTopicSlideGenerator, SlidePresenter) {
@@ -39,8 +39,13 @@ function ($, autocompleteTopic,
     
     // Updates the goal topic.
     updateTopic: function () {
-      var topic = this.topic = $('#topic').val(),
-          valid = topic.trim().length > 0;
+      var label = $('#topic').val(),
+          valid = label.trim().length > 0;
+      
+      this.topic = {
+        label: label,
+        uri: valid ? 'http://dbpedia.org/resource/' + label.replace(/[^\w]/g, '_') : ''
+      };
       
       // Enable third step if the topic is valid.
       $('.step.three')[valid ? 'removeClass' : 'addClass']('inactive');

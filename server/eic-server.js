@@ -29,3 +29,11 @@ app.get(/^\/stylesheets\/(?:\w+)$/, function (req, res) {
 app.get(/^\/(?:\w+\/)*(?:(?:\w+\.)+\w+)?$/, function (req, res) {
   res.sendfile(app.staticFolder + req.url);
 });
+
+app.post('/stories', function (req, res) {
+  res.redirect(303, '/stories/1');
+});
+
+app.get(/^\/stories\/\d+$/, function (req, res) {
+  res.sendfile(__dirname + req.url + '.json');
+});
