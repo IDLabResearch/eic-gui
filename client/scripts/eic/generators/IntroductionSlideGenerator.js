@@ -2,9 +2,11 @@ define([ 'lib/jquery', 'eic/generators/BaseSlideGenerator',
     'eic/generators/CombinedSlideGenerator',
     'eic/generators/TitleSlideGenerator',
     'eic/generators/GoogleImageSlideGenerator',
-    'eic/generators/GoogleMapsSlideGenerator' ], function ($,
+    'eic/generators/GoogleMapsSlideGenerator',
+    'eic/FacebookConnector'],
+function ($,
     BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator,
-    GoogleImageSlideGenerator, GoogleMapsSlideGenerator) {
+    GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector) {
 
   "use strict";
 
@@ -21,42 +23,31 @@ define([ 'lib/jquery', 'eic/generators/BaseSlideGenerator',
       init : function () {
         if (this.inited)
           return;
+        
+        var person = {
+          name : this.startTopic.name,
+          gender : (this.startTopic.gender == 'male') ? 'man' : 'woman',
+          fullhometown : this.startTopic.hometown.name,
+          hometown : this.startTopic.hometown.name.substr(0, this.startTopic.hometown.name.indexOf(','))
+        };
+        
         /* Make all the slide contents for the introduction */
-        var person = { name : this.startTopic.name,
-        gender : (this.startTopic.gender == 'male') ? 'man' : 'woman',
-        fullhometown : this.startTopic.hometown.name,
-        hometown : this.startTopic.hometown.name.substr(0, this.startTopic.hometown.name.indexOf(',')),
-        music : this.startTopic.music[0].name};
-        this.slides = [
-            { content : "Earth. Our home planet ...", type : "text" },
-            { content : "earth", type : "image" },
-            { content : "... It's filled with data and things ...", type : "text" },
-            { content : "earth luminous network", type : "image" },
-            { content : "... and EVERYTHING IS CONNECTED", type : "text" },
-            { content : "Don't believe me? I will show you.", type : "text" },
-            { content : "Once upon a time, " + person.name + " ...", type: "text"},
-            { content : "... a " + person.gender + " from " + person.fullhometown + " ...", type : "text" },
-            { content : person.fullhometown, type : "map" },
-            { content : person.hometown, type : "image" },
-            { content : "... liked " + person.music + " ...", type : "text" },
-          ];
-
-        /* Each slide type gets its own generator */
+        this.addGenerator(new TitleSlideGenerator("Earth. Our home planet ..."));
+        this.addGenerator(new GoogleImageSlideGenerator("earth", 2));
+        this.addGenerator(new TitleSlideGenerator("... It's filled with data and things ..."));
+        this.addGenerator(new GoogleImageSlideGenerator("earth luminous network", 2));
+        this.addGenerator(new TitleSlideGenerator("... and EVERYTHING IS CONNECTED"));
+        this.addGenerator(new TitleSlideGenerator("Don't believe me? I will show you."));
+        this.addGenerator(new TitleSlideGenerator("Once upon a time, " + person.name + " ..."));
+        this.addGenerator(new TitleSlideGenerator("... a " + person.gender +
+                                                  " from " + person.fullhometown + " ..."));
+        this.addGenerator(new GoogleMapsSlideGenerator(person.fullhometown));
+        this.addGenerator(new GoogleImageSlideGenerator(person.hometown));
+        
         var self = this;
-        this.slides.forEach(function (slide) {
-          var generator;
-          switch (slide.type) {
-          case "text":
-            generator = new TitleSlideGenerator(slide.content);
-            break;
-          case "image":
-            generator = new GoogleImageSlideGenerator(slide.content, 2);
-            break;
-          case "map":
-            generator = new GoogleMapsSlideGenerator(slide.content);
-            break;
-          }
-          self.addGenerator(generator);
+        new FacebookConnector().get('music', function (response) {
+          var music = response.data[0].name;
+          self.addGenerator(new TitleSlideGenerator("... liked " + music + " ..."));
         });
 
         this.inited = true;

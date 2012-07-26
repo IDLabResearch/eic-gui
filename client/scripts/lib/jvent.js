@@ -29,6 +29,10 @@
 		* me.on("ready", startDoingStuff);
 		*/
 		this.addListener = this.on = function (event, listener) { // Event: 'newListener'
+		  if(!event) {
+		    console.log(arguments)
+		    return;
+		  }
 			if (typeof collection[event] === "undefined") {
 				collection[event] = [];
 			}

@@ -20,6 +20,7 @@ function ($, BaseSlideGenerator) {
     this.maxVideoCount = options.maxVideoCount || 3;
     this.maxVideoDurationInS = options.maxVideoDurationInS || 30;
     this.skipVideoDurationInS = options.skipVideoDurationInS || 10;
+    this.orderMethod = options.orderMethod || 'relevance';
     this.slides = [];
   }
 
@@ -39,14 +40,7 @@ function ($, BaseSlideGenerator) {
       var foundVideos = 0;
       var inspectedVideos = 0;
       var i = 0;
-      while(foundVideos != this.maxVideoCount){
-        var found = searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
-        inspectedVideos += this.maxVideoCount;
-        foundVideos += found;
-        i++;
-        if(i == 10)
-          break;
-      }
+      searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
       this.inited = true;
     },
 
@@ -78,29 +72,45 @@ function ($, BaseSlideGenerator) {
     },
   });
   
-  function searchVideos(self, startResults, maxResults, skip) {
-    var counter = 0;
+  function searchVideos(self, startResults, maxResult, skip) {
+    if (maxResult > 50) {
+      return;
+    }
+    var inspected = 0;
     var resultCounter = startResults;
-    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResults + '&orderby=viewCount&alt=jsonc&q=' + self.topic.label, {'async': false})
+    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResult + '&orderby=' + self.orderMethod + '&alt=jsonc&q=' + self.topic.label)
      .success(function (response) {
+        var nrOfItems = response.data.items.length;
         response.data.items.forEach(function (item) {
-          if (counter < skip) {
-            counter++;
-          } else if (resultCounter == self.maxVideoCount) {
-            //we're done
-          } else if (item.restrictions === undefined) {
-            $.ajax('http://www.youtube.com/get_video_info?video_id=' + item.id + '&el=embedded', {'async': false})
+          if (inspected >= skip && item.restrictions === undefined) {
+            $.ajax('http://www.youtube.com/get_video_info?video_id=' + item.id + '&el=embedded')
             .success(function (res) {
-              if (res.substr(0, 11) != 'status=fail') {
+              if (res.substr(0, 11) != 'status=fail' && resultCounter != self.maxVideoCount) {
                 self.addVideoSlide(item.id, item.duration);
                 resultCounter++;
               }
+            })
+            .always(function (res) {
+              inspected++;
+              if (resultCounter != self.maxVideoCount) {
+                checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
+              }
             });
+          } else {
+            inspected++;
+            if (resultCounter != self.maxVideoCount) {
+              checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
+            }
           }
         });
       });
-    return resultCounter;
   }
-
+  
+  function checkStatus(self, inspected, nrOfItems, maxResult, foundResults) {
+    if (inspected == nrOfItems && nrOfItems == maxResult) {
+      searchVideos(self, foundResults, maxResult * 2, inspected);
+    }
+  }
+  
   return YouTubeSlideGenerator;
 });
