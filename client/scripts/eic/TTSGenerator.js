@@ -4,7 +4,7 @@ define(['lib/jquery', 'lib/jvent'],
 
     function TTSGenerator() {
       EventEmitter.call(this);
-    
+
       this.VOICE_LIST = {
         "ar_SA" : "leila22k",
         "ca_ES" : "laia22k",
@@ -63,8 +63,7 @@ define(['lib/jquery', 'lib/jvent'],
             if (data.res === 'OK') {
               console.log('success');
               self.emit('speechReady', data);
-            }
-            else {
+            } else {
               self.emit('speechError', data);
             }
           },
@@ -74,6 +73,6 @@ define(['lib/jquery', 'lib/jvent'],
         });
       }
     };
-    
+
     return TTSGenerator;
   });
