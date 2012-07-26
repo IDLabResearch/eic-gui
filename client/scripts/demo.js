@@ -32,9 +32,9 @@
     'eic/FacebookConnector',
     'eic/MapsSlideGenerator',
     'eic/TopicSlidePresenter',
-    'eic/TopicSlideGenerator'
-  
-];
+    'eic/TopicSlideGenerator',
+	'eic/YouTubeSlideGenerator'];
+
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};

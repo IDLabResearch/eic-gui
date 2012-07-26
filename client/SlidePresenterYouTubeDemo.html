@@ -2,19 +2,16 @@
 <html>
 <head>
   <meta charset='utf-8'>
-  <title>Everything Is Connected — Slide Presenter demo</title>
+  <title>Everything Is Connected — YouTube Slide Presenter demo</title>
   <script>
     function startApplication($, eic) {
       var generators = new eic.CombinedSlideGenerator();
       var presenter = new eic.SlidePresenter('#main .slides', generators);
       $('#start').click(function() {
-    	generators.addGenerator(new eic.IntroductionSlideGenerator());
-        var topics = $('#topics').val().trim().split(/,\s*/);
+    	var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
-          if(topic.length > 0) {
-            generators.addGenerator(new eic.TitleSlideGenerator(topic));
-            generators.addGenerator(new eic.GoogleImageSlideGenerator(topic));
-          }
+          generators.addGenerator(new eic.TitleSlideGenerator(topic));
+          generators.addGenerator(new eic.YouTubeSlideGenerator(topic));
         });
         presenter.start();
       });
@@ -26,7 +23,7 @@
 <body>
   <div id="main">
     <div id="input">
-      <input id="topics" size="100" value="Stones, Oceans, Trees" />
+      <input id="topics" size="100" value="Football" />
       <input id="start" type="submit" value="Start" />
     </div>
     <div class="slides">
