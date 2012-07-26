@@ -61,8 +61,6 @@ function ($, BaseSlideGenerator) {
       if (durationInS < this.maxVideoDurationInS + this.skipVideoDurationInS && durationInS >= this.maxVideoDurationInS)
         start = 0;
       
-      console.log('start: ' + start + ', end: ' + end);
-      
       var $iframe = $('<iframe>');
       $iframe.attr('class', 'youtube-player')
              .attr('type', 'text/html')
