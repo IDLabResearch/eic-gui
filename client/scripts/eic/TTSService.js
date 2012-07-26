@@ -2,7 +2,7 @@ define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
 
-    function TTSGenerator() {
+    function TTSService() {
       EventEmitter.call(this);
 
       this.VOICE_LIST = {
@@ -37,7 +37,7 @@ define(['lib/jquery', 'lib/jvent'],
       };
     }
 
-    TTSGenerator.prototype = {
+    TTSService.prototype = {
       retrieveVoice: function (lang) {
         if (this.VOICE_LIST[lang]) {
           return this.VOICE_LIST[lang];
@@ -74,5 +74,5 @@ define(['lib/jquery', 'lib/jvent'],
       }
     };
 
-    return TTSGenerator;
+    return TTSService;
   });

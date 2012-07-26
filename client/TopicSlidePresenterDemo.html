@@ -10,18 +10,8 @@
           var topic = $('#topic').val();
           var description = $('#description').val();
           var generators = new eic.TopicSlideGenerator(topic, description);
-          var presenter = new eic.SlidePresenter('#main .slides', generators);
-          generators.once('playReady',function () {
-            var audioEl = $("<audio src='"+data.snd_url+"' controls='controls' style='display: none;'/>");
-            
-            $("#main").append(audioEl);
-            
-            var audioEl = $("#audioTag");
-            audioEl.load();
-            audioEl.play();
-          
-          });
-        
+          var presenter = new eic.TopicSlidePresenter('#main .slides', generators);
+       
           presenter.start();
         });
       }
