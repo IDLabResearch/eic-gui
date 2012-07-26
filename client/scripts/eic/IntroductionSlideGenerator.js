@@ -1,7 +1,7 @@
-define([ 'lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', 'eic/TitleSlideGenerator', 'eic/GoogleImageSlideGenerator', 'eic/MapsSlideGenerator' ],
+define([ 'lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', 'eic/TitleSlideGenerator', 'eic/GoogleImageSlideGenerator', 'eic/GoogleMapsSlideGenerator' ],
     function ($,
     BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator,
-    GoogleImageSlideGenerator, MapsSlideGenerator) {
+    GoogleImageSlideGenerator, GoogleMapsSlideGenerator) {
 
   "use strict";
 
@@ -16,12 +16,11 @@ define([ 'lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', '
     type : "text" }, { content : "Don't believe us? Just wait and see...",
     type : "text" }, { content : "Ghent, Belgium",
     type : "map" } ];
-    this.generators = [];
     this.startTopic = startTopic;
   }
 
   $.extend(IntroductionSlideGenerator.prototype,
-      CombinedSlideGenerator.prototype, {
+           CombinedSlideGenerator.prototype, {
       /** Initiates the introductory slides */
       init : function () {
         if (!this.inited) {
@@ -32,22 +31,17 @@ define([ 'lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', '
               // Create a text-slide with the
               // TitleSlideGenerator
               var titleSlideGenerator = new TitleSlideGenerator(slide.content);
-              titleSlideGenerator.init();
-              self.generators.push(titleSlideGenerator);
+              self.addGenerator(titleSlideGenerator);
             } else if (slide.type == 'image') {
               // Create an image-slide with the
               // GoogleImageSlideGenerator
               var googleImageSlideGenerator = new GoogleImageSlideGenerator(
                   slide.content, 1);
-              googleImageSlideGenerator.init();
-              self.generators.push(googleImageSlideGenerator);
+              self.addGenerator(googleImageSlideGenerator);
             } else if (slide.type == 'map') {
-              // Create a map-slide with the
-              // MapsSlideGenerator
-              var mapsSlideGenerator = new MapsSlideGenerator(
-                  slide.content);
-              mapsSlideGenerator.init();
-              self.generators.push(mapsSlideGenerator);
+              // Create a map-slide with the GoogleMapsSlideGenerator
+              var mapsSlideGenerator = new GoogleMapsSlideGenerator(slide.content);
+              self.addGenerator(mapsSlideGenerator);
             }
 
             this.inited = true;
