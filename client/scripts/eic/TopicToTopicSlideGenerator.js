@@ -1,5 +1,8 @@
-define(['lib/jquery', 'eic/CombinedSlideGenerator', 'eic/IntroductionSlideGenerator'],
-function ($, CombinedSlideGenerator, IntroductionSlideGenerator) {
+define(['lib/jquery',
+        'eic/CombinedSlideGenerator',
+        'eic/IntroductionSlideGenerator',
+        'eic/TopicSlideGenerator'],
+function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
@@ -16,6 +19,22 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator) {
     init: function () {
       CombinedSlideGenerator.prototype.init.call(this);
       this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
+
+      var self = this;
+      
+      $.ajax({
+        type: "POST",
+        url: "/stories",
+        dataType: "JSON",
+        data: {
+          startTopic: this.startTopic,
+          endTopic: this.endTopic
+        }
+      }).success(function (story) {
+        story.steps.forEach(function (step) {
+          self.addGenerator(new TopicSlideGenerator(step.topic));
+        });
+      });
     }
   });
   
