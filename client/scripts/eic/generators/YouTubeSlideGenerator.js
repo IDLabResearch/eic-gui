@@ -41,7 +41,7 @@ function ($, BaseSlideGenerator) {
       var inspectedVideos = 0;
       var i = 0;
       searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
-      this.inited = true;      
+      this.inited = true;
     },
 
     /** Advances to the next slide. */
@@ -73,7 +73,7 @@ function ($, BaseSlideGenerator) {
   });
   
   function searchVideos(self, startResults, maxResult, skip) {
-    if(maxResult > 50){
+    if (maxResult > 50) {
       return;
     }
     var inspected = 0;
@@ -92,13 +92,13 @@ function ($, BaseSlideGenerator) {
             })
             .always(function (res) {
               inspected++;
-              if(resultCounter != self.maxVideoCount) {
+              if (resultCounter != self.maxVideoCount) {
                 checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
               }
             });
           } else {
             inspected++;
-            if(resultCounter != self.maxVideoCount) {
+            if (resultCounter != self.maxVideoCount) {
               checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
             }
           }
@@ -108,7 +108,7 @@ function ($, BaseSlideGenerator) {
   
   function checkStatus(self, inspected, nrOfItems, maxResult, foundResults) {
     if (inspected == nrOfItems && nrOfItems == maxResult) {
-        searchVideos(self, foundResults, maxResult * 2, inspected);
+      searchVideos(self, foundResults, maxResult * 2, inspected);
     }
   }
   
