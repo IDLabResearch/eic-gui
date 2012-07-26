@@ -3,47 +3,56 @@
     {
       "topic": {
         "label": "Jane Doe"
-      }
+      },
+      "text": "Once upon a time, Jane Doe, who likes pizza and ice cream, wondered how she was connected to the Chicago Theatre. Many of her friends were curious why she wanted to know that, but of course, that didn't stop Jane."
     },
     {
       "topic": {
         "label": "David Guetta"
-      }
+      },
+      "text": "The thing is, Jane really likes David Guetta. Pierre David Guetta, known professionally as David Guetta, is a French house music producer and DJ. Originally a DJ at nightclubs during the 1980s and 1990s, he co-founded Gum Productions and released his first album, Just a Little More Love, in 2002."
     },
     {
       "topic": {
         "label": "Paris"
-      }
+      },
+      "text": "The birth place of David Guetta is Paris, France. Paris is the capital and largest city of France. It is situated on the river Seine, in northern France, at the heart of the Île-de-France region."
     },
     {
       "topic": {
         "label": "Eiffel Tower"
-      }
+      },
+      "text": "The Eiffel Tower is located in Paris. The Eiffel Tower is a puddle iron lattice tower located on the Champ de Mars in Paris. Built in 1889 as the entrance arch to the 1889 World's Fair, it has become both a global cultural icon of France and one of the most recognizable structures in the world."
     },
     {
       "topic": {
         "label": "Émile Nouguier"
-      }
+      },
+      "text": "The Eiffel Tower is a significant building of Émile Nouguier. Émile Nouguier was a French civil engineer and architect."
     },
     {
       "topic": {
         "label": "February 20th, 1898"
-      }
+      },
+      "text": "February 20th, 1898, is the death date of Émile Nouguier. It is also the birth date of Jimmy Yancey."
     },
     {
       "topic": {
-      "label": "Jimmy Yancey"
-      }
+        "label": "Jimmy Yancey"
+      },
+      "text": "James Edwards \"Jimmy\" Yancey was an African American boogie-woogie pianist, composer, and lyricist. One reviewer noted him as \"one of the pioneers of this raucous, rapid-fire, eight-to-the-bar piano style\"."
     },
     {
       "topic": {
         "label": "Chicago"
-      }
+      },
+      "text": "Chicago is the largest city in the US state of Illinois and the third most populous city in the United States after New York City and Los Angeles. The city has around 2.7 million residents."
     },
     {
       "topic": {
         "label": "Chicago Theatre"
-      }
+      },
+      "text": "Chicago is the location of the Chicago Theatre. The Chicago Theatre, originally known as the Balaban and Katz Chicago Theatre, is a landmark theater located on North State Street in the Loop area of Chicago, Illinois, in the United States."
     }
   ]
 }
