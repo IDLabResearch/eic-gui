@@ -20,21 +20,21 @@
   });
 
   var scripts = ['lib/jquery',
-    'eic/SlidePresenter',
-    'eic/FacebookConnector',
-    'eic/TopicSlidePresenter',
-    'eic/generators/BaseSlideGenerator',
-    'eic/generators/IntroductionSlideGenerator',
-    'eic/generators/CombinedSlideGenerator',
-    'eic/generators/GoogleImageSlideGenerator',
-    'eic/generators/StretchSlideGenerator',
-    'eic/generators/TitleSlideGenerator',
-    'eic/generators/VideoSlideGenerator',
-    'eic/generators/TTSGenerator',
-    'eic/generators/MapsSlideGenerator',
-    'eic/generators/TopicSlideGenerator',
-	'eic/generators/YouTubeSlideGenerator'];
-
+		'eic/SlidePresenter',
+		'eic/FacebookConnector',
+		'eic/TopicSlidePresenter',
+		'eic/generators/BaseSlideGenerator',
+		'eic/generators/IntroductionSlideGenerator',
+		'eic/generators/CombinedSlideGenerator',
+		'eic/generators/GoogleImageSlideGenerator',
+		'eic/generators/StretchSlideGenerator',
+		'eic/generators/TitleSlideGenerator',
+		'eic/generators/VideoSlideGenerator',
+		'eic/generators/TTSGenerator',
+		'eic/generators/MapsSlideGenerator',
+		'eic/generators/TopicSlideGenerator',
+		'eic/generators/FBProfilePhotosGenerator',
+	  'eic/generators/YouTubeSlideGenerator'];
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};
