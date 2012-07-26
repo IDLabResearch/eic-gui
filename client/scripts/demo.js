@@ -28,7 +28,7 @@
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/StretchSlideGenerator',
     'eic/generators/TitleSlideGenerator',
-    'eic/generators/VideoSlideGenerator'
+    'eic/generators/VideoSlideGenerator',
     'eic/generators/TopicSlideGenerator',
     'eic/generators/FBProfilePhotosGenerator',
 	'eic/generators/YouTubeSlideGenerator'];
