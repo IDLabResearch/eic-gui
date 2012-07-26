@@ -30,10 +30,16 @@ function ($, autocompleteTopic,
         // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
         
-        // Enable second step.
-        $('.step.two').removeClass('inactive');
-        $('#topic').prop('disabled', false)
-                   .focus();
+        // Get additional profile information
+        self.facebookConnector.get('music', function (response) {
+          self.profile.music = response.data;
+          
+          // Enable second step.
+          $('.step.two').removeClass('inactive');
+          $('#topic').prop('disabled', false)
+                     .focus();
+        });
+        
       });
     },
     

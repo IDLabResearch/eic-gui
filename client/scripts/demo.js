@@ -1,3 +1,4 @@
+
 (function (requirejs) {
   "use strict";
 
@@ -9,9 +10,6 @@
       },
       'lib/jvent' : {
         exports : 'jvent'
-      },
-      'lib/OpenLayers' : {
-        exports : 'OpenLayers'
       },
       'lib/jplayer.min' : {
         exports : 'jplayer'
@@ -31,7 +29,6 @@
 		'eic/generators/TitleSlideGenerator',
 		'eic/generators/VideoSlideGenerator',
 		'eic/generators/TTSGenerator',
-		'eic/generators/MapsSlideGenerator',
 		'eic/generators/TopicSlideGenerator',
 		'eic/generators/FBProfilePhotosGenerator',
 	  'eic/generators/YouTubeSlideGenerator'];

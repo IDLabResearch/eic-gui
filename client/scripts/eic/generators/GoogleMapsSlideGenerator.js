@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 5000;
+  var defaultDuration = 2500;
 
   /** Generator that creates a title slide for a topic. */
   function GoogleMapsSlideGenerator(topic) {
