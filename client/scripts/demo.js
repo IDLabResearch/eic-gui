@@ -1,3 +1,4 @@
+
 (function (requirejs) {
   "use strict";
 
@@ -9,9 +10,6 @@
       },
       'lib/jvent' : {
         exports : 'jvent'
-      },
-      'lib/OpenLayers' : {
-        exports : 'OpenLayers'
       },
       'lib/jplayer.min' : {
         exports : 'jplayer'
@@ -33,8 +31,8 @@
     'eic/generators/VideoSlideGenerator',
     'eic/generators/MapsSlideGenerator',
     'eic/generators/TopicSlideGenerator',
+    'eic/generators/FBProfilePhotosGenerator',
 	'eic/generators/YouTubeSlideGenerator'];
-
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};

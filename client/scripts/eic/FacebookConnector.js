@@ -145,6 +145,12 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
     
+    getPlace: function (place_fb_id, callback) {
+			FB.api('/' + place_fb_id, function (response) {
+        callback(response);
+      });
+    },
+    
     findPlacesNearUser : function (facebook_id, callback) {
       findPlacesNearUser(facebook_id, callback);
     },
