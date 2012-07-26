@@ -32,8 +32,8 @@ function ($, BaseSlideGenerator) {
                               height: 600,
                               frameborder: 0,
                               scrolling: "no",
-                              src: "https://maps.google.com/maps?" +
-                                   "?t=h&z=12&output=embed&iwloc=near" +
+                              src: "https://maps.google.com/maps" +
+                                   "?t=h&z=14&output=embed&iwloc=near" +
                                    "&q=" + encodeURIComponent(this.topic.label) +
                                    "&hnear=" + encodeURIComponent(this.topic.label)
                              }),
