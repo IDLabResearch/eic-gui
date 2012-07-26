@@ -32,7 +32,7 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
         }
       }).success(function (story) {
         story.steps.forEach(function (step) {
-          self.addGenerator(new TopicSlideGenerator(step.topic));
+          self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
         });
       });
     }
