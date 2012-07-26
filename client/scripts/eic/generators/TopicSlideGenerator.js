@@ -15,6 +15,7 @@ define(['lib/jquery',
 
       //Create all generators
       var generators = [
+        //TitleSlideGenerator always first in the array!
         new TitleSlideGenerator(topic),
         new GoogleImageSlideGenerator(topic),
         //new VideoSlideGenerator(videoUrl)
@@ -72,24 +73,24 @@ define(['lib/jquery',
         },
         
         next: function () {
-          var i = Math.floor(Math.random() * this.generators.length),
+          var i = 1 + Math.floor(Math.random() * (this.generators.length - 1)),
           slide;
 
           while (!this.generators[i].hasNext()) {
-            i = Math.floor(Math.random() * this.generators.length);
+            i = 1 + Math.floor(Math.random() * (this.generators.length - 1));
           }
-
-          slide = this.generators[i].next();
-          
-          slide.duration = 5000;
-          slide.duration = this.maxDuration / 4;
-          
+        
           if (this.first) {
+            //make sure first slide is always a titleslide
+            slide = this.generators[0].next();
             slide.audioURL = this.audioURL;
             this.first = false;
             
             console.log('First slide added!');
-          }
+          } else
+            slide = this.generators[i].next();
+          
+          slide.duration = this.maxDuration / 5;
           this.slideCount++;
           
           console.log('Slide' + this.slideCount + 'requested!');
