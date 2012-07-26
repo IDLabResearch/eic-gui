@@ -1,12 +1,12 @@
 define(['lib/jquery'], function ($) {
   "use strict";
 
-  function SlidePresenter(container, generator) {
+  function TopicSlidePresenter(container, generator) {
     this.$container = $(container);
     this.generator = generator;
   }
 
-  SlidePresenter.prototype = {
+  TopicSlidePresenter.prototype = {
     start: function () {
       if (this.started)
         return;
@@ -46,3 +46,15 @@ define(['lib/jquery'], function ($) {
 
   return SlidePresenter;
 });
+
+/*
+ * playScene: function (text) {
+          var tts = new TTSGenerator();
+          tts.once('speechReady', function (event, data) {
+            this.sndUrl = data.snd_url;
+            this.duration = data.snd_time;
+            this.emit('playReady',this.sndUrl);
+          });
+          tts.getSpeech(text, 'en_GB');
+        },
+ */

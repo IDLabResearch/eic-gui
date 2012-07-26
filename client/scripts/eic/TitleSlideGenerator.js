@@ -4,10 +4,14 @@ function ($, BaseSlideGenerator) {
 
   var defaultDuration = 1000;
 
-  /** Generator that creates title slides */
-  function TitleSlideGenerator(title) {
+  /** Generator that creates a title slide for a topic. */
+  function TitleSlideGenerator(topic) {
     BaseSlideGenerator.call(this);
-    this.title = title;
+    
+    if (typeof topic === "string")
+      topic = { label: topic };
+    
+    this.topic = topic;
   }
 
   $.extend(TitleSlideGenerator.prototype,
@@ -23,7 +27,7 @@ function ($, BaseSlideGenerator) {
       if (!this.hasNext())
         return;
 
-      var $title = $('<h1>').text(this.title),
+      var $title = $('<h1>').text(this.topic.label),
           slide = this.createBaseSlide('title', $title, defaultDuration);
       
       this.done = true;

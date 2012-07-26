@@ -31,13 +31,13 @@
     }{
       start() : void\\
     }
-  \umlclass[x=5,y=0]{SlideGenerator}{
+  \umlclass[x=6,y=0]{SlideGenerator}{
     }{
       init() : void\\
       hasNext() : bool\\
       next() : Slide\\
     }
-  \umlclass[x=5,y=-4]{Slide}{
+  \umlclass[x=11,y=0]{Slide}{
       \$element : jQuery\\
       start : function\\
       stop : function\\
@@ -45,23 +45,30 @@
       stopped : Event\\
       duration : int\\
   }{}
-  \umlclass[x=11,y=2]{CombinedSlideGenerator}{
+  \umlclass[x=1,y=-4]{CombinedSlideGenerator}{
       generators : SlideGenerator[]
     }{
       addGenerator(Generator) : void\\
     }
-  \umlclass[x=11,y=0]{TitleSlideGenerator}{
-      generators : SlideGenerator[]\\
+  \umlclass[x=6,y=-4]{TitleSlideGenerator}{
+      topic : Topic\\
     }{}
-  \umlclass[x=11,y=-2]{TopicSlideGenerator}{
-      topic : URI\\
+  \umlclass[x=11,y=-4]{TopicSlideGenerator}{
+      topic : Topic\\
     }{}
+   \umlclass[x=6,y=-7]{Topic}{
+      uri : String\\
+      type : String\\
+      label : String\\
+   }{}
 
   \umluniaggreg[mult1=1,mult2=1]{SlidePresenter}{SlideGenerator}
   \umlunicompo[mult1=*,mult2=1]{SlideGenerator}{Slide}
-  \umlinherit[geometry=-|-]{CombinedSlideGenerator}{SlideGenerator}
+  \umlinherit[geometry=|-|]{CombinedSlideGenerator}{SlideGenerator}
   \umlinherit{TitleSlideGenerator}{SlideGenerator}
-  \umlinherit[geometry=-|-]{TopicSlideGenerator}{SlideGenerator}
+  \umlinherit[geometry=|-|]{TopicSlideGenerator}{SlideGenerator}
+  \umldep[geometry=|-|]{TopicSlideGenerator}{Topic}
+  \umldep[]{TitleSlideGenerator}{Topic}
 \end{tikzpicture}
 
 \end{document}

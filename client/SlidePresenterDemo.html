@@ -11,8 +11,10 @@
     	generators.addGenerator(new eic.IntroductionSlideGenerator());
         var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
-          generators.addGenerator(new eic.TitleSlideGenerator(topic));
-          generators.addGenerator(new eic.GoogleImageSlideGenerator(topic));
+          if(topic.length > 0) {
+            generators.addGenerator(new eic.TitleSlideGenerator(topic));
+            generators.addGenerator(new eic.GoogleImageSlideGenerator(topic));
+          }
         });
         presenter.start();
       });

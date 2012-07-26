@@ -1,7 +1,6 @@
 define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 	"use strict";
 
-	//TODO: Make following var and function only visible within FacebookConnector module scope
   var FB;
 
   function findPlacesNearUser(id, callback) {

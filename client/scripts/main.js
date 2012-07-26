@@ -1,7 +1,7 @@
 
 (function (requirejs) {
   "use strict";
-  
+
   requirejs.config({
     baseUrl : 'scripts',
     shim : {
@@ -28,7 +28,7 @@
       },
     },
   });
-  
+
   require(['eic/Application'], function (Application) {
     new Application().init();
   });

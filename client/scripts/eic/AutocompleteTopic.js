@@ -4,6 +4,8 @@ function ($) {
   
   function autocompleteTopic(selector) {
     $(selector).autocomplete({
+      delay: 50,
+      autoFocus: true,
       source: function (request, response) {
         $.ajax({
           url: "http://en.wikipedia.org/w/api.php",

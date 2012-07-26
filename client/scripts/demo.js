@@ -1,6 +1,6 @@
 (function (requirejs) {
   "use strict";
-  
+
   requirejs.config({
     baseUrl : 'scripts',
     shim : {
@@ -13,10 +13,24 @@
       'lib/OpenLayers' : {
         exports : 'OpenLayers'
       },
+      'lib/jplayer.min' : {
+        exports : 'jplayer'
+      },
     },
   });
 
-  var scripts = ['lib/jquery', 'eic/BaseSlideGenerator', 'eic/IntroductionSlideGenerator', 'eic/CombinedSlideGenerator', 'eic/GoogleImageSlideGenerator', 'eic/SlidePresenter', 'eic/StretchSlideGenerator', 'eic/TitleSlideGenerator', 'eic/VideoSlideGenerator', 'eic/TTSGenerator', 'eic/FacebookConnector', 'eic/MapsSlideGenerator'];
+  var scripts = ['lib/jquery',
+    'eic/BaseSlideGenerator',
+    'eic/IntroductionSlideGenerator',
+    'eic/CombinedSlideGenerator',
+    'eic/GoogleImageSlideGenerator',
+    'eic/SlidePresenter',
+    'eic/StretchSlideGenerator',
+    'eic/TitleSlideGenerator',
+    'eic/VideoSlideGenerator',
+    'eic/TTSGenerator',
+    'eic/FacebookConnector',
+    'eic/MapsSlideGenerator'];
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};

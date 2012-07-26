@@ -9,6 +9,10 @@ function ($, BaseSlideGenerator) {
    */
   function GoogleImageSlideGenerator(topic, maxResults) {
     BaseSlideGenerator.call(this);
+    
+    if (typeof topic === "string")
+      topic = { label: topic };
+    
     this.topic = topic;
     this.maxResults = maxResults || 4;
     this.slides = [];
@@ -29,7 +33,7 @@ function ($, BaseSlideGenerator) {
       var self = this;
       $.ajax('https://ajax.googleapis.com/ajax/services/search/images?v=1.0', {
         data: {
-          q: this.topic,
+          q: this.topic.label,
           imgsz: 'xxlarge',
           rsz: this.maxResults,
         },
