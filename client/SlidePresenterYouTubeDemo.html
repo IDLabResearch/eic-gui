@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Everything Is Connected — YouTube Slide Presenter demo</title>
+  <script>
+    function startApplication($, eic) {
+      var generators = new eic.CombinedSlideGenerator();
+      var presenter = new eic.SlidePresenter('#main .slides', generators);
+      $('#start').click(function() {
+    	var topics = $('#topics').val().trim().split(/,\s*/);
+        topics.forEach(function (topic) {
+          generators.addGenerator(new eic.TitleSlideGenerator(topic));
+          generators.addGenerator(new eic.YouTubeSlideGenerator(topic));
+        });
+        presenter.start();
+      });
+    }
+  </script>
+  <script data-main="scripts/demo" src="scripts/lib/require.js" async></script>
+  <link rel="stylesheet" href="stylesheets/demo.css" />
+</head>
+<body>
+  <div id="main">
+    <div id="input">
+      <input id="topics" size="100" value="Football" />
+      <input id="start" type="submit" value="Start" />
+    </div>
+    <div class="slides">
+    </div>
+  </div>
+</body>
+</html>

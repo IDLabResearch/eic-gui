@@ -30,7 +30,8 @@
     'eic/VideoSlideGenerator',
     'eic/TTSGenerator',
     'eic/FacebookConnector',
-    'eic/MapsSlideGenerator'];
+    'eic/MapsSlideGenerator',
+	'eic/YouTubeSlideGenerator'];
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};
