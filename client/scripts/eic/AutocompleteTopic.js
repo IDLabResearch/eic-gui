@@ -19,6 +19,11 @@ function ($) {
             response(data[1]);
           }
         });
+      },
+      select: function (event, ui) {
+        // Also update if a value is selected (instead of typed).
+        $(this).val(ui.item.value)
+               .trigger('change');
       }
     });
   }
