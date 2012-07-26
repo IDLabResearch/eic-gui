@@ -1,0 +1,49 @@
+{
+  "steps": [
+    {
+      "topic": {
+        "label": "Jane Doe"
+      }
+    },
+    {
+      "topic": {
+        "label": "David Guetta"
+      }
+    },
+    {
+      "topic": {
+        "label": "Paris"
+      }
+    },
+    {
+      "topic": {
+        "label": "Eiffel Tower"
+      }
+    },
+    {
+      "topic": {
+        "label": "Émile Nouguier"
+      }
+    },
+    {
+      "topic": {
+        "label": "February 20th, 1898"
+      }
+    },
+    {
+      "topic": {
+      "label": "Jimmy Yancey"
+      }
+    },
+    {
+      "topic": {
+        "label": "Chicago"
+      }
+    },
+    {
+      "topic": {
+        "label": "Chicago Theatre"
+      }
+    }
+  ]
+}
