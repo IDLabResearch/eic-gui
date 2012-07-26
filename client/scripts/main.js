@@ -23,9 +23,6 @@
       'lib/jvent': {
         exports: 'jvent'
       },
-      'lib/OpenLayers' : {
-        exports : 'OpenLayers'
-      },
     },
   });
 
