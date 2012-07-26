@@ -72,7 +72,7 @@ define(['lib/jquery',
         },
         
         next: function () {
-          var i = 1 + Math.floor(Math.random() * (this.generators.length - 1)),
+          var i = Math.floor(Math.random() * this.generators.length),
           slide;
 
           while (!this.generators[i].hasNext()) {
@@ -80,7 +80,10 @@ define(['lib/jquery',
           }
 
           slide = this.generators[i].next();
-
+          
+          slide.duration = 5000;
+          slide.duration = this.maxDuration / 4;
+          
           if (this.first) {
             slide.audioURL = this.audioURL;
             this.first = false;
