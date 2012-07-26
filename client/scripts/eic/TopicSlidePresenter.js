@@ -1,11 +1,11 @@
 define(['lib/jquery'], function ($) {
   "use strict";
-
+  
   function TopicSlidePresenter(container, generator) {
     this.$container = $(container);
     this.generator = generator;
   }
-
+  
   TopicSlidePresenter.prototype = {
     start: function () {
       if (this.started)
@@ -19,6 +19,9 @@ define(['lib/jquery'], function ($) {
       function showNext() {
         // if slides are available, show them
         if (self.generator.hasNext()) {
+          if (currentSlide.description)
+            alert('joepie');
+
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
@@ -39,12 +42,12 @@ define(['lib/jquery'], function ($) {
         }
       }
       showNext();
-
+      
       this.started = true;
     }
   };
-
-  return SlidePresenter;
+  
+  return TopicSlidePresenter;
 });
 
 /*

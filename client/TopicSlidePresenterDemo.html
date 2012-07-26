@@ -5,22 +5,18 @@
     <title>Everything Is Connected — Slide Presenter demo</title>
     <script>
       function startApplication($, eic) {
-        var generators = new eic.NarratedSlideGenerator();
-        var presenter = new eic.SlidePresenter('#main .slides', generators);
+
         $('#start').click(function() {
-          generators.addGenerator(new eic.IntroductionSlideGenerator());
-          var topics = $('#topics').val().trim().split(/,\s*/);
-          topics.forEach(function (topic) {
-            generators.addGenerator(new eic.TitleSlideGenerator(topic));
-            generators.addGenerator(new eic.GoogleImageSlideGenerator(topic));
-          });
-        
+          var topic = $('#topic').val();
+          var description = $('#description').val();
+          var generators = new eic.TopicSlideGenerator(topic, description);
+          var presenter = new eic.SlidePresenter('#main .slides', generators);
           generators.once('playReady',function () {
             var audioEl = $("<audio src='"+data.snd_url+"' controls='controls' style='display: none;'/>");
             
             $("#main").append(audioEl);
             
-            var audioEl = document.getElementById("audioTag");
+            var audioEl = $("#audioTag");
             audioEl.load();
             audioEl.play();
           
@@ -36,7 +32,8 @@
   <body>
     <div id="main">
       <div id="input">
-        <input id="topics" size="100" value="Stones, Oceans, Trees" />
+        <input id="topic" size="100" value="David Guetta" />
+        <textarea id="description" cols="50">Pierre David Guetta, known professionally as David Guetta, is a French house music producer and DJ. Originally a DJ at nightclubs during the 1980s and 1990s, he co-founded Gum Productions and released his first album, Just a Little More Love, in 2002.</textarea>
         <input id="start" type="submit" value="Start" />
       </div>
       <div class="slides">
