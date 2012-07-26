@@ -1,11 +1,21 @@
 \documentclass{article} 
-\usepackage[a4paper,margin=2.5cm,right=7cm]{geometry}
+\usepackage[a4paper,margin=2cm,right=7cm]{geometry}
 \usepackage[utf8]{inputenc}
 
+% Less spacing around titles
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+% No paragraph indents
+\setlength\parindent{0pt}
+
+% No page numbers
+\thispagestyle{empty}
+\pagestyle{empty}
+
+% Colored margin notes
 \usepackage{todonotes}
 \setlength{\marginparwidth}{5cm}
-
-\setlength\parindent{0pt}
 
 \begin{document}
 {\Large\bf Everything Is Connected: Example Story}
@@ -29,15 +39,14 @@ The thing is,
 Jane really likes David Guetta.
 
 \todo[color=green!40]{from DBpedia}
-Pierre David Guetta (7 November 1967), known professionally as David Guetta, is a French house music producer and DJ. Originally a DJ at nightclubs during the 1980s and 1990s, he co-founded Gum Productions and released his first album, Just a Little More Love, in 2002.
+Pierre David Guetta, known professionally as David Guetta, is a French house music producer and DJ. Originally a DJ at nightclubs during the 1980s and 1990s, he co-founded Gum Productions and released his first album, Just a Little More Love, in 2002.
 
 \section{DBpedia: Paris}
 \todo[color=red!40]{from DBpedia property}
 The birth place of David Guetta is Paris, France.
 
 \todo[color=green!40]{from DBpedia}
-Paris is the capital and largest city of France. It is situated on the river Seine, in northern France, at the heart of the Île-de-France region (or Paris Region, French: Région parisienne)%
-\footnote{We could filter out text within parentheses.}.
+Paris is the capital and largest city of France. It is situated on the river Seine, in northern France, at the heart of the Île-de-France region.
 
 \section{DBpedia: Eiffel Tower}
 \todo[color=red!40]{from DBpedia property}
@@ -45,14 +54,14 @@ The Eiffel Tower is located in Paris.%
 \footnote{Ideally, subject and object of this sentence are switched.}
 
 \todo[color=green!40]{from DBpedia}
-The Eiffel Tower (nickname La dame de fer, the iron lady) is a puddle iron lattice tower located on the Champ de Mars in Paris. Built in 1889 as the entrance arch to the 1889 World's Fair, it has become both a global cultural icon of France and one of the most recognizable structures in the world. The tower is the tallest building in Paris and the most-visited paid monument in the world; millions of people ascend it every year.
+The Eiffel Tower is a puddle iron lattice tower located on the Champ de Mars in Paris. Built in 1889 as the entrance arch to the 1889 World's Fair, it has become both a global cultural icon of France and one of the most recognizable structures in the world.
 
 \section{DBpedia: Émile Nouguier}
 \todo[color=red!40]{from DBpedia property}
 The Eiffel Tower is a significant building of Émile Nouguier.
 
 \todo[color=green!40]{from DBpedia}
-Émile Nouguier (17 February 1840 – 20 February 1898) was a French civil engineer and architect. He is famous for co-designing the Eiffel Tower, built 1887–1889 for the 1889 Universal Exposition in Paris, France, the Garabit viaduct, the highest in the world at the time, near Ruynes-en-Margeride, Cantal, France, and the Faidherbe Bridge over the Sénégal River in Senegal.
+Émile Nouguier was a French civil engineer and architect.
 
 \section{DBpedia: 1898/02/20}
 \todo[color=red!40]{from DBpedia property}
@@ -61,11 +70,9 @@ February 20th, 1898, is the death date of Émile Nouguier.
 \todo[color=red!40]{from DBpedia property}
 It is also the birth date of Jimmy Yancey.
 
-\clearpage
-
 \section{DBpedia: Jimmy Yancey}
 \todo[color=green!40]{from DBpedia}
-James Edwards "Jimmy" Yancey (February 20, 1894 – September 17, 1951) was an African American boogie-woogie pianist, composer, and lyricist. One reviewer noted him as "one of the pioneers of this raucous, rapid-fire, eight-to-the-bar piano style".
+James Edwards "Jimmy" Yancey was an African American boogie-woogie pianist, composer, and lyricist. One reviewer noted him as "one of the pioneers of this raucous, rapid-fire, eight-to-the-bar piano style".
 
 \section{DBpedia: Chicago}
 \todo[color=red!40]{from DBpedia property}

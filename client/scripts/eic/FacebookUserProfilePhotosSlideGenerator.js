@@ -4,21 +4,17 @@ function ($, BaseSlideGenerator) {
 
   var defaultDuration = 1000;
 
-  /** Generator of images slides from Google Image search results.
-   * Parameters: a topic and the maximum number of results to return
+  /** Generator of images slides from Facebook User Profile search results.
+   * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
    */
-  function GoogleImageSlideGenerator(topic, maxResults) {
+  function FacebookUserProfilePhotosSlideGenerator(fbConnector, maxResults) {
     BaseSlideGenerator.call(this);
-    
-    if (typeof topic === "string")
-      topic = { label: topic };
-    
-    this.topic = topic;
-    this.maxResults = maxResults || 4;
+    this.fbConnector = fbConnector;
+    this.maxResults = maxResults || 5;
     this.slides = [];
   }
 
-  $.extend(GoogleImageSlideGenerator.prototype,
+  $.extend(FacebookUserProfilePhotosSlideGenerator.prototype,
            BaseSlideGenerator.prototype,
   {
     /** Checks whether any slides are left. */
@@ -26,26 +22,21 @@ function ($, BaseSlideGenerator) {
       return this.slides.length > 0;
     },
 
-    /** Fetches a list of images about the topic. */
+    /** Fetches a list of images about the user in which he is tagged. */
+
     init: function () {
       if (this.inited)
         return;
       var self = this;
-      $.ajax('https://ajax.googleapis.com/ajax/services/search/images?v=1.0', {
-        data: {
-          q: this.topic.label,
-          imgsz: 'xxlarge',
-          rsz: this.maxResults,
-        },
-        dataType: 'jsonp',
-      })
-      .success(function (response) {
-        response.responseData.results.forEach(function (result) {
-          self.addImageSlide(result.url);
+      this.fbConnector.get('photos', function (response) {
+        $.each(response.data, function (number, photo) {
+          self.addImageSlide(photo.source);
         });
       });
+
       this.inited = true;
     },
+
 
     /** Advances to the next slide. */
     next: function () {
@@ -61,5 +52,5 @@ function ($, BaseSlideGenerator) {
     },
   });
 
-  return GoogleImageSlideGenerator;
+  return FacebookUserProfilePhotosSlideGenerator;
 });

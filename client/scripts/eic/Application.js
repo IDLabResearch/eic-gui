@@ -1,6 +1,9 @@
-define(['lib/jquery', 'eic/FacebookConnector',
+define(['lib/jquery', 'eic/AutocompleteTopic',
+        'eic/FacebookConnector',
         'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
-function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
+function ($, autocompleteTopic,
+          FacebookConnector,
+          TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
   // The main "Everything Is Connected" application.
@@ -12,9 +15,7 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
     // Initializes the application.
     init: function () {
       this.facebookConnector.init();
-      this.attachEventHandlers();
-      // Make sure the topic is empty (browsers can cache text).
-      $('#topic').val('');
+      this.initControls();
     },
     
     // Lets the user connect with a Facebook account.
@@ -66,12 +67,16 @@ function ($, FacebookConnector, TopicToTopicSlideGenerator, SlidePresenter) {
       presenter.start();
     },
     
-    // Attaches event handlers to the HTML controls.
-    attachEventHandlers: function () {
+    // Initialize the HTML controls (bind events, set up autocomplete, ...).
+    initControls: function () {
       // Initialize the controls of each step.
       $('#facebook-connect').click($.proxy(this, 'connectToFacebook'));
       $('#topic').on('change keyup', $.proxy(this, 'updateTopic'));
       $('#play').click($.proxy(this, 'playMovie'));
+
+      // Make sure the topic is empty (browsers can cache text).
+      $('#topic').val('');
+      autocompleteTopic('#topic');
 
       // Don't let empty links trigger a location change.
       $('a[href=#]').prop('href', 'javascript:;');
