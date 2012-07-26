@@ -1,10 +1,10 @@
-define(['lib/jquery', 'eic/BaseSlideGenerator', 'eic/GoogleImageSlideGenerator', 'eic/TitleSlideGenerator', 'eic/VideoSlideGenerator'],
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/GoogleImageSlideGenerator', 'eic/generators/TitleSlideGenerator', 'eic/generators/VideoSlideGenerator'],
   function ($, BaseSlideGenerator, GoogleImageSlideGenerator, TitleSlideGenerator, VideoSlideGenerator) {
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
       BaseSlideGenerator.call(this);
-      this.emitNewSlidesEvent = $.proxy(function () { 
+      this.emitNewSlidesEvent = $.proxy(function () {
         this.emit('newSlides');
       }, this);
 
@@ -23,7 +23,7 @@ define(['lib/jquery', 'eic/BaseSlideGenerator', 'eic/GoogleImageSlideGenerator',
 
       this.topic = topic;
       this.description = description;
-      this.first = false;
+      this.first = true;
       this.slideCount = 0;
       this.maxSlideCount = 0;
     }
@@ -49,7 +49,7 @@ define(['lib/jquery', 'eic/BaseSlideGenerator', 'eic/GoogleImageSlideGenerator',
         },
         
         next: function () {
-          var i = 1+Math.floor(Math.random() * (this.generators.length-1)),
+          var i = 1 + Math.floor(Math.random() * (this.generators.length - 1)),
           slide;
 
           while (!this.generators[i].hasNext()) {
@@ -59,10 +59,12 @@ define(['lib/jquery', 'eic/BaseSlideGenerator', 'eic/GoogleImageSlideGenerator',
           slide = this.generators[i].next();
 
           if (this.first) {
+            console.log('first slide added!');
             slide.description = this.description;
             this.first = false;
           }
-
+          console.log('slide' + this.slideCount + 'requested!');
+          this.slideCount++;
           return slide;
         },
         /** Checks if the generator can stop generating slides based on a required nr **/

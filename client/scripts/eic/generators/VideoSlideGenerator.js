@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/BaseSlideGenerator'],
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
   

@@ -20,26 +20,26 @@
   });
 
   var scripts = ['lib/jquery',
-    'eic/BaseSlideGenerator',
-    'eic/IntroductionSlideGenerator',
-    'eic/CombinedSlideGenerator',
-    'eic/GoogleImageSlideGenerator',
     'eic/SlidePresenter',
-    'eic/StretchSlideGenerator',
-    'eic/TitleSlideGenerator',
-    'eic/VideoSlideGenerator',
-    'eic/TTSGenerator',
     'eic/FacebookConnector',
-    'eic/MapsSlideGenerator',
     'eic/TopicSlidePresenter',
-    'eic/TopicSlideGenerator',
-	'eic/YouTubeSlideGenerator'];
+    'eic/generators/BaseSlideGenerator',
+    'eic/generators/IntroductionSlideGenerator',
+    'eic/generators/CombinedSlideGenerator',
+    'eic/generators/GoogleImageSlideGenerator',
+    'eic/generators/StretchSlideGenerator',
+    'eic/generators/TitleSlideGenerator',
+    'eic/generators/VideoSlideGenerator',
+    'eic/generators/TTSGenerator',
+    'eic/generators/MapsSlideGenerator',
+    'eic/generators/TopicSlideGenerator',
+	'eic/generators/YouTubeSlideGenerator'];
 
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};
     for (var i = 0; i < scripts.length; i++)
-      scriptHolder[scripts[i].replace(/^\w+\//, '')] = arguments[i];
+      scriptHolder[scripts[i].replace(/^(\w+\/)*/, '')] = arguments[i];
     if (window.startApplication)
       window.startApplication(jQuery, scriptHolder);
   });

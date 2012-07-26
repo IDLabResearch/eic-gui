@@ -20,7 +20,7 @@ define(['lib/jquery'], function ($) {
         // if slides are available, show them
         if (self.generator.hasNext()) {
           if (currentSlide.description)
-            alert('joepie');
+            window.alert('joepie');
 
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();

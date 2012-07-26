@@ -1,6 +1,6 @@
 define(['lib/jquery', 'eic/AutocompleteTopic',
         'eic/FacebookConnector',
-        'eic/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
 function ($, autocompleteTopic,
           FacebookConnector,
           TopicToTopicSlideGenerator, SlidePresenter) {

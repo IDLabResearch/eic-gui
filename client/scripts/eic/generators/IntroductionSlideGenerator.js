@@ -1,4 +1,9 @@
-define([ 'lib/jquery', 'eic/BaseSlideGenerator', 'eic/CombinedSlideGenerator', 'eic/TitleSlideGenerator', 'eic/GoogleImageSlideGenerator', 'eic/GoogleMapsSlideGenerator' ],
+define([ 'lib/jquery',
+  'eic/generators/BaseSlideGenerator',
+  'eic/generators/CombinedSlideGenerator',
+  'eic/generators/TitleSlideGenerator',
+  'eic/generators/GoogleImageSlideGenerator',
+  'eic/generators/GoogleMapsSlideGenerator' ],
     function ($,
     BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator,
     GoogleImageSlideGenerator, GoogleMapsSlideGenerator) {

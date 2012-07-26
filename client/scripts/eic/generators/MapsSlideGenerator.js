@@ -1,4 +1,4 @@
-define([ 'lib/jquery', 'lib/OpenLayers', 'eic/BaseSlideGenerator' ],
+define([ 'lib/jquery', 'lib/OpenLayers', 'eic/generators/BaseSlideGenerator' ],
     function ($, OpenLayers, BaseSlideGenerator) {
       "use strict";
 
