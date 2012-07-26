@@ -1,4 +1,4 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
   "use strict";
   
   function TopicSlidePresenter(container, generator) {
@@ -19,9 +19,7 @@ define(['lib/jquery'], function ($) {
       function showNext() {
         // if slides are available, show them
         if (self.generator.hasNext()) {
-          if (currentSlide.description)
-            window.alert('joepie');
-
+          console.log('Generator has next slides');
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
@@ -30,14 +28,24 @@ define(['lib/jquery'], function ($) {
           var nextSlide = self.generator.next();
           self.$container.prepend(nextSlide.$element);
           nextSlide.start();
-          window.setTimeout(showNext, nextSlide.duration);
+          
           // stop the previous slide
           if (currentSlide)
             currentSlide.stop();
           currentSlide = nextSlide;
+          
+          //If slide contains a description, send it to TTS service
+          if (currentSlide.audioURL) {
+            console.log('Audio added');
+            var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
+            self.$container.append(audioEl);
+          }
+          
+          window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive
         else {
+          console.log('Generator has no slides');
           self.generator.once('newSlides', showNext);
         }
       }

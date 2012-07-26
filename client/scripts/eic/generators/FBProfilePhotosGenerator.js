@@ -10,7 +10,10 @@ function ($, BaseSlideGenerator) {
   function FBProfilePhotosGenerator(fbConnector, maxResults) {
     BaseSlideGenerator.call(this);
     this.fbConnector = fbConnector;
-    this.maxResults = maxResults || 5;
+    if (typeof maxResults == 'undefined')
+			this.maxResults = 5;
+    else
+			this.maxResults = maxResults;
     this.slides = [];
   }
 
@@ -28,9 +31,19 @@ function ($, BaseSlideGenerator) {
       if (this.inited)
         return;
       var self = this;
+      
       this.fbConnector.get('photos', function (response) {
-        $.each(response.data, function (number, photo) {
+        $.each(response.data.slice(0, self.maxResults), function (number, photo) {
           self.addImageSlide(photo.source);
+        });
+      });
+      
+      this.fbConnector.findPlacesNearMe(function (response) {
+				$.each(response.data.slice(0, self.maxResults), function (number, place) {
+          self.fbConnector.getPlace(place.id, function (response) {
+						self.addImageSlide(response.picture);
+          });
+          
         });
       });
 

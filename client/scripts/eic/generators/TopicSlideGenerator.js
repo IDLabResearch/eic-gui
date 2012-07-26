@@ -1,5 +1,10 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/GoogleImageSlideGenerator', 'eic/generators/TitleSlideGenerator', 'eic/generators/VideoSlideGenerator'],
-  function ($, BaseSlideGenerator, GoogleImageSlideGenerator, TitleSlideGenerator, VideoSlideGenerator) {
+define(['lib/jquery',
+  'eic/TTSService',
+  'eic/generators/BaseSlideGenerator',
+  'eic/generators/GoogleImageSlideGenerator',
+  'eic/generators/TitleSlideGenerator',
+  'eic/generators/VideoSlideGenerator'],
+  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, TitleSlideGenerator, VideoSlideGenerator) {
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
@@ -26,6 +31,8 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/Googl
       this.first = true;
       this.slideCount = 0;
       this.maxSlideCount = 0;
+      this.maxDuration = 0;
+      this.audioURL = '';
     }
 
     $.extend(TopicSlideGenerator.prototype,
@@ -33,6 +40,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/Googl
       {
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {
+          //if the sound url is not yet retrieved and attached to the first slide (maxDuration still 0), don't give any slides
+          if (this.maxDuration === 0)
+            return false;
+          
           return this.generators.some(function (g) {
             return g.hasNext();
           });
@@ -40,16 +51,28 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/Googl
 
         /** Initialize all child generators. */
         init: function () {
+          var tts = new TTSService(), self = this;
+          
           if (!this.inited) {
             this.generators.forEach(function (g) {
               g.init();
             });
             this.inited = true;
           }
+
+          tts.once('speechReady', function (event, data) {
+            self.maxDuration = data.snd_time;
+            self.audioURL = data.snd_url;
+            //When speech is received, 'remind' the presenter that the slides are ready
+            self.emitNewSlidesEvent();
+            
+            console.log('Audio URL was fetched!');
+          });
+          tts.getSpeech(this.description, 'en_GB');
         },
         
         next: function () {
-          var i = 1 + Math.floor(Math.random() * (this.generators.length - 1)),
+          var i = Math.floor(Math.random() * this.generators.length),
           slide;
 
           while (!this.generators[i].hasNext()) {
@@ -57,23 +80,20 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/generators/Googl
           }
 
           slide = this.generators[i].next();
-
-          if (this.first) {
-            console.log('first slide added!');
-            slide.description = this.description;
-            this.first = false;
-          }
-          console.log('slide' + this.slideCount + 'requested!');
-          this.slideCount++;
-          return slide;
-        },
-        /** Checks if the generator can stop generating slides based on a required nr **/
-        setBound: function (nrOfSlides) {
-          this.maxSlideCount = nrOfSlides;
           
-          if (this.nrOfSlides > this.maxSlideCount && this.maxSlideCount > 0) {
-            this.generators.length = 0;
+          slide.duration = 5000;
+          slide.duration = this.maxDuration / 4;
+          
+          if (this.first) {
+            slide.audioURL = this.audioURL;
+            this.first = false;
+            
+            console.log('First slide added!');
           }
+          this.slideCount++;
+          
+          console.log('Slide' + this.slideCount + 'requested!');
+          return slide;
         },
         /** Add a child generator add the end of the list. */
         addGenerator: function (generator, suppressInit) {

@@ -2,7 +2,8 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 1000;
+  var defaultDuration = 2000;
+  var repeat = false;
 
   /** Generator of images slides from Google Image search results.
    * Parameters: a topic and the maximum number of results to return
@@ -16,6 +17,7 @@ function ($, BaseSlideGenerator) {
     this.topic = topic;
     this.maxResults = maxResults || 4;
     this.slides = [];
+    this.cnt = 0;
   }
 
   $.extend(GoogleImageSlideGenerator.prototype,
@@ -49,7 +51,11 @@ function ($, BaseSlideGenerator) {
 
     /** Advances to the next slide. */
     next: function () {
-      return this.slides.shift();
+      if (!repeat)
+        return this.slides.shift();
+        
+      this.cnt += 1;
+      return this.slides[(this.cnt - 1) % this.maxResults];
     },
 
     /** Adds a new image slide. */
