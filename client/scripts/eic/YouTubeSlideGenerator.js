@@ -36,14 +36,17 @@ function ($, BaseSlideGenerator) {
       if (this.inited)
         return;
       var self = this;
-      $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + this.maxVideoCount + '&orderby=relevance&alt=jsonc&q=' + this.topic.label)
-      .success(function (response) {
-        response.data.items.forEach(function (item) {
-          //console.log(item);
-          //TODO: avoid restricted content
-          self.addVideoSlide(item.id, item.duration);
-        });
-      });
+      var foundVideos = 0;
+      var inspectedVideos = 0;
+      var i = 0;
+      while(foundVideos != this.maxVideoCount){
+        var found = searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
+        inspectedVideos += this.maxVideoCount;
+        foundVideos += found;
+        i++;
+        if(i == 10)
+          break;
+      }
       this.inited = true;
     },
 
@@ -74,6 +77,30 @@ function ($, BaseSlideGenerator) {
       this.emit('newSlides');
     },
   });
+  
+  function searchVideos(self, startResults, maxResults, skip) {
+    var counter = 0;
+    var resultCounter = startResults;
+    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResults + '&orderby=viewCount&alt=jsonc&q=' + self.topic.label, {'async': false})
+     .success(function (response) {
+        response.data.items.forEach(function (item) {
+          if (counter < skip) {
+            counter++;
+          } else if (resultCounter == self.maxVideoCount) {
+            //we're done
+          } else if (item.restrictions === undefined) {
+            $.ajax('http://www.youtube.com/get_video_info?video_id=' + item.id + '&el=embedded', {'async': false})
+            .success(function (res) {
+              if (res.substr(0, 11) != 'status=fail') {
+                self.addVideoSlide(item.id, item.duration);
+                resultCounter++;
+              }
+            });
+          }
+        });
+      });
+    return resultCounter;
+  }
 
   return YouTubeSlideGenerator;
 });
