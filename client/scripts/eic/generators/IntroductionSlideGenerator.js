@@ -42,7 +42,7 @@ function ($,
         this.addGenerator(new TitleSlideGenerator("... a " + person.gender +
                                                   " from " + person.fullhometown + " ..."));
         this.addGenerator(new GoogleMapsSlideGenerator(person.fullhometown));
-        this.addGenerator(new GoogleImageSlideGenerator(person.fullhometown));
+        this.addGenerator(new GoogleImageSlideGenerator(person.hometown));
         
         var self = this;
         new FacebookConnector().get('music', function (response) {
