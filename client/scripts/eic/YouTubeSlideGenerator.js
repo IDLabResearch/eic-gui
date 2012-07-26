@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 10000;
+  var defaultDuration = 5000;
 
   /** Generator of images slides from Google Image search results.
    * Parameters: a topic and the maximum number of results to return
@@ -14,7 +14,7 @@ function ($, BaseSlideGenerator) {
       topic = { label: topic };
     
     this.topic = topic;
-    this.maxResults = maxResults || 4;
+    this.maxResults = maxResults || 1;
     this.slides = [];
   }
 
@@ -31,7 +31,7 @@ function ($, BaseSlideGenerator) {
 		if (this.inited)
 			return;
 		var self = this;
-		$.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results='+this.maxResults+'&orderby=rating&alt=jsonc&q='+this.topic.label)
+		$.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results='+this.maxResults+'&orderby=viewCount&alt=jsonc&q='+this.topic.label)
 		 .success(function (response) {
 			response.data.items.forEach(function(item){
 				self.addVideoSlide(item.id);
@@ -50,10 +50,10 @@ function ($, BaseSlideGenerator) {
 	var $iframe = $('<iframe>');
 	$iframe.attr('class', 'youtube-player')
 	       .attr('type', 'text/html')
-		   //.attr('width', '640')
-		   //.attr('height', '385')
+		   .attr('width', '800')
+		   .attr('height', '600')
 		   .attr('frameborder', '0')
-		   .attr('src', 'http://www.youtube.com/embed/'+videoID+'?autoplay=1');
+		   .attr('src', 'http://www.youtube.com/embed/'+videoID+'?autoplay=1&start=20&end=25');
 	
 	var slide = this.createBaseSlide('YouTube', $iframe, defaultDuration);
 	this.slides.push(slide);
