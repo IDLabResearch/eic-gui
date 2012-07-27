@@ -90,7 +90,13 @@ define(
             $($datediv).append($weekdaydiv);
             var slide = this.createBaseSlide('date', $datediv,
                 defaultDuration);
-
+			slide.on('started',function(){
+	          setTimeout(function(){
+				slide.$element.find("#date").addClass('zoom');
+		      },
+		      100
+	          )
+	        });
             this.done = true;
 
             return slide;

@@ -52,3 +52,30 @@ html {
   width: 100%;
   height: 100%;
 }
+
+.slide > img {
+-moz-transform-origin: 50% 50%; 
+-moz-transition: -moz-transform 30s linear; 
+-webkit-transform-origin: 50% 50%; 
+-webkit-transition: -webkit-transform 30s linear; 
+-o-transform-origin: 50% 50%; 
+-o-transition: -moz-transform 30s linear; 
+-ms-transform-origin: 50% 50%; 
+-ms-transition: -ms-transform 30s linear; 
+}
+.slide > #date {
+-moz-transform-origin: 50% 50%; 
+-moz-transition: -moz-transform 30s linear; 
+-webkit-transform-origin: 50% 50%; 
+-webkit-transition: -webkit-transform 30s linear; 
+-o-transform-origin: 50% 50%; 
+-o-transition: -moz-transform 30s linear; 
+-ms-transform-origin: 50% 50%; 
+-ms-transition: -ms-transform 30s linear; 
+}
+.zoom {
+-moz-transform: scale(2) rotate(10deg);
+-webkit-transform: scale(2) rotate(10deg);
+-o-transform: scale(2) rotate(10deg);
+-ms-transform: scale(2) rotate(10deg);
+}
