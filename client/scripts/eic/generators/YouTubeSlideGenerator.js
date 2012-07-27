@@ -51,19 +51,37 @@ function ($, BaseSlideGenerator) {
       if (duration < this.maxVideoDuration + this.skipVideoDuration && duration >= this.maxVideoDuration)
         start = 0;
       
+      /*
       var $iframe = $('<iframe>');
       $iframe.attr('class', 'youtube-player')
+             .attr('id', 'player')
              .attr('type', 'text/html')
              .attr('width', '800')
              .attr('height', '600')
              .attr('frameborder', '0')
-             .attr('src', 'http://www.youtube.com/embed/' + videoID + '?autoplay=1&start=' + (start / 1000) + '&end=' + (end / 1000));
+             .attr('src', 'http://www.youtube.com/embed/' + videoID + '?autoplay=1&enablejsapi=1&start=' + (start / 1000) + '&end=' + (end / 1000));
+      */
+      var $div = '<div id="ytplayer"></div>';
+      $.getScript("http://www.youtube.com/player_api");
+      var slide = this.createBaseSlide('YouTube', $div, (end - start));
+      slide.on('started', function () {
+        var player = new window.YT.Player('ytplayer', {
+          playerVars: { autoplay: 1, controls: 0, start: (start / 1000), end: (end / 1000), wmode: 'opaque' },
+          videoId: videoID,
+          width: 800,
+          height: 600,
+          events: {'onReady': onPlayerReady}
+        });
+      });
       
-      var slide = this.createBaseSlide('YouTube', $iframe, (end - start));
       this.slides.push(slide);
       this.emit('newSlides');
     },
   });
+  
+  function onPlayerReady(event) {
+    event.target.mute();
+  }
   
   function searchVideos(self, startResults, maxResult, skip) {
     if (maxResult > 50) { //YouTube API restriction
@@ -107,3 +125,7 @@ function ($, BaseSlideGenerator) {
   
   return YouTubeSlideGenerator;
 });
+
+
+
+
