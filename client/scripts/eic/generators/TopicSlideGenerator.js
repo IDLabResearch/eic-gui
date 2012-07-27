@@ -77,6 +77,10 @@ define(['lib/jquery',
             // make sure first slide is always a titleslide
             slide = new TitleSlideGenerator(this.topic).next();
             slide.audioURL = this.audioURL;
+            
+            // prepare other generators
+            this.generators.forEach(function (g) { g.prepare(); });
+            
             this.first = false;
             
             console.log('First slide ' + this.topic.label + ' added!');

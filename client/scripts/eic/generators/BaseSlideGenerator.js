@@ -10,12 +10,19 @@ function ($, EventEmitter) {
   }
 
   BaseSlideGenerator.prototype = {
+    /** Initialize the generator. */
     init: function () {},
     
+    /** Returns whether there any more. */
     hasNext: function () { return false; },
 
+    /** Get the next slide. */
     next: function () { return null; },
     
+    /** Prepare the upcoming slides if applicable (not guaranteed to be called). */
+    prepare: function () { },
+    
+    /** Create a base slide witht the specified class, content, and duration. */
     createBaseSlide: function (cssClass, content, duration) {
       var slide = new EventEmitter();
       
