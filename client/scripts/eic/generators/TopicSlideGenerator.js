@@ -121,7 +121,9 @@ define(['lib/jquery',
             this.emitNewSlidesEvent();
         },
         initGenerators: function () {
-          switch (this.topic.type) {
+          var generators = [];
+          
+          switch (this.topic.type) {          
           case "person":
             
             break;
