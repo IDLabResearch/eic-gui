@@ -60,9 +60,8 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         this.createSpeech();
         
         [
-          new TitleSlideGenerator("Everything Is Connected"),
+          new TitleSlideGenerator("Everything Is Connected", 3000),
           new FBProfilePhotosGenerator(3),
-          new TitleSlideGenerator("Everything Is Connected"),
         ]
         .forEach(function (generator) {
           self.addGenerator(generator);
