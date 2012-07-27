@@ -13,8 +13,8 @@
       },
       'lib/jplayer.min' : {
         exports : 'jplayer'
-      },
-    },
+      }
+    }
   });
 
   var scripts = ['lib/jquery',
@@ -37,7 +37,7 @@
     var scriptHolder = {};
     for (var i = 0; i < scripts.length; i++)
       scriptHolder[scripts[i].replace(/^(\w+\/)*/, '')] = arguments[i];
-    if (window.startApplication)
-      window.startApplication(jQuery, scriptHolder);
+    if (this.window.startApplication)
+      this.window.startApplication(jQuery, scriptHolder);
   });
 })(window.requirejs);
