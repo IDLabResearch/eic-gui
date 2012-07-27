@@ -70,7 +70,7 @@ function ($, BaseSlideGenerator) {
   });
   
   function searchVideos(self, startResults, maxResult, skip) {
-    if (maxResult > 50) {
+    if (maxResult > 50) { //YouTube API restriction
       maxResult = 50;
     }
     var inspected = 0;
