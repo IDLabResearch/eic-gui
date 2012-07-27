@@ -11,7 +11,7 @@
     	var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
           generators.addGenerator(new eic.TitleSlideGenerator(topic));
-          generators.addGenerator(new eic.YouTubeSlideGenerator({'topic':topic, 'maxVideoCount':1, 'maxVideoDurationInS':5, 'orderMethod':'relevance'}));
+          generators.addGenerator(new eic.YouTubeSlideGenerator({topic:{label:topic}, maxVideoCount:1, maxVideoDuration:5000, orderMethod:'relevance'}));
         });
         presenter.start();
       });
