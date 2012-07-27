@@ -1,6 +1,9 @@
 define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
+    
+    var local = false;
+    var server = local ? 'restdesc.org:5555' : 'vaas.acapela-group.com';
 
     function TTSService() {
       EventEmitter.call(this);
@@ -47,7 +50,7 @@ define(['lib/jquery', 'lib/jvent'],
       getSpeech: function (text, lang, callback) {
         var self = this;
         $.ajax({
-          url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
+          url: 'http://' + server + '/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
           type: 'GET',
           data: {
             prot_vers: 2,
