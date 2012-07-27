@@ -2,7 +2,7 @@ define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
     
-    var local = false;
+    var local = true;
     var server = local ? 'restdesc.org:5555' : 'vaas.acapela-group.com';
 
     function TTSService() {
