@@ -32,17 +32,15 @@ define(['lib/jquery',
         case "person":
         default :
           this.addGenerator(new GoogleImageSlideGenerator(topic),true);
-          this.addGenerator(new YouTubeSlideGenerator({
-            topic:topic
-          }),true);         
+          this.addGenerator(new YouTubeSlideGenerator(topic),true);         
           break;      
       }
 
 
-//      if (generators) {
-//        for (var i = 0; i < generators.length; i++)
-//          this.addGenerator(generators[i], true);
-//      }
+      //      if (generators) {
+      //        for (var i = 0; i < generators.length; i++)
+      //          this.addGenerator(generators[i], true);
+      //      }
 
       this.topic = topic;
       this.description = description;
@@ -106,13 +104,12 @@ define(['lib/jquery',
             console.log('First slide '+this.topic.label+' added!');
           } else {
             slide = this.generators[i].next();
-            slide.duration = this.generators[i].getDuration();
+            slide.duration = this.durationLeft < this.generators[i].getDuration() ? this.durationLeft + 1000 : this.generators[i].getDuration();
           }
           
-          //this.durationLeft -= slide.duration;
-          this.slideCount += 1;
+          this.durationLeft -= slide.duration;
           
-          console.log('Slide' + this.slideCount + ': duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');
+          console.log('New slide: duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');
           return slide;
         },
         /** Add a child generator add the end of the list. */
@@ -126,8 +123,6 @@ define(['lib/jquery',
 
           // signal the arrival of new slides
           generator.on('newSlides', function () {
-            this.slideCount += 1;
-            
             self.emitNewSlidesEvent();
           });
     

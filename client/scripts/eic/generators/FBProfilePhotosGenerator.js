@@ -1,7 +1,6 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
 	"use strict";
-  //TODO: FIX Runs twice but only correct the second time...
-  
+
   function setInited(target, object) {
     object.inited = true;
   }
@@ -15,28 +14,28 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
     });
   }
  
-  function placeImages(target, myPlaces, response) {
+  function placeImages(target, myPlaces, response, queue) {
+  	var q = $({});
     $.each(response.data.slice(0, 25), function (number, place) {
-			$(target).queue("r", placeImage(target, myPlaces, place));
-			console.log($(target).queue("s").length);
+			q.queue("r", placeImage(target, myPlaces, place, queue));
     });
-    console.log($(target).queue("r").length);
-    $(target).dequeue("r");
+    q.dequeue("r");
   }
 
-  function placeImage(target, myPlaces, place) {
+  function placeImage(target, myPlaces, place, queue) {
     target.fbConnector.getPlace(place.id, function (response) {
 			myPlaces.push(response.picture);
 			console.log(response.picture);
 			console.log(myPlaces.length);
 			if (myPlaces.length == 25) {
-				console.log('dequeuing s');
-				$(target).dequeue("s");
+				queue.dequeue("s");
 			}
     });
   }
 
-  function profilePictures(target, fbConnector) {
+  function profilePictures(target,fbConnector) {
+		console.log('target.maxResults');
+		console.log(target.maxResults);
     fbConnector.get('photos', function (response) {
 			$.each(response.data.slice(0, target.maxResults), function (number, photo) {
         target.addImageSlide(photo.source);
@@ -60,7 +59,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       if (j === 5)
         return;
     });
-		$('#canvas-demo').append(canvas);
+		//$('#canvas-demo').append(canvas);
     convertCanvasToImage(canvas, callback);
   }
 
@@ -103,9 +102,9 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
   /** Generator of images slides from Facebook User Profile search results.
    * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
    */
-  function FBProfilePhotosGenerator(fbConnector, maxResults) {
+  function FBProfilePhotosGenerator(maxResults) {
     BaseSlideGenerator.call(this);
-    this.fbConnector = fbConnector;
+    this.fbConnector = new FacebookConnector();
     if (typeof maxResults == 'undefined')
       this.maxResults = 5;
     else
@@ -128,21 +127,36 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
 
       var self = this;
       
-      $(self).queue(profilePictures(self, this.fbConnector));
+      $(self).queue(profilePictures(self,self.fbConnector));
 
+			//TODO: make a methode of this with two calls and following params:
+			//items_array, fb_call_function (any function that returns fb ids that contain a picture)
 			var myPlaces = [];
+			var myLikes = [];
+			
+			var q1=$({}), q2=$({});
       
       this.fbConnector.findPlacesNearMe(function (response) {
-				$(self).queue(placeImages(self, myPlaces, response));
+				$(self).queue(placeImages(self, myPlaces, response, q1));
       });
       
-      $(self).queue("s", function () {
-				addSlides(self, myPlaces);
-				$(self).dequeue("s");
+      this.fbConnector.get('likes', function (response) {
+				$(self).queue(placeImages(self, myLikes, response, q2));
       });
-      $(self).queue("s", function () {
+      
+      q1.queue("s", function () {
+				addSlides(self, myPlaces);
+				q1.dequeue("s");
+      });
+      
+			q2.queue("s", function () {
+				addSlides(self, myLikes);
+				q2.dequeue("s");
+      });
+
+      $(self).queue(function () {
 				setInited(self, this);
-				$(self).dequeue("s");
+				$(self).dequeue();
       });
     },
 
@@ -155,7 +169,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
-			console.log(typeof imageUrl);
+		
 			var $image;
 			if (typeof imageUrl == 'string')
 				$image = $('<img>').attr('src', imageUrl);
