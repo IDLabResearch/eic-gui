@@ -62,7 +62,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       if (j === 5)
         return;
     });
-		$('#canvas-demo').append(canvas);
+		//$('#canvas-demo').append(canvas);
     convertCanvasToImage(canvas, callback);
   }
 
@@ -142,9 +142,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 				addSlides(self, myPlaces);
 				$(self).dequeue("s");
       });
-      $(self).queue("s", function () {
+
+      $(self).queue(function () {
 				setInited(self, this);
-				$(self).dequeue("s");
+				$(self).dequeue();
       });
     },
 
@@ -157,7 +158,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
-			console.log(typeof imageUrl);
+		
 			var $image;
 			if (typeof imageUrl == 'string')
 				$image = $('<img>').attr('src', imageUrl);
