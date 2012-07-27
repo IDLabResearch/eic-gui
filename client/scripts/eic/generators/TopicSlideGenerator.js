@@ -15,27 +15,40 @@ define(['lib/jquery',
         this.emit('newSlides');
       }, this);
 
-      //Create all generators
-      var generators = [
-        //TitleSlideGenerator always first in the array!
-        new TitleSlideGenerator(topic),
-        new GoogleImageSlideGenerator(topic),
-        new YouTubeSlideGenerator({topic:topic}),
-        new DateSlideGenerator(topic),
-      ];
-
       this.generators = [];
-      if (generators) {
-        for (var i = 0; i < generators.length; i++)
-          this.addGenerator(generators[i], true);
+      //Create all generators depending on the type of the topic
+      this.addGenerator(new TitleSlideGenerator(topic),true);
+          
+      switch (topic.type) {          
+        case "date":
+          this.addGenerator(new DateSlideGenerator(topic))
+          break;
+        case "location":
+          //no break since location also accepts images and movies
+          this.addGenerator(
+            new GoogleMapsSlideGenerator(topic)
+            )
+        case "building":
+        case "person":
+        default :
+          this.addGenerator(new GoogleImageSlideGenerator(topic),true);
+          this.addGenerator(new YouTubeSlideGenerator({
+            topic:topic
+          }),true);         
+          break;      
       }
+
+
+//      if (generators) {
+//        for (var i = 0; i < generators.length; i++)
+//          this.addGenerator(generators[i], true);
+//      }
 
       this.topic = topic;
       this.description = description;
       this.first = true;
       this.slideCount = 0;
-      this.maxSlideCount = 0;
-      this.maxDuration = 0;
+      this.durationLeft = 0;
       this.audioURL = '';
     }
 
@@ -45,7 +58,7 @@ define(['lib/jquery',
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {
           //if the sound url is not yet retrieved and attached to the first slide (maxDuration still 0), don't give any slides
-          if (this.maxDuration === 0)
+          if (this.durationLeft <= 0)
             return false;
           
           return this.generators.some(function (g) {
@@ -65,7 +78,7 @@ define(['lib/jquery',
           }
 
           tts.once('speechReady', function (event, data) {
-            self.maxDuration = data.snd_time;
+            self.durationLeft = data.snd_time;
             self.audioURL = data.snd_url;
             //When speech is received, 'remind' the presenter that the slides are ready
             self.emitNewSlidesEvent();
@@ -86,16 +99,19 @@ define(['lib/jquery',
             //make sure first slide is always a titleslide
             slide = this.generators[0].next();
             slide.audioURL = this.audioURL;
+            slide.duration = this.generators[0].getDuration();
             this.first = false;
             
             console.log('First slide added!');
-          } else
+          } else {
             slide = this.generators[i].next();
+            slide.duration = this.generators[i].getDuration();
+          }
           
-          slide.duration = this.maxDuration / 5;
-          this.slideCount++;
+          this.durationLeft -= slide.duration;
+          this.slideCount += 1;
           
-          console.log('Slide' + this.slideCount + 'requested!');
+          console.log('Slide' + this.slideCount + ': duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');
           return slide;
         },
         /** Add a child generator add the end of the list. */
@@ -111,32 +127,11 @@ define(['lib/jquery',
           generator.on('newSlides', function () {
             this.slideCount += 1;
             
-            if (this.nrOfSlides > this.maxSlideCount && this.maxSlideCount > 0) {
-              this.generators.length = 0;
-            }
             self.emitNewSlidesEvent();
           });
     
           if (generator.hasNext())
             this.emitNewSlidesEvent();
-        },
-        getGenerators: function () {
-          var generators = [];
-          
-          switch (this.topic.type) {          
-          case "person":
-            
-            break;
-          case "location":
-            
-            break;
-          case "building":
-            break;
-          case "date":
-            break;
-          default :
-                
-          }
         }
       });
     return TopicSlideGenerator;
