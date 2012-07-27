@@ -9,8 +9,8 @@ function ($, BaseSlideGenerator) {
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
    * - the maximum number of videos to return
-   * - the maximum duration (in seconds) of a video
-   * - the skipping duration (in seconds) at the beginning of the video
+   * - the maximum duration (in milliseconds) of a video
+   * - the skipping duration (in milliseconds) at the beginning of the video
    */
   function YouTubeSlideGenerator(topic, options) {
     BaseSlideGenerator.call(this);
@@ -21,6 +21,7 @@ function ($, BaseSlideGenerator) {
     this.maxVideoDuration = options.maxVideoDuration || 5000;
     this.skipVideoDuration = options.skipVideoDuration || 10000;
     this.orderMethod = options.orderMethod || 'relevance';
+    this.totalDuration = 0;
     this.slides = [];
   }
 
@@ -59,6 +60,7 @@ function ($, BaseSlideGenerator) {
       if (duration < this.maxVideoDuration + this.skipVideoDuration && duration >= this.maxVideoDuration)
         start = 0;
       duration = end - start;
+      this.totalDuration += duration;
       
       var playerId = 'ytplayer' + (++playerCount),
           $container = $('<div>').append($('<div>').prop('id', playerId))
@@ -104,7 +106,7 @@ function ($, BaseSlideGenerator) {
       this.emit('newSlides');
     },
     
-    getDuration: function () { return this.maxVideoDuration; },
+    getDuration: function () { return this.totalDuration; },
   });
   
   function onPlayerReady(event) {
