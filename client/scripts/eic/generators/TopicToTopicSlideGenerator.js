@@ -45,11 +45,15 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
     },
     
     setStartTopic: function (startTopic) {
+      if (this.startTopic)
+        throw "startTopic already set";
       this.startTopic = startTopic;
       this.init();
     },
     
     setEndTopic: function (endTopic) {
+      if (this.endTopic)
+        throw "endTopic already set";
       this.endTopic = endTopic;
       this.init();
     }
