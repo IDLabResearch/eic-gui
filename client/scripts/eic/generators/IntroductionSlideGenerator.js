@@ -1,65 +1,87 @@
-define([ 'lib/jquery', 'eic/generators/BaseSlideGenerator',
+define([ 'lib/jquery',
     'eic/generators/CombinedSlideGenerator',
     'eic/generators/TitleSlideGenerator',
+    'eic/generators/FBProfilePhotosGenerator',
     'eic/generators/GoogleImageSlideGenerator',
-    'eic/generators/GoogleMapsSlideGenerator' ], function ($,
-    BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator,
-    GoogleImageSlideGenerator, GoogleMapsSlideGenerator) {
+    'eic/generators/GoogleMapsSlideGenerator',
+    'eic/FacebookConnector', 'eic/TTSService'],
+function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
+          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService) {
 
   "use strict";
 
   /** Generator that creates introductory slides */
   function IntroductionSlideGenerator(startTopic) {
+    if (startTopic.type !== 'facebook')
+      throw "The IntroductionSlideGenerator only works with topics that are Facebook profiles.";
+    
     CombinedSlideGenerator.call(this);
     this.slides = [];
     this.startTopic = startTopic;
   }
 
   $.extend(IntroductionSlideGenerator.prototype,
-      CombinedSlideGenerator.prototype, {
-      /** Initiates the introductory slides */
-      init : function () {
-        if (this.inited)
-          return;
-        /* Make all the slide contents for the introduction */
-        var person = { name : this.startTopic.name,
-        gender : (this.startTopic.gender == 'male') ? 'man' : 'woman',
-        fullhometown : this.startTopic.hometown.name,
-        hometown : this.startTopic.hometown.name.substr(0, this.startTopic.hometown.name.indexOf(',')),
-        music : this.startTopic.music[0].name};
-        this.slides = [
-            { content : "Earth. Our home planet ...", type : "text" },
-            { content : "earth", type : "image" },
-            { content : "... It's filled with data and things ...", type : "text" },
-            { content : "earth luminous network", type : "image" },
-            { content : "... and EVERYTHING IS CONNECTED", type : "text" },
-            { content : "Don't believe me? I will show you.", type : "text" },
-            { content : "Once upon a time, " + person.name + " ...", type: "text"},
-            { content : "... a " + person.gender + " from " + person.fullhometown + " ...", type : "text" },
-            { content : person.fullhometown, type : "map" },
-            { content : person.hometown, type : "image" },
-            { content : "... liked " + person.music + " ...", type : "text" },
-          ];
-
-        /* Each slide type gets its own generator */
-        var self = this;
-        this.slides.forEach(function (slide) {
-          var generator;
-          switch (slide.type) {
-          case "text":
-            generator = new TitleSlideGenerator(slide.content);
-            break;
-          case "image":
-            generator = new GoogleImageSlideGenerator(slide.content, 2);
-            break;
-          case "map":
-            generator = new GoogleMapsSlideGenerator(slide.content);
-            break;
-          }
+           CombinedSlideGenerator.prototype,
+  {
+      init: function () {
+        if (!this.inited) {
+          var self = this;
+          this.fetchTopicInformation(function () {
+            self.createSpeech();
+            self.createIntroSlideGenerators();
+          });
+          this.inited = true;
+        }
+      },
+      
+      next: function () {
+        var slide = CombinedSlideGenerator.prototype.next.apply(this);
+        if (this.audioURL) {
+          slide.audioURL = this.audioURL;
+          delete this.audioURL;
+        }
+        return slide;
+      },
+      
+      fetchTopicInformation: function (callback) {
+        var self = this,
+            profile = this.startTopic;
+        profile.genderType = this.startTopic.gender === 'male' ? 'man' : 'woman';
+        profile.relativePronoun = this.startTopic.gender === 'male' ? 'he' : 'she';
+        profile.fullHometown = profile.hometown.name;
+        profile.shortHometown = profile.fullHometown.replace(/,.+$/, '');
+        
+        new FacebookConnector().get('music', function (response) {
+          profile.music = response.data[0].name;
+          callback.call(self);
+        });
+      },
+      
+      createIntroSlideGenerators: function () {
+        var startTopic = this.startTopic,
+            self = this;
+        
+        [
+          new TitleSlideGenerator("Everything Is Connected", 3000),
+          new FBProfilePhotosGenerator(3),
+        ]
+        .forEach(function (generator) {
           self.addGenerator(generator);
         });
-
-        this.inited = true;
+      },
+      
+      createSpeech: function () {
+        var startTopic = this.startTopic,
+            tts = new TTSService(),
+            self = this;
+        
+        var text = "Once upon a time, " +
+                   startTopic.first_name + "wondered how " +
+                   startTopic.relativePronoun + " was connected to everything in this world. ";
+        
+        tts.getSpeech(text, 'en_GB', function (response) {
+          self.audioURL = response.snd_url;
+        });
       },
     });
 

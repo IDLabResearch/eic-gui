@@ -8,7 +8,6 @@
       var generators = new eic.CombinedSlideGenerator();
       var presenter = new eic.SlidePresenter('#main .slides', generators);
       $('#start').click(function() {
-    	generators.addGenerator(new eic.IntroductionSlideGenerator());
         var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
           if(topic.length > 0) {
@@ -30,6 +29,8 @@
       <input id="start" type="submit" value="Start" />
     </div>
     <div class="slides">
+    </div>
+    <div class="audio">
     </div>
   </div>
 </body>

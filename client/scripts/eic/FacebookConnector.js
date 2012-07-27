@@ -91,6 +91,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
             // Make profile behave like a Topic
             profile.uri = profile.link;
             profile.label = profile.name;
+            profile.type = "facebook";
             
             callback(0, profile);
           });

@@ -1,14 +1,15 @@
 define(['lib/jquery', 'eic/AutocompleteTopic',
         'eic/FacebookConnector',
-        'eic/generators/TopicToTopicSlideGenerator', 'eic/TopicSlidePresenter'],
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
 function ($, autocompleteTopic,
           FacebookConnector,
-          TopicToTopicSlideGenerator, TopicSlidePresenter) {
+          TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
   // The main "Everything Is Connected" application.
   function Application() {
     this.facebookConnector = new FacebookConnector();
+    this.generator = new TopicToTopicSlideGenerator();
   }
   
   Application.prototype = {
@@ -25,21 +26,15 @@ function ($, autocompleteTopic,
       $('#facebook').text('Connecting…');
       
       this.facebookConnector.connect(function (error, profile) {
-        self.profile = profile;
+        self.generator.setStartTopic(profile);
         
         // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
-        
-        // Get additional profile information
-        self.facebookConnector.get('music', function (response) {
-          self.profile.music = response.data;
-          
-          // Enable second step.
-          $('.step.two').removeClass('inactive');
-          $('#topic').prop('disabled', false)
-                     .focus();
-        });
-        
+
+        // Enable second step.
+        $('.step.two').removeClass('inactive');
+        $('#topic').prop('disabled', false)
+                   .focus();
       });
     },
     
@@ -61,8 +56,9 @@ function ($, autocompleteTopic,
     // Starts the movie about the connection between the user and the topic.
     playMovie: function () {
       var $slides = $('<div>').addClass('slides'),
+          $audio = $('<div>').addClass('audio'),
           $wrapper = $('<div>').addClass('slides-wrapper')
-                               .append($slides);
+                               .append($slides).append($audio);
       
       // Hide the main panel.
       $('#main').slideUp();
@@ -73,8 +69,8 @@ function ($, autocompleteTopic,
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
       
       // Create and start the slide show.
-      var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
-      var presenter = new TopicSlidePresenter($slides, generator);
+      this.generator.setEndTopic(this.topic);
+      var presenter = new SlidePresenter($slides, this.generator, $audio);
       presenter.start();
     },
     
