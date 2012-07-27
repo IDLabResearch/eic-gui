@@ -12,45 +12,51 @@ function ($,
 
   /** Generator that creates introductory slides */
   function IntroductionSlideGenerator(startTopic) {
+    if (startTopic.type !== 'facebook')
+      throw "The IntroductionSlideGenerator only works with topics that are Facebook profiles.";
+    
     CombinedSlideGenerator.call(this);
     this.slides = [];
     this.startTopic = startTopic;
   }
 
   $.extend(IntroductionSlideGenerator.prototype,
-      CombinedSlideGenerator.prototype, {
-      /** Initiates the introductory slides */
-      init : function () {
-        if (this.inited)
-          return;
+           CombinedSlideGenerator.prototype,
+  {
+      init: function () {
+        if (!this.inited) {
+          this.fetchTopicInformation(this.createIntroSlideGenerators);
+          this.inited = true;
+        }
+      },
+      
+      fetchTopicInformation: function (callback) {
+        var self = this,
+            profile = this.startTopic;
+        profile.genderType = this.startTopic.gender === 'male' ? 'man' : 'woman';
+        profile.fullHometown = profile.hometown.name;
+        profile.shortHometown = profile.fullHometown.replace(/,.+$/, '');
         
-        var person = {
-          name : this.startTopic.name,
-          gender : (this.startTopic.gender == 'male') ? 'man' : 'woman',
-          fullhometown : this.startTopic.hometown.name,
-          hometown : this.startTopic.hometown.name.substr(0, this.startTopic.hometown.name.indexOf(','))
-        };
+        new FacebookConnector().get('music', function (response) {
+          profile.music = response.data[0].name;
+          callback.call(self);
+        });
+      },
+      
+      createIntroSlideGenerators: function () {
+        var startTopic = this.startTopic;
         
-        /* Make all the slide contents for the introduction */
         this.addGenerator(new TitleSlideGenerator("Earth. Our home planet ..."));
         this.addGenerator(new GoogleImageSlideGenerator("earth", 2));
         this.addGenerator(new TitleSlideGenerator("... It's filled with data and things ..."));
         this.addGenerator(new GoogleImageSlideGenerator("earth luminous network", 2));
         this.addGenerator(new TitleSlideGenerator("... and EVERYTHING IS CONNECTED"));
         this.addGenerator(new TitleSlideGenerator("Don't believe me? I will show you."));
-        this.addGenerator(new TitleSlideGenerator("Once upon a time, " + person.name + " ..."));
-        this.addGenerator(new TitleSlideGenerator("... a " + person.gender +
-                                                  " from " + person.fullhometown + " ..."));
-        this.addGenerator(new GoogleMapsSlideGenerator(person.fullhometown));
-        this.addGenerator(new GoogleImageSlideGenerator(person.hometown));
-        
-        var self = this;
-        new FacebookConnector().get('music', function (response) {
-          var music = response.data[0].name;
-          self.addGenerator(new TitleSlideGenerator("... liked " + music + " ..."));
-        });
-
-        this.inited = true;
+        this.addGenerator(new TitleSlideGenerator("Once upon a time, " + startTopic.name + " ..."));
+        this.addGenerator(new TitleSlideGenerator("... a " + startTopic.genderType +
+                                                  " from " + startTopic.fullHometown + " ..."));
+        this.addGenerator(new GoogleMapsSlideGenerator(startTopic.fullHometown));
+        this.addGenerator(new GoogleImageSlideGenerator(startTopic.shortHometown));
       },
     });
 
