@@ -1,8 +1,10 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
 	"use strict";
 
-  //Maximum number of mosaic tiles
+  //Maximum number of mosaic tiles and time to show
 	var mosaicMaxNumTilesWide = 7;
+	var defaultDuration = 750;
+	var mosaicSlideDuration = 2500;
 	
   function setInited(target, object) {
     object.inited = true;
@@ -11,7 +13,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   function addSlides(target, myPlaces) {
 		console.log('slides' + myPlaces.length);
     loadImages(myPlaces, function (response) {
-      target.addImageSlide(response);
+      target.addImageSlideWithDuration(mosaicSlideDuration, response);
     });
   }
  
@@ -50,7 +52,21 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
 
   function profilePictures(target, fbConnector) {
+		fbConnector.get('', function (response) {
+      $(target).queue(function() {
+				console.log(response);
+				var bio = response.bio || 'All of this happened';
+        var $title = $('<h1>').text('You... '+bio), slide = target.createBaseSlide('title', $title, 1500);
+        target.slides.push(slide);
+        target.emit('newSlides');
+			});
+		});
+
     fbConnector.get('photos', function (response) {
+    	var $title = $('<h1>').text('Your photos...'), slide = target.createBaseSlide('title', $title, 1000);
+      target.slides.push(slide);
+      target.emit('newSlides');
+      
 			$.each(response.data.slice(0, target.maxResults), function (number, photo) {
         target.addImageSlide(photo.source);
       });
@@ -85,8 +101,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     var images = {};
     var loadedImages = 0;
     var numImages = sources.length;
-		console.log(numImages);
-		console.log(sources);
 		
     for (var src in sources) {
       images[src] = new Image();
@@ -127,12 +141,20 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     });
     
     q.queue("s", function () {
+    	var $title = $('<h1>').text('Your ' + type + '...'),
+          slide = target.createBaseSlide('title', $title, 1000);
+      target.slides.push(slide);
+      target.emit('newSlides');
+      q.dequeue("s");
+    });
+    
+    q.queue("s", function () {
       addSlides(target, items);
       q.dequeue("s");
 		});
   }
 
-  var defaultDuration = 1000;
+  
 
   /** Generator of images slides from Facebook User Profile search results.
    * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
@@ -141,7 +163,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     BaseSlideGenerator.call(this);
     this.fbConnector = new FacebookConnector();
     if (typeof maxResults == 'undefined')
-      this.maxResults = 5;
+      this.maxResults = 7;
     else
       this.maxResults = maxResults;
     this.slides = [];
@@ -164,7 +186,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       
       $(self).queue(profilePictures(self, self.fbConnector));
 
-			$(self).queue(composeFBMosaic(self, 'any', this.fbConnector.findPlacesNearMe));
+			$(self).queue(composeFBMosaic(self, 'neighboorhoud', this.fbConnector.findPlacesNearMe));
 			$(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
 			$(self).queue(composeFBMosaic(self, 'music', this.fbConnector.get));
 			$(self).queue(composeFBMosaic(self, 'movies', this.fbConnector.get));
@@ -193,6 +215,20 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       this.slides.push(slide);
       this.emit('newSlides');
     },
+    
+    addImageSlideWithDuration: function (duration, imageUrl) {
+			
+			var $image;
+			if (typeof imageUrl == 'string')
+				$image = $('<img>').attr('src', imageUrl);
+			else
+				$image = imageUrl;
+					
+			var slide = this.createBaseSlide('image', $image, duration);
+					
+      this.slides.push(slide);
+      this.emit('newSlides');
+    }
   });
 
   return FBProfilePhotosGenerator;

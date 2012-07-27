@@ -101,7 +101,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
           console.log('User cancelled login or did not fully authorize.');
         }
       }, {
-        scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday'
+        scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday,user_about_me'
       });
     },
 
