@@ -123,7 +123,7 @@ define(['lib/jquery',
         getGenerators: function () {
           var generators = [];
           
-          switch (this.topic.type) {          
+          switch (this.topic.type) {
           case "person":
             
             break;

@@ -130,7 +130,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       
       $(self).queue(profilePictures(self, this.fbConnector));
 
-			var myPlaces = new Array();
+			var myPlaces = [];
       
       this.fbConnector.findPlacesNearMe(function (response) {
 				$(self).queue(placeImages(self, myPlaces, response));
