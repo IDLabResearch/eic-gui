@@ -10,7 +10,7 @@
           var topic = $('#topic').val();
           var description = $('#description').val();
           var generators = new eic.TopicSlideGenerator(topic, description);
-          var presenter = new eic.TopicSlidePresenter('#main .slides', generators);
+          var presenter = new eic.SlidePresenter('#main .slides', generators);
        
           presenter.start();
         });

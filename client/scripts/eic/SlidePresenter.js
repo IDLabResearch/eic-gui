@@ -1,11 +1,11 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
   "use strict";
-
+  
   function SlidePresenter(container, generator) {
     this.$container = $(container);
     this.generator = generator;
   }
-
+  
   SlidePresenter.prototype = {
     start: function () {
       if (this.started)
@@ -27,11 +27,19 @@ define(['lib/jquery'], function ($) {
           var nextSlide = self.generator.next();
           self.$container.prepend(nextSlide.$element);
           nextSlide.start();
-          window.setTimeout(showNext, nextSlide.duration);
+          
           // stop the previous slide
           if (currentSlide)
             currentSlide.stop();
           currentSlide = nextSlide;
+          
+          // if slide contains a description, send it to TTS service
+          if (currentSlide.audioURL) {
+            var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
+            self.$container.append(audioEl);
+          }
+          
+          window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive
         else {
@@ -39,10 +47,10 @@ define(['lib/jquery'], function ($) {
         }
       }
       showNext();
-
+      
       this.started = true;
     }
   };
-
+  
   return SlidePresenter;
 });

@@ -20,7 +20,6 @@
   var scripts = ['lib/jquery',
     'eic/SlidePresenter',
     'eic/FacebookConnector',
-    'eic/TopicSlidePresenter',
     'eic/TTSService',
     'eic/generators/BaseSlideGenerator',
     'eic/generators/IntroductionSlideGenerator',
@@ -31,7 +30,7 @@
     'eic/generators/VideoSlideGenerator',
     'eic/generators/TopicSlideGenerator',
     'eic/generators/FBProfilePhotosGenerator',
-	'eic/generators/YouTubeSlideGenerator'];
+	  'eic/generators/YouTubeSlideGenerator'];
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};

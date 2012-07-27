@@ -1,9 +1,9 @@
 define(['lib/jquery', 'eic/AutocompleteTopic',
         'eic/FacebookConnector',
-        'eic/generators/TopicToTopicSlideGenerator', 'eic/TopicSlidePresenter'],
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
 function ($, autocompleteTopic,
           FacebookConnector,
-          TopicToTopicSlideGenerator, TopicSlidePresenter) {
+          TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
   
   // The main "Everything Is Connected" application.
@@ -68,7 +68,7 @@ function ($, autocompleteTopic,
       
       // Create and start the slide show.
       var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
-      var presenter = new TopicSlidePresenter($slides, generator);
+      var presenter = new SlidePresenter($slides, generator);
       presenter.start();
     },
     
