@@ -20,7 +20,7 @@ define(['lib/jquery',
         //TitleSlideGenerator always first in the array!
         new TitleSlideGenerator(topic),
         new GoogleImageSlideGenerator(topic),
-        new YouTubeSlideGenerator({topic:topic}),
+        new YouTubeSlideGenerator(topic),
         new DateSlideGenerator(topic),
       ];
 
