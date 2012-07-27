@@ -5,13 +5,14 @@ function ($, BaseSlideGenerator) {
   var defaultDuration = 1000;
 
   /** Generator that creates a title slide for a topic. */
-  function TitleSlideGenerator(topic) {
+  function TitleSlideGenerator(topic, duration) {
     BaseSlideGenerator.call(this);
     
     if (typeof topic === "string")
       topic = { label: topic };
     
     this.topic = topic;
+    this.duration = duration || defaultDuration;
   }
 
   $.extend(TitleSlideGenerator.prototype,
@@ -28,14 +29,13 @@ function ($, BaseSlideGenerator) {
         return;
 
       var $title = $('<h1>').text(this.topic.label),
-          slide = this.createBaseSlide('title', $title, defaultDuration);
+          slide = this.createBaseSlide('title', $title, this.duration);
       
       this.done = true;
 
       return slide;
     },
   });
-  
   
   return TitleSlideGenerator;
 });
