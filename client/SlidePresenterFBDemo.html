@@ -20,7 +20,7 @@
         var generators = new eic.CombinedSlideGenerator();
         var presenter = new eic.SlidePresenter('#main .slides', generators);
         $('#start').click(function() {
-          generators.addGenerator(new eic.FBProfilePhotosGenerator(fbConnector));
+          generators.addGenerator(new eic.FBProfilePhotosGenerator());
           presenter.start();
         });
       }
