@@ -5,7 +5,7 @@ define(['lib/jquery',
   'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/YouTubeSlideGenerator'],
-  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
 
     "use strict";
 
@@ -20,7 +20,7 @@ define(['lib/jquery',
         //TitleSlideGenerator always first in the array!
         new TitleSlideGenerator(topic),
         new GoogleImageSlideGenerator(topic),
-        //new YouTubeSlideGenerator({topic:topic}),
+        new YouTubeSlideGenerator({topic:topic}),
         new DateSlideGenerator(topic),
       ];
 
@@ -120,7 +120,7 @@ define(['lib/jquery',
           if (generator.hasNext())
             this.emitNewSlidesEvent();
         },
-        initGenerators: function () {
+        getGenerators: function () {
           var generators = [];
           
           switch (this.topic.type) {          
