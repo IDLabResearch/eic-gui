@@ -4,7 +4,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
   /** Generator that provides slides from child generators */
   function CombinedSlideGenerator(generators) {
     BaseSlideGenerator.call(this);
-    this.emitNewSlidesEvent = $.proxy(function () { this.emit('newSlides'); }, this);
+    this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
 
     this.generators = [];
     if (generators)

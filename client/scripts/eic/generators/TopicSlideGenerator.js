@@ -1,45 +1,19 @@
 define(['lib/jquery',
   'eic/TTSService',
-  'eic/generators/BaseSlideGenerator',
+  'eic/generators/CombinedSlideGenerator',
   'eic/generators/GoogleImageSlideGenerator',
   'eic/generators/GoogleMapsSlideGenerator',
   'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/YouTubeSlideGenerator'],
-  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+  function ($, TTSService, CombinedSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
-      BaseSlideGenerator.call(this);
-      this.emitNewSlidesEvent = $.proxy(function () {
-        this.emit('newSlides');
-      }, this);
+      CombinedSlideGenerator.call(this);
+      this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
 
       this.generators = [];
-      //Create all generators depending on the type of the topic
-      this.addGenerator(new TitleSlideGenerator(topic), true);
-      
-      switch (topic.type) {
-      case "date":
-        this.addGenerator(new DateSlideGenerator(topic));
-        break;
-      case "location":
-        this.addGenerator(new GoogleMapsSlideGenerator(topic));
-        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
-        this.addGenerator(new YouTubeSlideGenerator(topic), true);
-        break;
-      default:
-        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
-        this.addGenerator(new YouTubeSlideGenerator(topic), true);
-        break;
-      }
-
-
-      //      if (generators) {
-      //        for (var i = 0; i < generators.length; i++)
-      //          this.addGenerator(generators[i], true);
-      //      }
-
       this.topic = topic;
       this.description = description;
       this.first = true;
@@ -49,7 +23,7 @@ define(['lib/jquery',
     }
 
     $.extend(TopicSlideGenerator.prototype,
-      BaseSlideGenerator.prototype,
+             CombinedSlideGenerator.prototype,
       {
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {
@@ -64,15 +38,29 @@ define(['lib/jquery',
 
         /** Initialize all child generators. */
         init: function () {
-          var tts = new TTSService(), self = this;
-          
-          if (!this.inited) {
-            this.generators.forEach(function (g) {
-              g.init();
-            });
-            this.inited = true;
+          if (this.inited)
+            return;
+            
+          //Create all generators depending on the type of the topic
+          this.addGenerator(new TitleSlideGenerator(this.topic));
+          switch (this.topic.type) {
+          case "date":
+            this.addGenerator(new DateSlideGenerator(this.topic));
+            break;
+          case "location":
+            this.addGenerator(new GoogleMapsSlideGenerator(this.topic));
+            this.addGenerator(new GoogleImageSlideGenerator(this.topic));
+            this.addGenerator(new YouTubeSlideGenerator(this.topic));
+            break;
+          default:
+            this.addGenerator(new GoogleImageSlideGenerator(this.topic));
+            this.addGenerator(new YouTubeSlideGenerator(this.topic));
+            break;
           }
-
+          
+          var tts = new TTSService(),
+              self = this;
+          
           tts.once('speechReady', function (event, data) {
             self.durationLeft = data.snd_time;
             self.audioURL = data.snd_url;
@@ -82,6 +70,8 @@ define(['lib/jquery',
           });
           tts.getSpeech(this.description, 'en_GB');
           console.log("Getting speech for topic " + this.topic.label + " from service");
+          
+          this.inited = true;
         },
         
         next: function () {
@@ -110,23 +100,6 @@ define(['lib/jquery',
           console.log('New slide: duration ' + slide.duration + 'ms, ' +  this.durationLeft + 'ms left!');
           return slide;
         },
-        /** Add a child generator add the end of the list. */
-        addGenerator: function (generator, suppressInit) {
-          var self = this;
-          
-          // initialize the generator and add it to the list
-          if (!suppressInit)
-            generator.init();
-          this.generators.push(generator);
-
-          // signal the arrival of new slides
-          generator.on('newSlides', function () {
-            self.emitNewSlidesEvent();
-          });
-    
-          if (generator.hasNext())
-            this.emitNewSlidesEvent();
-        }
       });
     return TopicSlideGenerator;
   });
