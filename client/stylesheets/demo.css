@@ -63,7 +63,7 @@ html {
 -ms-transform-origin: 50% 50%; 
 -ms-transition: -ms-transform 30s linear; 
 }
-.slide > #date {
+.slide > .calendar {
 -moz-transform-origin: 50% 50%; 
 -moz-transition: -moz-transform 30s linear; 
 -webkit-transform-origin: 50% 50%; 

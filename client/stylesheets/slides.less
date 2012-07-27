@@ -67,6 +67,33 @@
     }
   }
   
+  &.date {
+    text-align: center;
+    font: 40px Georgia, serif;
+    
+    .calendar {
+      margin: 100px 0 0 250px;
+      width:300px;
+      height:400px;
+      background-color: white;
+      border: 2px solid #e34420;
+    }
+    .month {
+      margin-top: 15px;
+      text-transform: uppercase;
+    }
+    .year {
+      font-size: 30px;
+    }
+    .day {
+      margin: -20px 0 20px;
+      font-size: 200px;
+    }
+    .weekday {
+      font-size: 50px;
+    }
+  }
+  
   /***** Transitions *****/
   &.image > img, &.date > .calendar {
     .transition(30s linear, 50% 50%);
