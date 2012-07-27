@@ -25,7 +25,11 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
   {
       init: function () {
         if (!this.inited) {
-          this.fetchTopicInformation(this.createIntroSlideGenerators);
+          var self = this;
+          this.fetchTopicInformation(function () {
+            self.createSpeech();
+            self.createIntroSlideGenerators();
+          });
           this.inited = true;
         }
       },
@@ -56,8 +60,6 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
       createIntroSlideGenerators: function () {
         var startTopic = this.startTopic,
             self = this;
-        
-        this.createSpeech();
         
         [
           new TitleSlideGenerator("Everything Is Connected", 3000),
