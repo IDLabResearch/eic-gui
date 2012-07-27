@@ -95,6 +95,8 @@ define(
 
             return slide;
           },
+          
+          getDuration: function () { return defaultDuration; },
         });
 
       return DateSlideGenerator;

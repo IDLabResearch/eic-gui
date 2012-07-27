@@ -4,8 +4,9 @@ define(['lib/jquery',
   'eic/generators/GoogleImageSlideGenerator',
   'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
-  'eic/generators/VideoSlideGenerator'],
-  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, DateSlideGenerator, TitleSlideGenerator, VideoSlideGenerator) {
+  'eic/generators/YouTubeSlideGenerator'],
+  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
@@ -19,8 +20,8 @@ define(['lib/jquery',
         //TitleSlideGenerator always first in the array!
         new TitleSlideGenerator(topic),
         new GoogleImageSlideGenerator(topic),
+        new YouTubeSlideGenerator(topic),
         new DateSlideGenerator(topic),
-        //new VideoSlideGenerator(videoUrl)
       ];
 
       this.generators = [];
@@ -68,10 +69,9 @@ define(['lib/jquery',
             self.audioURL = data.snd_url;
             //When speech is received, 'remind' the presenter that the slides are ready
             self.emitNewSlidesEvent();
-            
-            console.log('Audio URL was fetched!');
           });
           tts.getSpeech(this.description, 'en_GB');
+          console.log("Getting speech for topic " + this.topic.label + " from service");
         },
         
         next: function () {
@@ -120,6 +120,24 @@ define(['lib/jquery',
           if (generator.hasNext())
             this.emitNewSlidesEvent();
         },
+        getGenerators: function () {
+          var generators = [];
+          
+          switch (this.topic.type) {
+          case "person":
+            
+            break;
+          case "location":
+            
+            break;
+          case "building":
+            break;
+          case "date":
+            break;
+          default :
+                
+          }
+        }
       });
     return TopicSlideGenerator;
   });

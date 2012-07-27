@@ -1,6 +1,8 @@
 define(['lib/jquery', 'lib/jvent'],
 function ($, EventEmitter) {
   "use strict";
+  
+  var defaultDuration = 1000;
 
   /** Generator that serves as a base for other generators. */
   function BaseSlideGenerator() {
@@ -13,6 +15,8 @@ function ($, EventEmitter) {
     hasNext: function () { return false; },
 
     next: function () { return null; },
+    
+    getDuration: function () { return defaultDuration; },
     
     createBaseSlide: function (cssClass, content, duration) {
       var slide = new EventEmitter();

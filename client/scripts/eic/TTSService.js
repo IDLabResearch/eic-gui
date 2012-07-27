@@ -1,6 +1,9 @@
 define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
+    
+    var local = false;
+    var server = local ? 'restdesc.org:5555' : 'vaas.acapela-group.com';
 
     function TTSService() {
       EventEmitter.call(this);
@@ -46,14 +49,15 @@ define(['lib/jquery', 'lib/jvent'],
       },
       getSpeech: function (text, lang, callback) {
         var self = this;
+        console.log('Requesting audio URL...');
         $.ajax({
-          url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
+          url: 'http://' + server + '/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
           type: 'GET',
           data: {
             prot_vers: 2,
-            cl_login: "EVAL_VAAS",
-            cl_app: "EVAL_3626419",
-            cl_pwd: "3bt6oxps",
+            cl_login: "EXAMPLE_ID",
+            cl_app: "EXAMPLE_APP",
+            cl_pwd: "x0hzls5cqs",
             req_voice: this.retrieveVoice(lang),
             req_text: text
           },
@@ -62,9 +66,11 @@ define(['lib/jquery', 'lib/jvent'],
             if (data.res === 'OK') {
               if (callback)
                 callback(data);
+              console.log('Audio URL ' + data.snd_url + ' was fetched!');
               self.emit('speechReady', data);
             }
             else {
+              console.log(data.err_code);
               self.emit('speechError', data);
             }
           },

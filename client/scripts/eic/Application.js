@@ -56,8 +56,9 @@ function ($, autocompleteTopic,
     // Starts the movie about the connection between the user and the topic.
     playMovie: function () {
       var $slides = $('<div>').addClass('slides'),
+          $audio = $('<div>').addClass('audio'),
           $wrapper = $('<div>').addClass('slides-wrapper')
-                               .append($slides);
+                               .append($slides).append($audio);
       
       // Hide the main panel.
       $('#main').slideUp();
@@ -69,7 +70,7 @@ function ($, autocompleteTopic,
       
       // Create and start the slide show.
       this.generator.setEndTopic(this.topic);
-      var presenter = new SlidePresenter($slides, this.generator);
+      var presenter = new SlidePresenter($slides, this.generator, $audio);
       presenter.start();
     },
     

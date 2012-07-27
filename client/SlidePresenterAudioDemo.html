@@ -7,10 +7,10 @@
       function startApplication($, eic) {
 
         $('#start').click(function() {
-          var topic = $('#topic').val();
+          var topic = {label:$('#topic').val()};
           var description = $('#description').val();
           var generators = new eic.TopicSlideGenerator(topic, description);
-          var presenter = new eic.SlidePresenter('#main .slides', generators);
+          var presenter = new eic.SlidePresenter('#main .slides', generators,'#main .audio');
        
           presenter.start();
         });
@@ -28,6 +28,7 @@
       </div>
       <div class="slides">
       </div>
+      <div class="audio"></div>
     </div>
   </body>
 </html>
