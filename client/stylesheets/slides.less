@@ -1,3 +1,29 @@
+/***** Mixins *****/
+
+.transition (@transform, @origin) {
+  -moz-transform-origin: @origin;
+  -moz-transition: -moz-transform @transform;
+  -webkit-transform-origin: @origin;
+  -webkit-transition: -webkit-transform @transform;
+  -o-transform-origin: @origin;
+  -o-transition: -o-transform @transform;
+  -ms-transform-origin: @origin;
+  -ms-transition: -ms-transform @transform;
+  transform-origin: @origin;
+  transition: transform @transform;
+}
+
+.transform (@transform) {
+  -moz-transform: @transform;
+  -webkit-transform: @transform;
+  -o-transform: @transform;
+  -ms-transform: @transform;
+  transform: @transform;
+}
+
+
+/***** Rules *****/
+
 .slides {
   width: 800px;
   height: 600px;
@@ -39,31 +65,13 @@
       height: 100%;
     }
   }
-}
-
-.slide > img {
--moz-transform-origin: 50% 50%; 
--moz-transition: -moz-transform 30s linear; 
--webkit-transform-origin: 50% 50%; 
--webkit-transition: -webkit-transform 30s linear; 
--o-transform-origin: 50% 50%; 
--o-transition: -moz-transform 30s linear; 
--ms-transform-origin: 50% 50%; 
--ms-transition: -ms-transform 30s linear; 
-}
-.slide > #date {
--moz-transform-origin: 50% 50%; 
--moz-transition: -moz-transform 30s linear; 
--webkit-transform-origin: 50% 50%; 
--webkit-transition: -webkit-transform 30s linear; 
--o-transform-origin: 50% 50%; 
--o-transition: -moz-transform 30s linear; 
--ms-transform-origin: 50% 50%; 
--ms-transition: -ms-transform 30s linear; 
-}
-.zoom {
--moz-transform: scale(2) rotate(10deg);
--webkit-transform: scale(2) rotate(10deg);
--o-transform: scale(2) rotate(10deg);
--ms-transform: scale(2) rotate(10deg);
+  
+  /***** Transitions *****/
+  &.image > img, &.date > .calendar {
+    .transition(30s linear, 50% 50%);
+  }
+  
+  .zoom {
+    .transform(scale(2) rotate(10deg));
+  }
 }

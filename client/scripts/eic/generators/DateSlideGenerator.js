@@ -54,34 +54,34 @@ function ($, BaseSlideGenerator) {
       var $datediv = $(
       '<div/>',
       {
-        id : 'date',
+        'class' : 'calendar',
         style : "position:relative; top:100px; left:250px; width:300px; height:400px; background-color: white; border: 1px solid red;",
       });
       var $monthdiv = $(
       '<div/>',
       {
-        id : 'month',
+        'class' : 'month',
         style : "position:relative; top:10px; left:10px; width:280px; height:50px; text-align: center; font: 40px Georgia, serif;",
         text : this.month[this.date.getMonth()],
       });
       var $yeardiv = $(
       '<div/>',
       {
-        id : 'year',
+        'class' : 'year',
         style : "position:relative; top:5px; left:10px; width:280px; height:30px; text-align: center; font: 30px Georgia, serif;",
         text : this.date.getFullYear(),
       });
       var $daydiv = $(
       '<div/>',
       {
-        id : 'day',
+        'class' : 'day',
         style : "position:relative; top:0px; left:10px; width:280px; height:200px; text-align: center; font: 200px Georgia, serif;",
         text : this.date.getDate(),
       });
       var $weekdaydiv = $(
       '<div/>',
       {
-        id : 'weekday',
+        'class' : 'weekday',
         style : "position:relative; top:20px; left:10px; width:280px; height:50px; text-align: center; font: 50px Georgia, serif;",
         text : this.weekday[this.date.getDay()],
       });
