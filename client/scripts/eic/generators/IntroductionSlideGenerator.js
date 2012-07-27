@@ -65,20 +65,8 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
           new TitleSlideGenerator("Everything Is Connected"),
         ]
         .forEach(function (generator) {
-          self.addGenerator(generator)
+          self.addGenerator(generator);
         });
-        /*
-        this.addGenerator(new GoogleImageSlideGenerator("earth", 2));
-        this.addGenerator(new TitleSlideGenerator("... It's filled with data and things ..."));
-        this.addGenerator(new GoogleImageSlideGenerator("earth luminous network", 2));
-        this.addGenerator(new TitleSlideGenerator("... and EVERYTHING IS CONNECTED"));
-        this.addGenerator(new TitleSlideGenerator("Don't believe me? I will show you."));
-        this.addGenerator(new TitleSlideGenerator("Once upon a time, " + startTopic.name + " ..."));
-        this.addGenerator(new TitleSlideGenerator("... a " + startTopic.genderType +
-                                                  " from " + startTopic.fullHometown + " ..."));
-        this.addGenerator(new GoogleMapsSlideGenerator(startTopic.fullHometown));
-        this.addGenerator(new GoogleImageSlideGenerator(startTopic.shortHometown));
-        */
       },
       
       createSpeech: function () {
