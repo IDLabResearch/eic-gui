@@ -44,9 +44,8 @@ define(['lib/jquery', 'lib/jvent'],
         }
         return this.VOICE_LIST.en_GB;
       },
-      getSpeech: function (text, lang) {
+      getSpeech: function (text, lang, callback) {
         var self = this;
-        console.log('success');
         $.ajax({
           url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
           type: 'GET',
@@ -61,9 +60,11 @@ define(['lib/jquery', 'lib/jvent'],
           dataType: 'jsonp',
           success: function (data) {
             if (data.res === 'OK') {
-              console.log('success');
+              if (callback)
+                callback(data);
               self.emit('speechReady', data);
-            } else {
+            }
+            else {
               self.emit('speechError', data);
             }
           },
