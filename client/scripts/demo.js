@@ -30,7 +30,8 @@
     'eic/generators/VideoSlideGenerator',
     'eic/generators/TopicSlideGenerator',
     'eic/generators/FBProfilePhotosGenerator',
-    'eic/generators/YouTubeSlideGenerator'];
+    'eic/generators/YouTubeSlideGenerator',
+    'eic/generators/IntroductionSlideGenerator'];
 
   requirejs(scripts, function (jQuery) {
     var scriptHolder = {};
