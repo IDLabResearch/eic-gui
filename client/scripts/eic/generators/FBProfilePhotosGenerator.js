@@ -15,10 +15,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   function placeImages(target, myPlaces, response, queue) {
 		var q = $({});
 		var sqrt = Math.floor(Math.sqrt(response.data.length));
-		console.log(' Square root :'+sqrt);
-    var sq = sqrt*sqrt;
+		console.log(' Square root :' + sqrt);
+    var sq = sqrt * sqrt;
     var max = 36 < sq ? 36 : sq;
-    console.log(' Max :'+max);
+    console.log(' Max :' + max);
     $.each(response.data.slice(0, max), function (number, place) {
 			q.queue("r", placeImage(target, myPlaces, place, queue, max));
     });
@@ -35,7 +35,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     });
   }
 
-  function profilePictures(target,fbConnector) {
+  function profilePictures(target, fbConnector) {
     fbConnector.get('photos', function (response) {
 			$.each(response.data.slice(0, target.maxResults), function (number, photo) {
         target.addImageSlide(photo.source);
@@ -47,11 +47,11 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     var numOfImages = Object.keys(images).length;
     console.log('images length ' + numOfImages);
     var sqrt = Math.floor(Math.sqrt(numOfImages));
-    var sq = sqrt*sqrt;
+    var sq = sqrt * sqrt;
     var canvas = document.createElement("canvas");
-    var max_width = 500
-    canvas.width  = sqrt * Math.floor(max_width/sqrt);
-    canvas.height = sqrt * Math.floor(max_width/sqrt);
+    var max_width = 500;
+    canvas.width  = sqrt * Math.floor(max_width / sqrt);
+    canvas.height = sqrt * Math.floor(max_width / sqrt);
     var context = canvas.getContext("2d");
     var i = 0, j = 0;
 
@@ -104,15 +104,15 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
   
   function composeFBMosaic(target, type, fb_connector_call) {
-		console.log('making fb mosaic of type '+type);
+		console.log('making fb mosaic of type ' + type);
 		var q = $({});
 		var items = [];
 
-    fb_connector_call(type, function(response) {
+    fb_connector_call(type, function (response) {
 			$(target).queue(placeImages(target, items, response, q));
     });
     
-    q.queue("s", function() {
+    q.queue("s", function () {
       addSlides(target, items);
       q.dequeue("s");
 		});
@@ -148,7 +148,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
       var self = this;
       
-      $(self).queue(profilePictures(self,self.fbConnector));
+      $(self).queue(profilePictures(self, self.fbConnector));
 
 			$(self).queue(composeFBMosaic(self, 'any', this.fbConnector.findPlacesNearMe));
 			$(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
