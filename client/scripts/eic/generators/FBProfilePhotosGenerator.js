@@ -1,10 +1,11 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
-	"use strict";
+  "use strict";
 
-  // Maximum number of mosaic tiles and time to show
-	var mosaicMaxNumTilesWide = 7;
-	var defaultDuration = 750;
-	var mosaicSlideDuration = 2500;
+  var defaultDuration = 1000;
+  
+  var mosaicShow = false;
+  var mosaicMaxNumTilesWide = 7;
+  var mosaicSlideDuration = 2500;
 
   /** Generator of images slides from Facebook User Profile search results.
    * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
@@ -12,10 +13,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   function FBProfilePhotosGenerator(maxResults) {
     BaseSlideGenerator.call(this);
     this.fbConnector = new FacebookConnector();
-    if (typeof maxResults == 'undefined')
-      this.maxResults = 7;
-    else
-      this.maxResults = maxResults;
+    this.maxResults = maxResults || 7;
     this.slides = [];
   }
 
@@ -27,7 +25,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     },
 
     /** Fetches a list of images about the user in which he is tagged. */
-
     init : function () {
       if (this.inited)
         return;
@@ -36,11 +33,13 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       
       $(self).queue(profilePictures(self, self.fbConnector));
 
-			$(self).queue(composeFBMosaic(self, 'neighboorhoud', this.fbConnector.findPlacesNearMe));
-			$(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
-			$(self).queue(composeFBMosaic(self, 'music', this.fbConnector.get));
-			$(self).queue(composeFBMosaic(self, 'movies', this.fbConnector.get));
-			$(self).queue(composeFBMosaic(self, 'friends', this.fbConnector.get));
+      if (mosaicShow) {
+        $(self).queue(composeFBMosaic(self, 'neighboorhoud', this.fbConnector.findPlacesNearMe));
+        $(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
+        $(self).queue(composeFBMosaic(self, 'music', this.fbConnector.get));
+        $(self).queue(composeFBMosaic(self, 'movies', this.fbConnector.get));
+        $(self).queue(composeFBMosaic(self, 'friends', this.fbConnector.get));
+      }
       
       this.inited = true;
     },
@@ -50,39 +49,27 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       return this.slides.shift();
     },
     
-    getDuration: function () { return defaultDuration; },
+    getDuration: function () {
+      var duration = defaultDuration * this.maxResults;
+      if (mosaicShow)
+        duration += mosaicSlideDuration * 5;
+      return duration;
+    },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
-			var $image;
-			if (typeof imageUrl == 'string')
-				$image = $('<img>').attr('src', imageUrl);
-			else
-				$image = imageUrl;
-					
-			var slide = this.createBaseSlide('image', $image, defaultDuration);
-      // Ken Burns effect
+      var $image = imageUrl;
+      if (typeof imageUrl === 'string')
+        $image = $('<img>').attr('src', imageUrl);
+          
+      var slide = this.createBaseSlide('image', $image, defaultDuration);
       slide.on('started', function () {
-        setTimeout(function () {
-          slide.$element.find("img").addClass('zoom');
-        }, 100);
+        setTimeout($.proxy($image, 'addClass', 'zoom'), 100);
       });
+            
       this.slides.push(slide);
       this.emit('newSlides');
     },
-    
-    addImageSlideWithDuration: function (duration, imageUrl) {
-			var $image;
-			if (typeof imageUrl == 'string')
-				$image = $('<img>').attr('src', imageUrl);
-			else
-				$image = imageUrl;
-					
-			var slide = this.createBaseSlide('image', $image, duration);
-					
-      this.slides.push(slide);
-      this.emit('newSlides');
-    }
   });
 
   function addSlides(target, myPlaces) {
@@ -92,52 +79,38 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
  
   function placeImages(target, myPlaces, type, response, queue) {
-		var q = $({});
-		var sqrt = Math.floor(Math.sqrt(response.data.length));
+    var q = $({});
+    var sqrt = Math.floor(Math.sqrt(response.data.length));
     var sq = sqrt * sqrt;
     var mq = mosaicMaxNumTilesWide * mosaicMaxNumTilesWide;
     var max = mq < sq ? mq : sq;
     $.each(response.data.slice(0, max), function (number, place) {
-			q.queue("r", placeImage(target, myPlaces, place, type, queue, max));
+      q.queue("r", placeImage(target, myPlaces, place, type, queue, max));
     });
     q.dequeue("r");
   }
 
   function placeImage(target, myPlaces, place, type, queue, max) {
-		if (type == 'friends') {
-			target.fbConnector.getPlace(place.id + '/picture', function (response) {
-				myPlaces.push(response.data.url);
-				if (myPlaces.length == max) {
-					queue.dequeue("s");
-				}
-			});
-		} else {
+    if (type == 'friends') {
+      target.fbConnector.getPlace(place.id + '/picture', function (response) {
+        myPlaces.push(response.data.url);
+        if (myPlaces.length == max) {
+          queue.dequeue("s");
+        }
+      });
+    } else {
       target.fbConnector.getPlace(place.id, function (response) {
         myPlaces.push(response.picture);
         if (myPlaces.length == max) {
           queue.dequeue("s");
         }
-			});
-		}
+      });
+    }
   }
 
   function profilePictures(target, fbConnector) {
-		fbConnector.get('', function (response) {
-      $(target).queue(function () {
-				var bio = response.bio || 'All of this happened';
-        var $title = $('<h1>').text('You... ' + bio), slide = target.createBaseSlide('title', $title, 1500);
-        target.slides.push(slide);
-        target.emit('newSlides');
-			});
-		});
-
     fbConnector.get('photos', function (response) {
-      var $title = $('<h1>').text('Your photos...'),
-          slide = target.createBaseSlide('title', $title, 1000);
-      target.slides.push(slide);
-      target.emit('newSlides');
-      
-			$.each(response.data.slice(0, target.maxResults), function (number, photo) {
+      $.each(response.data.slice(0, target.maxResults), function (number, photo) {
         target.addImageSlide(photo.source);
       });
     });
@@ -162,7 +135,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       if (j === sqrt)
         return;
     });
-		//$('#canvas-demo').append(canvas);
+    //$('#canvas-demo').append(canvas);
     convertCanvasToImage(canvas, callback);
   }
 
@@ -170,7 +143,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     var images = {};
     var loadedImages = 0;
     var numImages = sources.length;
-		
+    
     for (var src in sources) {
       images[src] = new Image();
       images[src].onload = function () {
@@ -193,7 +166,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
   // Converts canvas to an image
   function convertCanvasToImage(canvas, callback) {
-		//Unsafe - found no short term solution to fix this slide
+    //Unsafe - found no short term solution to fix this slide
     //var image = new Image();
     //image.src = canvas.toDataURL("image/png");
     //callback(image.src);
@@ -201,25 +174,17 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
   
   function composeFBMosaic(target, type, fb_connector_call) {
-		var q = $({});
-		var items = [];
+    var q = $({});
+    var items = [];
 
     fb_connector_call(type, function (response) {
-			$(target).queue(placeImages(target, items, type, response, q));
-    });
-    
-    q.queue("s", function () {
-      var $title = $('<h1>').text('Your ' + type + '...'),
-          slide = target.createBaseSlide('title', $title, 1000);
-      target.slides.push(slide);
-      target.emit('newSlides');
-      q.dequeue("s");
+      $(target).queue(placeImages(target, items, type, response, q));
     });
     
     q.queue("s", function () {
       addSlides(target, items);
       q.dequeue("s");
-		});
+    });
   }
 
   return FBProfilePhotosGenerator;
