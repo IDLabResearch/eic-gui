@@ -1,6 +1,8 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
+  
+  var defaultDuration = 5000;
 
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
@@ -77,6 +79,8 @@ function ($, BaseSlideGenerator) {
       this.slides.push(slide);
       this.emit('newSlides');
     },
+    
+    getDuration: function () { return defaultDuration; },
   });
   
   function onPlayerReady(event) {

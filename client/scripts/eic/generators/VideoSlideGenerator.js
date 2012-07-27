@@ -35,6 +35,8 @@ function ($, BaseSlideGenerator) {
 
       return slide;
     },
+    
+    getDuration: function () { return defaultDuration; },
   });
   
   return VideoSlideGenerator;
