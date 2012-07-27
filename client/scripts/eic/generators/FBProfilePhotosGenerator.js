@@ -189,7 +189,14 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 				$image = imageUrl;
 					
 			var slide = this.createBaseSlide('image', $image, defaultDuration);
-					
+      //Ken Burns effect
+      slide.on('started', function () {
+        setTimeout(function () {
+          slide.$element.find("img").addClass('zoom');
+        },
+      100
+      );
+      });
       this.slides.push(slide);
       this.emit('newSlides');
     },

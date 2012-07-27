@@ -59,20 +59,21 @@ function ($, BaseSlideGenerator) {
     },
     
     getDuration: function () {
-      return defaultDuration;
+      return defaultDuration * this.maxResults;
     },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
           slide = this.createBaseSlide('image', $image, defaultDuration);
-	  slide.on('started',function(){
-	    setTimeout(function(){
-		  slide.$element.find("img").addClass('zoom');
-		  },
-		  100
-	    )
-	  });
+    //Ken Burns effect
+      slide.on('started', function () {
+        setTimeout(function () {
+          slide.$element.find("img").addClass('zoom');
+        },
+      100
+      );
+      });
       this.slides.push(slide);
       this.emit('newSlides');
     },
