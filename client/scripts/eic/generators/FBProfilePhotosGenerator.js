@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 	"use strict";
 
   //Maximum number of mosaic tiles
-	var mosaicMaxNumTilesWide = 7; 
+	var mosaicMaxNumTilesWide = 7;
 	
   function setInited(target, object) {
     object.inited = true;
@@ -30,24 +30,23 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
 
   function placeImage(target, myPlaces, place, type, queue, max) {
-  	if (type == 'friends') {
-  		target.fbConnector.getPlace(place.id+'/picture', function (response) {
-			myPlaces.push(response.data.url);
-			if (myPlaces.length == max) {
-				queue.dequeue("s");
-				console.log('max reached');
-			}
-    });
-  	} else {
+		if (type == 'friends') {
+			target.fbConnector.getPlace(place.id + '/picture', function (response) {
+				myPlaces.push(response.data.url);
+				if (myPlaces.length == max) {
+					queue.dequeue("s");
+					console.log('max reached');
+				}
+			});
+		} else {
       target.fbConnector.getPlace(place.id, function (response) {
         myPlaces.push(response.picture);
         if (myPlaces.length == max) {
           queue.dequeue("s");
           console.log('max reached');
         }
-      }); 
-
-   }
+			});
+		}
   }
 
   function profilePictures(target, fbConnector) {
