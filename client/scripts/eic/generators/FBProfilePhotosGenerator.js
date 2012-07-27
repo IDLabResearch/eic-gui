@@ -1,6 +1,9 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
 	"use strict";
 
+  //Maximum number of mosaic tiles
+	var mosaicMaxNumTilesWide = 7; 
+	
   function setInited(target, object) {
     object.inited = true;
   }
@@ -12,27 +15,39 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     });
   }
  
-  function placeImages(target, myPlaces, response, queue) {
+  function placeImages(target, myPlaces, type, response, queue) {
 		var q = $({});
 		var sqrt = Math.floor(Math.sqrt(response.data.length));
 		console.log(' Square root :' + sqrt);
     var sq = sqrt * sqrt;
-    var max = 36 < sq ? 36 : sq;
+    var mq = mosaicMaxNumTilesWide * mosaicMaxNumTilesWide;
+    var max = mq < sq ? mq : sq;
     console.log(' Max :' + max);
     $.each(response.data.slice(0, max), function (number, place) {
-			q.queue("r", placeImage(target, myPlaces, place, queue, max));
+			q.queue("r", placeImage(target, myPlaces, place, type, queue, max));
     });
     q.dequeue("r");
   }
 
-  function placeImage(target, myPlaces, place, queue, max) {
-    target.fbConnector.getPlace(place.id, function (response) {
-			myPlaces.push(response.picture);
+  function placeImage(target, myPlaces, place, type, queue, max) {
+  	if (type == 'friends') {
+  		target.fbConnector.getPlace(place.id+'/picture', function (response) {
+			myPlaces.push(response.data.url);
 			if (myPlaces.length == max) {
 				queue.dequeue("s");
 				console.log('max reached');
 			}
     });
+  	} else {
+      target.fbConnector.getPlace(place.id, function (response) {
+        myPlaces.push(response.picture);
+        if (myPlaces.length == max) {
+          queue.dequeue("s");
+          console.log('max reached');
+        }
+      }); 
+
+   }
   }
 
   function profilePictures(target, fbConnector) {
@@ -49,7 +64,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     var sqrt = Math.floor(Math.sqrt(numOfImages));
     var sq = sqrt * sqrt;
     var canvas = document.createElement("canvas");
-    var max_width = 500;
+    var max_width = 600;
     canvas.width  = sqrt * Math.floor(max_width / sqrt);
     canvas.height = sqrt * Math.floor(max_width / sqrt);
     var context = canvas.getContext("2d");
@@ -109,7 +124,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 		var items = [];
 
     fb_connector_call(type, function (response) {
-			$(target).queue(placeImages(target, items, response, q));
+			$(target).queue(placeImages(target, items, type, response, q));
     });
     
     q.queue("s", function () {
@@ -154,7 +169,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 			$(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
 			$(self).queue(composeFBMosaic(self, 'music', this.fbConnector.get));
 			$(self).queue(composeFBMosaic(self, 'movies', this.fbConnector.get));
-
+			$(self).queue(composeFBMosaic(self, 'friends', this.fbConnector.get));
       $(self).queue(setInited(self, this));
     },
 
