@@ -14,6 +14,7 @@ function ($, BaseSlideGenerator) {
     BaseSlideGenerator.call(this);
 
     this.topic = topic;
+    options = options || {};
     this.maxVideoCount = options.maxVideoCount || 1;
     this.maxVideoDuration = options.maxVideoDuration || 30000;
     this.skipVideoDuration = options.skipVideoDuration || 10000;
