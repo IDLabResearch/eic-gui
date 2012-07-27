@@ -2,7 +2,8 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
   
-  var defaultDuration = 5000;
+  var playerCount = 0;
+  var preload = true;
 
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
@@ -16,7 +17,7 @@ function ($, BaseSlideGenerator) {
     this.topic = topic;
     options = options || {};
     this.maxVideoCount = options.maxVideoCount || 1;
-    this.maxVideoDuration = options.maxVideoDuration || 30000;
+    this.maxVideoDuration = options.maxVideoDuration || 5000;
     this.skipVideoDuration = options.skipVideoDuration || 10000;
     this.orderMethod = options.orderMethod || 'relevance';
     this.slides = [];
@@ -34,8 +35,12 @@ function ($, BaseSlideGenerator) {
     init: function () {
       if (this.inited)
         return;
+      
       var self = this;
-      searchVideos(self, 0, this.maxVideoCount, 0);
+      $.getScript("http://www.youtube.com/player_api", function () {
+        searchVideos(self, 0, self.maxVideoCount, 0);
+      });
+      
       this.inited = true;
     },
 
@@ -52,27 +57,45 @@ function ($, BaseSlideGenerator) {
         end = duration;
       if (duration < this.maxVideoDuration + this.skipVideoDuration && duration >= this.maxVideoDuration)
         start = 0;
+      duration = end - start;
       
-      /*
-      var $iframe = $('<iframe>');
-      $iframe.attr('class', 'youtube-player')
-             .attr('id', 'player')
-             .attr('type', 'text/html')
-             .attr('width', '800')
-             .attr('height', '600')
-             .attr('frameborder', '0')
-             .attr('src', 'http://www.youtube.com/embed/' + videoID + '?autoplay=1&enablejsapi=1&start=' + (start / 1000) + '&end=' + (end / 1000));
-      */
-      var $div = '<div id="ytplayer"></div>';
-      $.getScript("http://www.youtube.com/player_api");
-      var slide = this.createBaseSlide('YouTube', $div, (end - start));
-      slide.on('started', function () {
-        var player = new window.YT.Player('ytplayer', {
-          playerVars: { autoplay: 1, controls: 0, start: (start / 1000), end: (end / 1000), wmode: 'opaque' },
-          videoId: videoID,
-          width: 800,
-          height: 600,
-          events: {'onReady': onPlayerReady}
+      var playerId = 'ytplayer' + (++playerCount),
+          $container = $('<div>').append($('<div>').prop('id', playerId))
+                                 .css({ width: 0, height: 0, overflow: 'hidden' });
+      $('body').append($container);
+      
+      var player = new window.YT.Player(playerId, {
+        playerVars: {
+          autoplay: preload ? 1 : 0,
+          controls: 0,
+          start: (start / 1000),
+          end: (end / 1000),
+          wmode: 'opaque'
+        },
+        videoId: videoID,
+        width: 800,
+        height: 600,
+        events: { 'onReady': onPlayerReady }
+      });
+      
+      var $placeholder = $('<div>'),
+          slide = this.createBaseSlide('youtube', $placeholder, duration);
+      slide.once('started', function () {
+        var offset = $placeholder.offset();
+        player.playVideo();
+        $container.css({
+          position: 'absolute',
+          top: offset.top,
+          left: offset.left,
+          width: 'auto',
+          height: 'auto',
+          overflow: 'auto'
+        });
+      });
+      slide.once('stopped', function () {
+        $container.fadeOut(function () {
+          player.stopVideo();
+          $container.remove();
         });
       });
       
@@ -80,11 +103,15 @@ function ($, BaseSlideGenerator) {
       this.emit('newSlides');
     },
     
-    getDuration: function () { return defaultDuration; },
+    getDuration: function () { return this.maxVideoDuration; },
   });
   
   function onPlayerReady(event) {
-    event.target.mute();
+    var player = event.target;
+    player.mute();
+    if (preload) {
+      window.setTimeout($.proxy(player, 'playVideo'), 500);
+    }
   }
   
   function searchVideos(self, startResults, maxResult, skip) {
