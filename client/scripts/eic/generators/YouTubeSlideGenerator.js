@@ -6,15 +6,15 @@ function ($, BaseSlideGenerator) {
 
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
-   * - a topic
    * - the maximum number of videos to return
    * - the maximum duration (in seconds) of a video
    * - the skipping duration (in seconds) at the beginning of the video
    */
-  function YouTubeSlideGenerator(options) {
+  function YouTubeSlideGenerator(topic, options) {
     BaseSlideGenerator.call(this);
 
-    this.topic = options.topic;
+    this.topic = topic;
+    options = options || {};
     this.maxVideoCount = options.maxVideoCount || 1;
     this.maxVideoDuration = options.maxVideoDuration || 30000;
     this.skipVideoDuration = options.skipVideoDuration || 10000;

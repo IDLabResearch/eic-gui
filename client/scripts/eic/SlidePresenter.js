@@ -45,9 +45,9 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
           
           // if slide contains a description, send it to TTS service
           if (currentSlide.audioURL) {
-            console.log("URL "+currentSlide.audioURL + " detected in slide!");
+            console.log("URL " + currentSlide.audioURL + " detected in slide!");
             //var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
-            self.$audioContainer.jPlayer("setMedia",{mp3: currentSlide.audioURL}).jPlayer("play");
+            self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
             console.log("Playing " + currentSlide.audioURL);
 
           //self.$container.append(audioEl);

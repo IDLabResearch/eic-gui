@@ -66,7 +66,7 @@ define(['lib/jquery', 'lib/jvent'],
             if (data.res === 'OK') {
               if (callback)
                 callback(data);
-              console.log('Audio URL ' + data.snd_url+ ' was fetched!');
+              console.log('Audio URL ' + data.snd_url + ' was fetched!');
               self.emit('speechReady', data);
             }
             else {
