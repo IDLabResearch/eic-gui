@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
 	"use strict";
   //TODO: FIX Runs twice but only correct the second time...
   
@@ -36,7 +36,9 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
     });
   }
 
-  function profilePictures(target, fbConnector) {
+  function profilePictures(target,fbConnector) {
+		console.log('target.maxResults');
+		console.log(target.maxResults);
     fbConnector.get('photos', function (response) {
 			$.each(response.data.slice(0, target.maxResults), function (number, photo) {
         target.addImageSlide(photo.source);
@@ -60,7 +62,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       if (j === 5)
         return;
     });
-		$('#canvas-demo').append(canvas);
+		//$('#canvas-demo').append(canvas);
     convertCanvasToImage(canvas, callback);
   }
 
@@ -103,9 +105,9 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
   /** Generator of images slides from Facebook User Profile search results.
    * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
    */
-  function FBProfilePhotosGenerator(fbConnector, maxResults) {
+  function FBProfilePhotosGenerator(maxResults) {
     BaseSlideGenerator.call(this);
-    this.fbConnector = fbConnector;
+    this.fbConnector = new FacebookConnector();
     if (typeof maxResults == 'undefined')
       this.maxResults = 5;
     else
@@ -128,7 +130,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
 
       var self = this;
       
-      $(self).queue(profilePictures(self, this.fbConnector));
+      $(self).queue(profilePictures(self,self.fbConnector));
 
 			var myPlaces = [];
       
@@ -140,9 +142,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
 				addSlides(self, myPlaces);
 				$(self).dequeue("s");
       });
-      $(self).queue("s", function () {
+
+      $(self).queue(function () {
 				setInited(self, this);
-				$(self).dequeue("s");
+				$(self).dequeue();
       });
     },
 
@@ -155,7 +158,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
-			console.log(typeof imageUrl);
+		
 			var $image;
 			if (typeof imageUrl == 'string')
 				$image = $('<img>').attr('src', imageUrl);
