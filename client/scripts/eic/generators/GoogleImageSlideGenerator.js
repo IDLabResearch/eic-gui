@@ -59,7 +59,7 @@ function ($, BaseSlideGenerator) {
     },
     
     getDuration: function () {
-      return defaultDuration * this.maxResults;
+      return defaultDuration;
     },
 
     /** Adds a new image slide. */

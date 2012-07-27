@@ -5,6 +5,7 @@ function ($, BaseSlideGenerator) {
   var playerCount = 0;
   var preload = false;
 
+
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
    * - the maximum number of videos to return
