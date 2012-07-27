@@ -27,13 +27,10 @@ define(['lib/jquery',
       {
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {
-          //if the sound url is not yet retrieved and attached to the first slide (maxDuration still 0), don't give any slides
           if (this.durationLeft <= 0)
             return false;
-          
-          return this.generators.some(function (g) {
-            return g.hasNext();
-          });
+          else
+            return this.generators.some(function (g) { return g.hasNext(); });
         },
 
         /** Initialize all child generators. */
@@ -75,24 +72,24 @@ define(['lib/jquery',
         },
         
         next: function () {
-          var i = 1 + Math.floor(Math.random() * (this.generators.length - 1)),
-          slide;
-
-          while (!this.generators[i].hasNext()) {
-            i = 1 + Math.floor(Math.random() * (this.generators.length - 1));
-          }
+          var slide;
         
           if (this.first) {
             //make sure first slide is always a titleslide
             slide = this.generators[0].next();
             slide.audioURL = this.audioURL;
-            slide.duration = this.generators[0].getDuration();
             this.first = false;
             
             console.log('First slide ' + this.topic.label + ' added!');
-          } else {
-            slide = this.generators[i].next();
-            slide.duration = this.durationLeft < this.generators[i].getDuration() ? this.durationLeft + 1000 : this.generators[i].getDuration();
+          }
+          else {
+            var generator;
+            do {
+              generator = this.generators[Math.floor(Math.random() * this.generators.length)];
+            } while (!generator.hasNext());
+            slide = generator.next();
+            if (slide.duration > this.durationLeft)
+              slide.duration = Math.min(slide.duration, this.durationLeft + 1000);
           }
           
           this.durationLeft -= slide.duration;

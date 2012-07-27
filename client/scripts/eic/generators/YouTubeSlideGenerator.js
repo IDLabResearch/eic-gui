@@ -105,8 +105,6 @@ function ($, BaseSlideGenerator) {
       this.slides.push(slide);
       this.emit('newSlides');
     },
-    
-    getDuration: function () { return this.totalDuration; },
   });
   
   function onPlayerReady(event) {

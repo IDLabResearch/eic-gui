@@ -48,13 +48,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     next : function () {
       return this.slides.shift();
     },
-    
-    getDuration: function () {
-      var duration = defaultDuration * this.maxResults;
-      if (mosaicShow)
-        duration += mosaicSlideDuration * 5;
-      return duration;
-    },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl, duration) {

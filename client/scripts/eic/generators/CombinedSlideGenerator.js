@@ -39,12 +39,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       }
     },
     
-    getDuration: function () {
-      return this.generators.reduce(function (sum, generator) {
-        return sum + generator.getDuration();
-      }, 0);
-    },
-    
     /** Add a child generator add the end of the list. */
     addGenerator: function (generator, suppressInit) {
       // initialize the generator and add it to the list

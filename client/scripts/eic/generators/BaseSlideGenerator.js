@@ -16,8 +16,6 @@ function ($, EventEmitter) {
 
     next: function () { return null; },
     
-    getDuration: function () { return defaultDuration; },
-    
     createBaseSlide: function (cssClass, content, duration) {
       var slide = new EventEmitter();
       

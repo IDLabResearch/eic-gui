@@ -57,10 +57,6 @@ function ($, BaseSlideGenerator) {
       this.cnt += 1;
       return this.slides[(this.cnt - 1) % this.maxResults];
     },
-    
-    getDuration: function () {
-      return defaultDuration * this.maxResults;
-    },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {

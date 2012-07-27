@@ -22,8 +22,6 @@ function ($, BaseSlideGenerator) {
     hasNext: function () {
       return this.done !== true;
     },
-    
-    getDuration: function () { return this.duration; },
 
     /** Advances to the title slide. */
     next: function () {
