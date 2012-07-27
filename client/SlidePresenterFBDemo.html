@@ -26,7 +26,7 @@
         topics.forEach(function (topic) {
           if(topic.length > 0) {
             generators.addGenerator(new eic.TitleSlideGenerator(topic));
-            generators.addGenerator(new eic.FBProfilePhotosGenerator(fbConnector));
+            generators.addGenerator(new eic.FBProfilePhotosGenerator());
           }
         });
         presenter.start();

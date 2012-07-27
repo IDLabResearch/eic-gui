@@ -1,10 +1,11 @@
 define([ 'lib/jquery',
     'eic/generators/CombinedSlideGenerator',
     'eic/generators/TitleSlideGenerator',
+    'eic/generators/FBProfilePhotosGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/GoogleMapsSlideGenerator',
     'eic/FacebookConnector', 'eic/TTSService'],
-function ($, CombinedSlideGenerator, TitleSlideGenerator,
+function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
           GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService) {
 
   "use strict";
@@ -42,6 +43,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator,
         var self = this,
             profile = this.startTopic;
         profile.genderType = this.startTopic.gender === 'male' ? 'man' : 'woman';
+        profile.relativePronoun = this.startTopic.gender === 'male' ? 'he' : 'she';
         profile.fullHometown = profile.hometown.name;
         profile.shortHometown = profile.fullHometown.replace(/,.+$/, '');
         
@@ -52,11 +54,20 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator,
       },
       
       createIntroSlideGenerators: function () {
-        var startTopic = this.startTopic;
+        var startTopic = this.startTopic,
+            self = this;
         
         this.createSpeech();
         
-        this.addGenerator(new TitleSlideGenerator("Earth. Our home planet ..."));
+        [
+          new TitleSlideGenerator("Everything Is Connected"),
+          new FBProfilePhotosGenerator(3),
+          new TitleSlideGenerator("Everything Is Connected"),
+        ]
+        .forEach(function (generator) {
+          self.addGenerator(generator)
+        });
+        /*
         this.addGenerator(new GoogleImageSlideGenerator("earth", 2));
         this.addGenerator(new TitleSlideGenerator("... It's filled with data and things ..."));
         this.addGenerator(new GoogleImageSlideGenerator("earth luminous network", 2));
@@ -67,15 +78,17 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator,
                                                   " from " + startTopic.fullHometown + " ..."));
         this.addGenerator(new GoogleMapsSlideGenerator(startTopic.fullHometown));
         this.addGenerator(new GoogleImageSlideGenerator(startTopic.shortHometown));
+        */
       },
       
       createSpeech: function () {
         var startTopic = this.startTopic,
             tts = new TTSService(),
-            self = this,
-            text = "";
+            self = this;
         
-        text += "Hi " + startTopic.first_name + "!";
+        var text = "Once upon a time, " +
+                   startTopic.first_name + "wondered how " +
+                   startTopic.relativePronoun + " was connected to everything in this world. ";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
