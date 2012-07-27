@@ -17,24 +17,41 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
            CombinedSlideGenerator.prototype,
   {
     init: function () {
-      CombinedSlideGenerator.prototype.init.call(this);
-      this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
-
-      var self = this;
-      
-      $.ajax({
-        type: "POST",
-        url: "/stories",
-        dataType: "JSON",
-        data: {
-          startTopic: this.startTopic,
-          endTopic: this.endTopic
+      if (this.startTopic) {
+        if (!this.initedStart) {
+          CombinedSlideGenerator.prototype.init.call(this);
+          this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
+          this.initedStart = true;
         }
-      }).success(function (story) {
-        story.steps.forEach(function (step) {
-          self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
-        });
-      });
+
+        if (this.endTopic && !this.initedEnd) {
+          var self = this;
+          $.ajax({
+            type: "POST",
+            url: "/stories",
+            dataType: "JSON",
+            data: {
+              startTopic: this.startTopic,
+              endTopic: this.endTopic
+            }
+          }).success(function (story) {
+            story.steps.forEach(function (step) {
+              self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
+            });
+          });
+          this.initedEnd = true;
+        }
+      }
+    },
+    
+    setStartTopic: function (startTopic) {
+      this.startTopic = startTopic;
+      this.init();
+    },
+    
+    setEndTopic: function (endTopic) {
+      this.endTopic = endTopic;
+      this.init();
     }
   });
   

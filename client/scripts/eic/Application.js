@@ -9,6 +9,7 @@ function ($, autocompleteTopic,
   // The main "Everything Is Connected" application.
   function Application() {
     this.facebookConnector = new FacebookConnector();
+    this.generator = new TopicToTopicSlideGenerator();
   }
   
   Application.prototype = {
@@ -25,7 +26,7 @@ function ($, autocompleteTopic,
       $('#facebook').text('Connecting…');
       
       this.facebookConnector.connect(function (error, profile) {
-        self.profile = profile;
+        self.generator.setStartTopic(profile);
         
         // Update connection status.
         $('#facebook').text('Connected as ' + profile.name + '.');
@@ -67,8 +68,8 @@ function ($, autocompleteTopic,
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
       
       // Create and start the slide show.
-      var generator = new TopicToTopicSlideGenerator(this.profile, this.topic);
-      var presenter = new SlidePresenter($slides, generator);
+      this.generator.setEndTopic(this.topic);
+      var presenter = new SlidePresenter($slides, this.generator);
       presenter.start();
     },
     
