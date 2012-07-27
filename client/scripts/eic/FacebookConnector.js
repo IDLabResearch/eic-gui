@@ -157,7 +157,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     },
     
     findPlacesNearMe : function (type, callback) {
-    	//Any type value is supported, has no effect
+      // Any type value is supported, has no effect
 			findPlacesNearUser('{0}', callback);
 		}
 

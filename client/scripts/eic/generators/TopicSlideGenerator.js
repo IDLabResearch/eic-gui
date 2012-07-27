@@ -17,23 +17,21 @@ define(['lib/jquery',
 
       this.generators = [];
       //Create all generators depending on the type of the topic
-      this.addGenerator(new TitleSlideGenerator(topic),true);
-          
-      switch (topic.type) {          
-        case "date":
-          this.addGenerator(new DateSlideGenerator(topic))
-          break;
-        case "location":
-          //no break since location also accepts images and movies
-          this.addGenerator(
-            new GoogleMapsSlideGenerator(topic)
-            )
-        case "building":
-        case "person":
-        default :
-          this.addGenerator(new GoogleImageSlideGenerator(topic),true);
-          this.addGenerator(new YouTubeSlideGenerator(topic),true);         
-          break;      
+      this.addGenerator(new TitleSlideGenerator(topic), true);
+      
+      switch (topic.type) {
+      case "date":
+        this.addGenerator(new DateSlideGenerator(topic));
+        break;
+      case "location":
+        this.addGenerator(new GoogleMapsSlideGenerator(topic));
+        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
+        this.addGenerator(new YouTubeSlideGenerator(topic), true);
+        break;
+      default:
+        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
+        this.addGenerator(new YouTubeSlideGenerator(topic), true);
+        break;
       }
 
 
@@ -101,7 +99,7 @@ define(['lib/jquery',
             slide.duration = this.generators[0].getDuration();
             this.first = false;
             
-            console.log('First slide '+this.topic.label+' added!');
+            console.log('First slide ' + this.topic.label + ' added!');
           } else {
             slide = this.generators[i].next();
             slide.duration = this.durationLeft < this.generators[i].getDuration() ? this.durationLeft + 1000 : this.generators[i].getDuration();
@@ -109,7 +107,7 @@ define(['lib/jquery',
           
           this.durationLeft -= slide.duration;
           
-          console.log('New slide: duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');
+          console.log('New slide: duration ' + slide.duration + 'ms, ' +  this.durationLeft + 'ms left!');
           return slide;
         },
         /** Add a child generator add the end of the list. */

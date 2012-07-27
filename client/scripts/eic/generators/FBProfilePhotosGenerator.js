@@ -53,17 +53,18 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
   function profilePictures(target, fbConnector) {
 		fbConnector.get('', function (response) {
-      $(target).queue(function() {
+      $(target).queue(function () {
 				console.log(response);
 				var bio = response.bio || 'All of this happened';
-        var $title = $('<h1>').text('You... '+bio), slide = target.createBaseSlide('title', $title, 1500);
+        var $title = $('<h1>').text('You... ' + bio), slide = target.createBaseSlide('title', $title, 1500);
         target.slides.push(slide);
         target.emit('newSlides');
 			});
 		});
 
     fbConnector.get('photos', function (response) {
-    	var $title = $('<h1>').text('Your photos...'), slide = target.createBaseSlide('title', $title, 1000);
+      var $title = $('<h1>').text('Your photos...'),
+          slide = target.createBaseSlide('title', $title, 1000);
       target.slides.push(slide);
       target.emit('newSlides');
       
@@ -141,7 +142,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     });
     
     q.queue("s", function () {
-    	var $title = $('<h1>').text('Your ' + type + '...'),
+      var $title = $('<h1>').text('Your ' + type + '...'),
           slide = target.createBaseSlide('title', $title, 1000);
       target.slides.push(slide);
       target.emit('newSlides');
