@@ -57,12 +57,13 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     },
 
     /** Adds a new image slide. */
-    addImageSlide: function (imageUrl) {
+    addImageSlide: function (imageUrl, duration) {
       var $image = imageUrl;
       if (typeof imageUrl === 'string')
-        $image = $('<img>').attr('src', imageUrl);
+        $image = $('<img>').prop('src', imageUrl)
+                           .css({ 'min-height': '100%' });
           
-      var slide = this.createBaseSlide('image', $image, defaultDuration);
+      var slide = this.createBaseSlide('image', $image, duration || defaultDuration);
       slide.on('started', function () {
         setTimeout($.proxy($image, 'addClass', 'zoom'), 100);
       });
@@ -74,7 +75,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
   function addSlides(target, myPlaces) {
     loadImages(myPlaces, function (response) {
-      target.addImageSlideWithDuration(mosaicSlideDuration, response);
+      target.addImageSlide(response, mosaicSlideDuration);
     });
   }
  
@@ -109,8 +110,8 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   }
 
   function profilePictures(target, fbConnector) {
-    fbConnector.get('photos', function (response) {
-      $.each(response.data.slice(0, target.maxResults), function (number, photo) {
+    fbConnector.get('photos?fields=source', function (response) {
+      response.data.slice(0, target.maxResults).forEach(function (photo) {
         target.addImageSlide(photo.source);
       });
     });
