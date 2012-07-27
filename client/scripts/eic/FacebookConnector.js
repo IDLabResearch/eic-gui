@@ -156,7 +156,8 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       findPlacesNearUser(facebook_id, callback);
     },
     
-    findPlacesNearMe : function (callback) {
+    findPlacesNearMe : function (type, callback) {
+    	//Any type value is supported, has no effect
 			findPlacesNearUser('{0}', callback);
 		}
 
