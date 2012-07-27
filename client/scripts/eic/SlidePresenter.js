@@ -1,9 +1,19 @@
 define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
   "use strict";
   
-  function SlidePresenter(container, generator) {
+  function SlidePresenter(container, generator, audioContainer) {
     this.$container = $(container);
+    this.$audioContainer = $(audioContainer);
     this.generator = generator;
+    
+    this.$audioContainer.jPlayer({
+      ready: function () {
+
+      },
+      errorAlerts: true,
+      swfPath: "/js",
+      supplied: "mp3"
+    });
   }
   
   SlidePresenter.prototype = {
@@ -35,8 +45,12 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
           
           // if slide contains a description, send it to TTS service
           if (currentSlide.audioURL) {
-            var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
-            self.$container.append(audioEl);
+            console.log("URL "+currentSlide.audioURL + " detected in slide!");
+            //var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
+            self.$audioContainer.jPlayer("setMedia",{mp3: currentSlide.audioURL}).jPlayer("play");
+            console.log("Playing " + currentSlide.audioURL);
+
+          //self.$container.append(audioEl);
           }
           
           window.setTimeout(showNext, nextSlide.duration);
