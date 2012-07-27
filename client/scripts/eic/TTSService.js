@@ -53,8 +53,8 @@ define(['lib/jquery', 'lib/jvent'],
           data: {
             prot_vers: 2,
             cl_login: "EVAL_VAAS",
-            cl_app: "EVAL_9289549",
-            cl_pwd: "veuoqce4",
+            cl_app: "EVAL_5481051",
+            cl_pwd: "k1ziqidx",
             req_voice: this.retrieveVoice(lang),
             req_text: text
           },
