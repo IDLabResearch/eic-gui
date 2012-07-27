@@ -17,7 +17,7 @@ function ($, BaseSlideGenerator) {
       topic = { label: topic };
 
     this.topic = topic;
-    this.maxVideoCount = options.maxVideoCount || 3;
+    this.maxVideoCount = options.maxVideoCount || 1;
     this.maxVideoDurationInS = options.maxVideoDurationInS || 30;
     this.skipVideoDurationInS = options.skipVideoDurationInS || 10;
     this.orderMethod = options.orderMethod || 'relevance';
@@ -37,10 +37,7 @@ function ($, BaseSlideGenerator) {
       if (this.inited)
         return;
       var self = this;
-      var foundVideos = 0;
-      var inspectedVideos = 0;
-      var i = 0;
-      searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
+      searchVideos(self, 0, this.maxVideoCount, 0);
       this.inited = true;
     },
 
@@ -73,8 +70,8 @@ function ($, BaseSlideGenerator) {
   });
   
   function searchVideos(self, startResults, maxResult, skip) {
-    if (maxResult > 50) {
-      return;
+    if (maxResult > 50) { //YouTube API restriction
+      maxResult = 50;
     }
     var inspected = 0;
     var resultCounter = startResults;
@@ -107,7 +104,7 @@ function ($, BaseSlideGenerator) {
   }
   
   function checkStatus(self, inspected, nrOfItems, maxResult, foundResults) {
-    if (inspected == nrOfItems && nrOfItems == maxResult) {
+    if (inspected == nrOfItems && nrOfItems == maxResult && maxResult != 50) {
       searchVideos(self, foundResults, maxResult * 2, inspected);
     }
   }
