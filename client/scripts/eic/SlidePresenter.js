@@ -29,6 +29,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
       function showNext() {
         // if slides are available, show them
         if (self.generator.hasNext()) {
+          
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
@@ -53,11 +54,16 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
           //self.$container.append(audioEl);
           }
           
+          if (currentSlide.topic){
+            console.log("Slide for topic "+currentSlide.topic +"coming");
+          }
+          
           window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive
         else {
           self.generator.once('newSlides', showNext);
+          console.log("No new slides!");
         }
       }
       showNext();

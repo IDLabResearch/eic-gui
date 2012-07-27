@@ -2,11 +2,11 @@ define(['lib/jquery',
   'eic/TTSService',
   'eic/generators/BaseSlideGenerator',
   'eic/generators/GoogleImageSlideGenerator',
+  'eic/generators/GoogleMapsSlideGenerator',
   'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/YouTubeSlideGenerator'],
-  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
-
+  function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
@@ -80,6 +80,7 @@ define(['lib/jquery',
           tts.once('speechReady', function (event, data) {
             self.durationLeft = data.snd_time;
             self.audioURL = data.snd_url;
+            console.log("Speech for topic " + self.topic.label + " received!");
             //When speech is received, 'remind' the presenter that the slides are ready
             self.emitNewSlidesEvent();
           });
@@ -102,13 +103,13 @@ define(['lib/jquery',
             slide.duration = this.generators[0].getDuration();
             this.first = false;
             
-            console.log('First slide added!');
+            console.log('First slide '+this.topic.label+' added!');
           } else {
             slide = this.generators[i].next();
             slide.duration = this.generators[i].getDuration();
           }
           
-          this.durationLeft -= slide.duration;
+          //this.durationLeft -= slide.duration;
           this.slideCount += 1;
           
           console.log('Slide' + this.slideCount + ': duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');

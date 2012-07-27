@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 1000;
+  var defaultDuration = 2000;
   var repeat = false;
 
   /** Generator of images slides from Google Image search results.
@@ -59,7 +59,7 @@ function ($, BaseSlideGenerator) {
     },
     
     getDuration: function () {
-      return defaultDuration * this.maxResults;
+      return defaultDuration;
     },
 
     /** Adds a new image slide. */
