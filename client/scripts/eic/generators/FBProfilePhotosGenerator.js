@@ -1,19 +1,14 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
-function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'],
+function ($, BaseSlideGenerator, FacebookConnector) {
   "use strict";
 
   var defaultDuration = 1000;
 
-  /** Generator of images slides from Facebook User Profile search results.
-   * Parameters: a facebookconnector of a logged in fb user and no of maxResutls
-   */
-  function FBProfilePhotosGenerator(fbConnector, maxResults) {
+  // Generator of images slides from Facebook user profile search results.
+  function FBProfilePhotosGenerator(maxResults) {
     BaseSlideGenerator.call(this);
-    this.fbConnector = fbConnector;
-    if (typeof maxResults == 'undefined')
-			this.maxResults = 5;
-    else
-			this.maxResults = maxResults;
+    this.fbConnector = new FacebookConnector();
+    this.maxResults = maxResults || 5;
     this.slides = [];
   }
 
@@ -30,26 +25,17 @@ function ($, BaseSlideGenerator) {
     init: function () {
       if (this.inited)
         return;
+        
       var self = this;
-      
       this.fbConnector.get('photos', function (response) {
+        console.log('retrieving photos');
         $.each(response.data.slice(0, self.maxResults), function (number, photo) {
           self.addImageSlide(photo.source);
-        });
-      });
-      
-      this.fbConnector.findPlacesNearMe(function (response) {
-				$.each(response.data.slice(0, self.maxResults), function (number, place) {
-          self.fbConnector.getPlace(place.id, function (response) {
-						self.addImageSlide(response.picture);
-          });
-          
         });
       });
 
       this.inited = true;
     },
-
 
     /** Advances to the next slide. */
     next: function () {

@@ -12,14 +12,10 @@ function ($, BaseSlideGenerator) {
   function YouTubeSlideGenerator(options) {
     BaseSlideGenerator.call(this);
 
-    var topic = options.topic;
-    if (typeof topic === "string")
-      topic = { label: topic };
-
-    this.topic = topic;
-    this.maxVideoCount = options.maxVideoCount || 3;
-    this.maxVideoDurationInS = options.maxVideoDurationInS || 30;
-    this.skipVideoDurationInS = options.skipVideoDurationInS || 10;
+    this.topic = options.topic;
+    this.maxVideoCount = options.maxVideoCount || 1;
+    this.maxVideoDuration = options.maxVideoDuration || 30000;
+    this.skipVideoDuration = options.skipVideoDuration || 10000;
     this.orderMethod = options.orderMethod || 'relevance';
     this.slides = [];
   }
@@ -37,10 +33,7 @@ function ($, BaseSlideGenerator) {
       if (this.inited)
         return;
       var self = this;
-      var foundVideos = 0;
-      var inspectedVideos = 0;
-      var i = 0;
-      searchVideos(self, foundVideos, inspectedVideos + this.maxVideoCount, inspectedVideos);
+      searchVideos(self, 0, this.maxVideoCount, 0);
       this.inited = true;
     },
 
@@ -50,12 +43,12 @@ function ($, BaseSlideGenerator) {
     },
 
     /** Adds a new video slide. */
-    addVideoSlide: function (videoID, durationInS) {
-      var start = this.skipVideoDurationInS;
-      var end = this.skipVideoDurationInS + this.maxVideoDurationInS;
-      if (durationInS <= this.maxVideoDurationInS + this.skipVideoDurationInS)
-        end = durationInS;
-      if (durationInS < this.maxVideoDurationInS + this.skipVideoDurationInS && durationInS >= this.maxVideoDurationInS)
+    addVideoSlide: function (videoID, duration) {
+      var start = this.skipVideoDuration;
+      var end = this.skipVideoDuration + this.maxVideoDuration;
+      if (duration <= this.maxVideoDuration + this.skipVideoDuration)
+        end = duration;
+      if (duration < this.maxVideoDuration + this.skipVideoDuration && duration >= this.maxVideoDuration)
         start = 0;
       
       var $iframe = $('<iframe>');
@@ -64,17 +57,17 @@ function ($, BaseSlideGenerator) {
              .attr('width', '800')
              .attr('height', '600')
              .attr('frameborder', '0')
-             .attr('src', 'http://www.youtube.com/embed/' + videoID + '?autoplay=1&start=' + start + '&end=' + end);
+             .attr('src', 'http://www.youtube.com/embed/' + videoID + '?autoplay=1&start=' + (start / 1000) + '&end=' + (end / 1000));
       
-      var slide = this.createBaseSlide('YouTube', $iframe, (end - start) * 1000);
+      var slide = this.createBaseSlide('YouTube', $iframe, (end - start));
       this.slides.push(slide);
       this.emit('newSlides');
     },
   });
   
   function searchVideos(self, startResults, maxResult, skip) {
-    if (maxResult > 50) {
-      return;
+    if (maxResult > 50) { //YouTube API restriction
+      maxResult = 50;
     }
     var inspected = 0;
     var resultCounter = startResults;
@@ -86,7 +79,7 @@ function ($, BaseSlideGenerator) {
             $.ajax('http://www.youtube.com/get_video_info?video_id=' + item.id + '&el=embedded')
             .success(function (res) {
               if (res.substr(0, 11) != 'status=fail' && resultCounter != self.maxVideoCount) {
-                self.addVideoSlide(item.id, item.duration);
+                self.addVideoSlide(item.id, item.duration * 1000);
                 resultCounter++;
               }
             })
@@ -107,7 +100,7 @@ function ($, BaseSlideGenerator) {
   }
   
   function checkStatus(self, inspected, nrOfItems, maxResult, foundResults) {
-    if (inspected == nrOfItems && nrOfItems == maxResult) {
+    if (inspected == nrOfItems && nrOfItems == maxResult && maxResult != 50) {
       searchVideos(self, foundResults, maxResult * 2, inspected);
     }
   }

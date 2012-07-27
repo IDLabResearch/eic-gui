@@ -44,26 +44,27 @@ define(['lib/jquery', 'lib/jvent'],
         }
         return this.VOICE_LIST.en_GB;
       },
-      getSpeech: function (text, lang) {
+      getSpeech: function (text, lang, callback) {
         var self = this;
-        console.log('success');
         $.ajax({
           url: 'http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
           type: 'GET',
           data: {
             prot_vers: 2,
             cl_login: "EVAL_VAAS",
-            cl_app: "EVAL_9289549",
-            cl_pwd: "veuoqce4",
+            cl_app: "EVAL_3626419",
+            cl_pwd: "3bt6oxps",
             req_voice: this.retrieveVoice(lang),
             req_text: text
           },
           dataType: 'jsonp',
           success: function (data) {
             if (data.res === 'OK') {
-              console.log('success');
+              if (callback)
+                callback(data);
               self.emit('speechReady', data);
-            } else {
+            }
+            else {
               self.emit('speechError', data);
             }
           },
