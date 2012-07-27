@@ -1,5 +1,6 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function($, BaseSlideGenerator) {"use strict";
-
+  //TODO: FIX Runs twice but only correct the second time...
+  
   function setInited(target, object) {
     object.inited = true;
   }
@@ -92,9 +93,11 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function($, BaseSlid
 
   // Converts canvas to an image
   function convertCanvasToImage(canvas, callback) {
-    var image = new Image();
-    image.src = canvas.toDataURL("image/png");
-    callback(image.src);
+		//Unsafe - found no short term solution to fix this slide
+    //var image = new Image();
+    //image.src = canvas.toDataURL("image/png");
+    //callback(image.src);
+    callback(canvas);
   }
 
   var defaultDuration = 1000;
@@ -136,12 +139,12 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function($, BaseSlid
       });
       
       $(self).queue("s", function() {
-      	addSlides(self,myPlaces);
-      	$(self).dequeue("s");
+				addSlides(self,myPlaces);
+				$(self).dequeue("s");
       });
       $(self).queue("s",function() {
-      	setInited(self,this);
-      	$(self).dequeue("s");
+				setInited(self,this);
+				$(self).dequeue("s");
       });
     },
 
@@ -154,8 +157,15 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function($, BaseSlid
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
-      var $image = $('<img>').attr('src', imageUrl),
-          slide = this.createBaseSlide('image', $image, defaultDuration);
+			console.log(typeof imageUrl);
+			var $image;
+			if(typeof imageUrl == 'string')
+				$image = $('<img>').attr('src', imageUrl);
+		  else
+				$image = imageUrl;
+					
+			var slide = this.createBaseSlide('image', $image, defaultDuration);
+					
       this.slides.push(slide);
       this.emit('newSlides');
     },
