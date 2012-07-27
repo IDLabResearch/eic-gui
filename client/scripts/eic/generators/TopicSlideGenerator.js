@@ -2,9 +2,11 @@ define(['lib/jquery',
   'eic/TTSService',
   'eic/generators/BaseSlideGenerator',
   'eic/generators/GoogleImageSlideGenerator',
+  'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/YouTubeSlideGenerator'],
   function ($, TTSService, BaseSlideGenerator, GoogleImageSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+
     "use strict";
 
     function TopicSlideGenerator(topic, description) {
@@ -18,7 +20,8 @@ define(['lib/jquery',
         //TitleSlideGenerator always first in the array!
         new TitleSlideGenerator(topic),
         new GoogleImageSlideGenerator(topic),
-        //new YouTubeSlideGenerator({topic:topic})
+        //new YouTubeSlideGenerator({topic:topic}),
+        new DateSlideGenerator(topic),
       ];
 
       this.generators = [];
