@@ -1,7 +1,6 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
 	"use strict";
-  //TODO: FIX Runs twice but only correct the second time...
-  
+
   function setInited(target, object) {
     object.inited = true;
   }
@@ -15,23 +14,21 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     });
   }
  
-  function placeImages(target, myPlaces, response) {
+  function placeImages(target, myPlaces, response, queue) {
+  	var q = $({});
     $.each(response.data.slice(0, 25), function (number, place) {
-			$(target).queue("r", placeImage(target, myPlaces, place));
-			console.log($(target).queue("s").length);
+			q.queue("r", placeImage(target, myPlaces, place, queue));
     });
-    console.log($(target).queue("r").length);
-    $(target).dequeue("r");
+    q.dequeue("r");
   }
 
-  function placeImage(target, myPlaces, place) {
+  function placeImage(target, myPlaces, place, queue) {
     target.fbConnector.getPlace(place.id, function (response) {
 			myPlaces.push(response.picture);
 			console.log(response.picture);
 			console.log(myPlaces.length);
 			if (myPlaces.length == 25) {
-				console.log('dequeuing s');
-				$(target).dequeue("s");
+				queue.dequeue("s");
 			}
     });
   }
@@ -132,15 +129,29 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       
       $(self).queue(profilePictures(self,self.fbConnector));
 
+			//TODO: make a methode of this with two calls and following params:
+			//items_array, fb_call_function (any function that returns fb ids that contain a picture)
 			var myPlaces = [];
+			var myLikes = [];
+			
+			var q1=$({}), q2=$({});
       
       this.fbConnector.findPlacesNearMe(function (response) {
-				$(self).queue(placeImages(self, myPlaces, response));
+				$(self).queue(placeImages(self, myPlaces, response, q1));
       });
       
-      $(self).queue("s", function () {
+      this.fbConnector.get('likes', function (response) {
+				$(self).queue(placeImages(self, myLikes, response, q2));
+      });
+      
+      q1.queue("s", function () {
 				addSlides(self, myPlaces);
-				$(self).dequeue("s");
+				q1.dequeue("s");
+      });
+      
+			q2.queue("s", function () {
+				addSlides(self, myLikes);
+				q2.dequeue("s");
       });
 
       $(self).queue(function () {
