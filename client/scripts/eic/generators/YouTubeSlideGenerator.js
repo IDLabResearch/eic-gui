@@ -12,11 +12,7 @@ function ($, BaseSlideGenerator) {
   function YouTubeSlideGenerator(options) {
     BaseSlideGenerator.call(this);
 
-    var topic = options.topic;
-    if (typeof topic === "string")
-      topic = { label: topic };
-
-    this.topic = topic;
+    this.topic = options.topic;
     this.maxVideoCount = options.maxVideoCount || 1;
     this.maxVideoDuration = options.maxVideoDuration || 30000;
     this.skipVideoDuration = options.skipVideoDuration || 10000;
