@@ -24,6 +24,8 @@ function ($, BaseSlideGenerator) {
       return this.slides.length > 0 || this.generator.hasNext();
     },
     
+    getDuration: function () { return this.duration; },
+    
     next: function () {
       // Add possible new slides.
       while (this.generator.hasNext())

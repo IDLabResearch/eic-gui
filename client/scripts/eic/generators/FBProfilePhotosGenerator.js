@@ -41,6 +41,8 @@ function ($, BaseSlideGenerator, FacebookConnector) {
     next: function () {
       return this.slides.shift();
     },
+    
+    getDuration: function () { return defaultDuration; },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
