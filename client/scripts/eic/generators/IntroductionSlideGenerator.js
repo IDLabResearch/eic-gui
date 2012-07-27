@@ -1,12 +1,11 @@
-define([ 'lib/jquery', 'eic/generators/BaseSlideGenerator',
+define([ 'lib/jquery',
     'eic/generators/CombinedSlideGenerator',
     'eic/generators/TitleSlideGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/GoogleMapsSlideGenerator',
-    'eic/FacebookConnector'],
-function ($,
-    BaseSlideGenerator, CombinedSlideGenerator, TitleSlideGenerator,
-    GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector) {
+    'eic/FacebookConnector', 'eic/TTSService'],
+function ($, CombinedSlideGenerator, TitleSlideGenerator,
+          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService) {
 
   "use strict";
 
@@ -30,6 +29,15 @@ function ($,
         }
       },
       
+      next: function () {
+        var slide = CombinedSlideGenerator.prototype.next.apply(this);
+        if (this.audioURL) {
+          slide.audioURL = this.audioURL;
+          delete this.audioURL;
+        }
+        return slide;
+      },
+      
       fetchTopicInformation: function (callback) {
         var self = this,
             profile = this.startTopic;
@@ -46,6 +54,8 @@ function ($,
       createIntroSlideGenerators: function () {
         var startTopic = this.startTopic;
         
+        this.createSpeech();
+        
         this.addGenerator(new TitleSlideGenerator("Earth. Our home planet ..."));
         this.addGenerator(new GoogleImageSlideGenerator("earth", 2));
         this.addGenerator(new TitleSlideGenerator("... It's filled with data and things ..."));
@@ -57,6 +67,19 @@ function ($,
                                                   " from " + startTopic.fullHometown + " ..."));
         this.addGenerator(new GoogleMapsSlideGenerator(startTopic.fullHometown));
         this.addGenerator(new GoogleImageSlideGenerator(startTopic.shortHometown));
+      },
+      
+      createSpeech: function () {
+        var startTopic = this.startTopic,
+            tts = new TTSService(),
+            self = this,
+            text = "";
+        
+        text += "Hi " + startTopic.first_name + "!";
+        
+        tts.getSpeech(text, 'en_GB', function (response) {
+          self.audioURL = response.snd_url;
+        });
       },
     });
 
