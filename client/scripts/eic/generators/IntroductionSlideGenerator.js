@@ -63,7 +63,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         
         [
           new TitleSlideGenerator("Everything Is Connected", 3000),
-          new FBProfilePhotosGenerator(3),
+          new FBProfilePhotosGenerator(6),
         ]
         .forEach(function (generator) {
           self.addGenerator(generator);

@@ -20,7 +20,7 @@
         var generators = new eic.CombinedSlideGenerator();
         var presenter = new eic.SlidePresenter('#main .slides', generators);
         $('#start').click(function() {
-          generators.addGenerator(new eic.FBProfilePhotosGenerator(fbConnector));
+          generators.addGenerator(new eic.FBProfilePhotosGenerator());
           presenter.start();
         });
       }
@@ -33,10 +33,8 @@
       <div id="input">
         <div id="fb-root">
           <div>
-            <fb:login-button autologoutlink="true" perms="email,user_hometown,user_interests,user_likes,user_photos,user_birthday"></fb:login-button>
+            <fb:login-button autologoutlink="true" perms="email,user_hometown,user_interests,user_likes,user_photos,user_birthday,user_about_me"></fb:login-button>
           </div>
-
-          <input id="topics" size="100" value="Stones, Oceans, Trees" />
           <input id="start" type="submit" value="Start" disabled />
         </div>
         <div class="slides"></div>

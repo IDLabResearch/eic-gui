@@ -10,8 +10,9 @@
       $('#start').click(function() {
     	var topics = $('#topics').val().trim().split(/,\s*/);
         topics.forEach(function (topic) {
-          generators.addGenerator(new eic.TitleSlideGenerator(topic));
-          generators.addGenerator(new eic.YouTubeSlideGenerator({label:topic}, {maxVideoCount:1, maxVideoDuration:8000, skipVideoDuration: 30000, orderMethod:'relevance'}));
+          generators.addGenerator(new eic.TitleSlideGenerator(topic, 5000));
+          generators.addGenerator(new eic.YouTubeSlideGenerator({label:topic}, {maxVideoCount:1, maxVideoDuration:5000, skipVideoDuration: 30000, orderMethod:'relevance'}));
+          generators.addGenerator(new eic.TitleSlideGenerator(topic + ' end', 5000));
         });
         presenter.start();
       });

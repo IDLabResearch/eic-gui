@@ -101,7 +101,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
           console.log('User cancelled login or did not fully authorize.');
         }
       }, {
-        scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday'
+        scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday,user_about_me'
       });
     },
 
@@ -156,7 +156,8 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       findPlacesNearUser(facebook_id, callback);
     },
     
-    findPlacesNearMe : function (callback) {
+    findPlacesNearMe : function (type, callback) {
+    	//Any type value is supported, has no effect
 			findPlacesNearUser('{0}', callback);
 		}
 
