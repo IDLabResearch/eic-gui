@@ -39,6 +39,11 @@
   position: absolute;
   background-color: white;
   
+  .inner {
+    width: 100%;
+    height: 100%;
+  }
+  
   /***** Transitions *****/
   &.transition-out {
     opacity : 0;
@@ -48,8 +53,15 @@
   
   /***** Slide types *****/
   &.title {
+    .inner {
+      display: table;
+    }
     h1 {
-      padding: 1em; 
+      display: table-cell;
+      vertical-align: middle;
+      
+      padding: 1em 1em 2em 1em;
+      font-size: 4em;
     }
   }
 
@@ -95,7 +107,7 @@
   }
   
   /***** Transitions *****/
-  &.image > img, &.date > .calendar {
+  &.image img, &.date .calendar {
     .transition(30s linear, 50% 50%);
   }
   

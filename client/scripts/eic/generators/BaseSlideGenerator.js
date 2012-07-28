@@ -27,9 +27,10 @@ function ($, EventEmitter) {
       var slide = new EventEmitter();
       
       // Create slide element.
+      var $wrapper = $('<div>').addClass('inner');
       slide.$element = $('<div>').addClass('slide')
                                  .addClass(cssClass)
-                                 .append(content);
+                                 .append($wrapper.append(content));
 
       // Set duration.
       slide.duration = duration;
