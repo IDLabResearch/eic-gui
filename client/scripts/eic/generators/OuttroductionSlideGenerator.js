@@ -1,3 +1,5 @@
+/*jshint browser: true*/
+
 define([ 'lib/jquery',
     'eic/generators/BaseSlideGenerator',
     'eic/TTSService', 'eic/FacebookConnector', 'lib/jvent'],
@@ -80,7 +82,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
               $('#outtro > h1').append($('<em>').text(endTopic.label));
               $('#outtro > h1').append("!");
               setTimeout(function(){
-                AddShares();
+                addShares();
               },2000);
             },1000);
           },500);
@@ -113,32 +115,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
       }
     });
 
-  function AddShares() {
-    //$('body').append($('div'));
-    /*var $fb = $('<div>').addClass("fb-like")
-                        .attr('data-send',"true")
-                        .attr('data-width',"450")
-                        .attr('data-show-faces',"true")
-                        .attr('data-font',"lucida grande");*/
-    /*var $fb = $('<fb:like>').attr('href',"<OUR URL>")
-                        .attr('layout',"button_count")
-                        .attr('show_faces',"false")
-                        .attr('width',"450")
-                        .attr('height',"35")
-                        .attr('action',"like")
-                        .attr('colorscheme',"light")
-                        .attr('font',"trebuchet ms")
-                        .attr('allowTransparency',"true");
-    $('#outtro').append($fb);*/
-    /*$('#outtro').append($('<a>').attr('href',"#")
-                                .attr('id',"facebookshare")
-                                .text('click'));
-//                                .attr('onclick',"function(){console.log('clicked'); postToFeed(); return false;}"));
-    $('#facebookshare').onClick = function(){
-      console.log('clicked');
-      postToFeed();
-      return false;
-    };*/
+  function addShares() {
 
     /** Add Facebook button */
     /** Does not work */
@@ -154,7 +131,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                                       .attr('data-show-faces',"true")
                                       .attr('data-font',"lucida grande")
                                       .attr('style',"padding-left:20"));
-    AddFBButton();
+    addFBButton();
 
     /** Add Tweet button */
     $('#outtro').append($('<a>').attr('href',"https://twitter.com/share")
@@ -163,10 +140,10 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                                 .text("Tweet")
                                 .attr('url',"OUR URL")
                                 .attr('style',"padding-left:40"));
-    AddTweetButton();
+    addTweetButton();
 
     /** Add Google Plus button */
-    /** Make sure the shared data is right */
+    /** Make sure the metadata is right */
     $('html').attr('itemscope',"")
                                             .attr('itemtype',"http://schema.org/Demo");
     $('head').append($('<meta>').attr('itemprop',"name")
@@ -174,10 +151,10 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     $('head').append($('<meta>').attr('itemprop',"name")
                                 .attr('content',"A demonstrator to show how everything is connected."));
     $('#outtro').append($('<g:plusone>').attr('annotation',"none"));
-    AddGPlusButton();
+    addGPlusButton();
   }
 
-  function AddFBButton() {
+  function addFBButton() {
     var js, fjs = document.getElementsByTagName('script')[0];
     if (document.getElementById('facebook-jssdk')) return;
     js = document.createElement('script');
@@ -186,7 +163,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     fjs.parentNode.insertBefore(js, fjs);
   }
 
-  function AddTweetButton() {
+  function addTweetButton() {
     var js,fjs=document.getElementsByTagName('script')[0];
     if(!document.getElementById('twitter-wjs')) {
       js=document.createElement('script');
@@ -196,14 +173,14 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     }
   }
 
-  function AddGPlusButton() {
+  function addGPlusButton() {
     var po = document.createElement('script');
     po.type = 'text/javascript';
     po.async = true;
     po.src = 'https://apis.google.com/js/plusone.js';
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(po, s);
-  };
+  }
 
   return OuttroductionSlideGenerator;
 });
