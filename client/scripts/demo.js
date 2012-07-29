@@ -1,3 +1,4 @@
+/*jshint browser: true*/
 
 (function (requirejs) {
   "use strict";
@@ -37,7 +38,7 @@
     var scriptHolder = {};
     for (var i = 0; i < scripts.length; i++)
       scriptHolder[scripts[i].replace(/^(\w+\/)*/, '')] = arguments[i];
-    if (this.window.startApplication)
-      this.window.startApplication(jQuery, scriptHolder);
+    if (window.startApplication)
+      window.startApplication(jQuery, scriptHolder);
   });
 })(window.requirejs);
