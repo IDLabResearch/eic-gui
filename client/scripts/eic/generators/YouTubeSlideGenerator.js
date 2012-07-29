@@ -3,8 +3,6 @@ function ($, BaseSlideGenerator) {
   "use strict";
   
   var playerCount = 0;
-  var preload = false;
-
 
   /** Generator of YouTube videos using the YouTube API
    * The option parameter is a hash consisting of
@@ -44,17 +42,38 @@ function ($, BaseSlideGenerator) {
       });
       
       this.inited = true;
+      this.status = "inited";
     },
 
     /** Advances to the next slide. */
     next: function () {
       return this.slides.shift();
     },
+    
+    /** Prepare video by playing and pausing it, in order to prebuffer its contents. */
+    prepare: function () {
+      var self = this, player = self.player;
+      
+      // if we did not start preparations yet, and the player object is ready
+      if (self.status === "inited" && player && player.playVideo) {
+        // start preparing by playing the video
+        self.status = "preparing";
+        player.playVideo();
+        
+        // as soon as the video plays, pause it...
+        player.addEventListener('onStateChange', function () {
+          // ...but only if we're still in preparation mode (and not playing for real)
+          if (self.status === "preparing" && player.getPlayerState() == window.YT.PlayerState.PLAYING)
+            player.pauseVideo();
+        });
+      }
+    },
 
     /** Adds a new video slide. */
     addVideoSlide: function (videoID, duration) {
-      var start = this.skipVideoDuration;
-      var end = this.skipVideoDuration + this.maxVideoDuration;
+      var self = this,
+          start = this.skipVideoDuration,
+          end = this.skipVideoDuration + this.maxVideoDuration;
       if (duration <= this.maxVideoDuration + this.skipVideoDuration)
         end = duration;
       if (duration < this.maxVideoDuration + this.skipVideoDuration && duration >= this.maxVideoDuration)
@@ -62,14 +81,15 @@ function ($, BaseSlideGenerator) {
       duration = end - start;
       this.totalDuration += duration;
       
+      // create a container that will hide the player
       var playerId = 'ytplayer' + (++playerCount),
           $container = $('<div>').append($('<div>').prop('id', playerId))
                                  .css({ width: 0, height: 0, overflow: 'hidden' });
       $('body').append($container);
-      
-      var player = new window.YT.Player(playerId, {
+      // create the player in the container
+      var player = this.player = new window.YT.Player(playerId, {
         playerVars: {
-          autoplay: preload ? 1 : 0,
+          autoplay: 0,
           controls: 0,
           start: (start / 1000),
           end: (end / 1000),
@@ -78,18 +98,26 @@ function ($, BaseSlideGenerator) {
         videoId: videoID,
         width: 800,
         height: 600,
-        events: { 'onReady': onPlayerReady }
+        events: { onReady: function (event) { event.target.mute(); } }
       });
       
+      // create a placeholder on the slide where the player will come
       var $placeholder = $('<div>'),
           slide = this.createBaseSlide('youtube', $placeholder, duration);
+      // if the slide starts, move the player to the slide
       slide.once('started', function () {
+        // flag our state to make sure prepare doesn't pause the video
+        self.status = 'started';
+        
+        // make video visible
         var offset = $placeholder.offset();
         player.playVideo();
         $container.css({
+          // move to the location of the placeholder
           position: 'absolute',
           top: offset.top,
           left: offset.left,
+          // and make the container show its contents
           width: 'auto',
           height: 'auto',
           overflow: 'auto'
@@ -105,17 +133,7 @@ function ($, BaseSlideGenerator) {
       this.slides.push(slide);
       this.emit('newSlides');
     },
-    
-    getDuration: function () { return this.totalDuration; },
   });
-  
-  function onPlayerReady(event) {
-    var player = event.target;
-    player.mute();
-    if (preload) {
-      window.setTimeout($.proxy(player, 'playVideo'), 500);
-    }
-  }
   
   function searchVideos(self, startResults, maxResult, skip) {
     if (maxResult > 50) { //YouTube API restriction

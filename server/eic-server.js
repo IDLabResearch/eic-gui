@@ -26,7 +26,7 @@ app.get(/^\/stylesheets\/(?:\w+)$/, function (req, res) {
   res.render(app.staticFolder + req.url + '.less');
 });
 
-app.get(/^\/(?:\w+\/)*(?:(?:\w+\.)+\w+)?$/, function (req, res) {
+app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
   res.sendfile(app.staticFolder + req.url);
 });
 
