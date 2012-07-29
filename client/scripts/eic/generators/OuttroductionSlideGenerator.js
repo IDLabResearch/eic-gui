@@ -116,51 +116,46 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     });
 
   function addShares() {
-
-    /** Add Facebook button */
-    /** Does not work */
     $('#outtro').append($('<p>').append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>')));
+    /** Add Facebook button */
     $('#outtro').append($('<h2>').text('Share:'));
-    $('#outtro').append($('<fb-like>').attr('data-send',"true")
-                                      .attr('data-width',"450")
-                                      .attr('data-show-faces',"true")
-                                      .attr('data-font',"lucida grande")
-                                      .attr('style',"padding-left:20"));
-    addFBButton();
+    var $fblike = $('<div>').addClass("fb-like")
+                            .attr('data-href',"OUR URL")
+                            .attr('data-send',"false")
+                            .attr('data-layout',"button_count")
+                            .attr('data-width',"100")
+                            .attr('data-show-faces',"true")
+                            .attr('style',"padding-left:4em");
+    $('#outtro').append($fblike);
+    // Render the button (Facebook API is already loaded)
+    window.FB.XFBML.parse();
 
     /** Add Tweet button */
     $('#outtro').append($('<a>').attr('href',"https://twitter.com/share")
                                 .attr('data-lang',"en")
                                 .addClass("twitter-share-button")
                                 .text("Tweet")
-                                .attr('url',"OUR URL")
-                                .attr('style',"padding-left:40"));
+                                .attr('url',"OUR URL"));
+    // Render the button
     addTweetButton();
 
     /** Add Google Plus button */
-    /** Make sure the metadata is right */
+    // Make sure the metadata is right
     $('html').attr('itemscope',"")
-                                            .attr('itemtype',"http://schema.org/Demo");
+             .attr('itemtype',"http://schema.org/Demo");
     $('head').append($('<meta>').attr('itemprop',"name")
                                 .attr('content',"Everything is connected"));
     $('head').append($('<meta>').attr('itemprop',"name")
                                 .attr('content',"A demonstrator to show how everything is connected."));
-    $('#outtro').append($('<g:plusone>').attr('annotation',"none"));
+    $('#outtro').append($('<div>').addClass("g-plusone")
+                                  .attr('annotation',"none"));
+    // Render the button
     addGPlusButton();
-  }
-
-  function addFBButton() {
-    var js, fjs = document.getElementsByTagName('script')[0];
-    if (document.getElementById('facebook-jssdk')) return;
-    js = document.createElement('script');
-    js.id = 'facebook-jssdk';
-    js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1";
-    fjs.parentNode.insertBefore(js, fjs);
   }
 
   function addTweetButton() {
