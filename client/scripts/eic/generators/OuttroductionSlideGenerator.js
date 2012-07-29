@@ -128,7 +128,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                             .attr('data-href',"OUR URL")
                             .attr('data-send',"false")
                             .attr('data-layout',"button_count")
-                            .attr('data-width',"100")
+                            .attr('data-width',"112")
                             .attr('data-show-faces',"true")
                             .attr('style',"padding-left:4em");
     $('#outtro').append($fblike);
@@ -152,8 +152,10 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                                 .attr('content',"Everything is connected"));
     $('head').append($('<meta>').attr('itemprop',"name")
                                 .attr('content',"A demonstrator to show how everything is connected."));
+
     $('#outtro').append($('<div>').addClass("g-plusone")
-                                  .attr('annotation',"none"));
+                                  .attr('data-size',"medium")
+                                  .attr('data-href',"OUR URL"));
     // Render the button
     addGPlusButton();
   }
