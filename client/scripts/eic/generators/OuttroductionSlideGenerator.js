@@ -1,6 +1,6 @@
 define([ 'lib/jquery',
     'eic/generators/BaseSlideGenerator',
-    'eic/TTSService', 'eic/FacebookConnector'],
+    'eic/TTSService', 'eic/FacebookConnector', 'lib/jvent'],
 function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
 
   "use strict";
@@ -63,21 +63,22 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                                    .addClass(cssClass)
                                    .attr('id',"outtro");
 
-        var $outtro = $('<h1>').text("As you can see, ");
+        var $outtro = $('<h2>').text("As you can see, ");
         slide.$element.append($outtro);
         setTimeout(function(){
-          $('#outtro > h1').append($('<br>'));
-          $('#outtro > h1').append($('<em>').text(startTopic.first_name + ", "));
+          //$('#outtro > h2').append($('<br>'));
+          $('#outtro > h2').append($('<em>').text(startTopic.first_name + ", "));
           
           setTimeout(function(){
-            $('#outtro > h1').append($('<br>'));
-            $('#outtro > h1').append("You are connected to everything in this world,");
+            $('#outtro > h2').append($('<br>'));
+            $('#outtro > h2').append("You are connected to everything in this world,");
             $('#outtro').parent().children('.transition-out').remove();
             setTimeout(function(){
-              $('#outtro > h1').append($('<br>'));
-              $('#outtro > h1').append("Even ");
-              $('#outtro > h1').append($('<em>').text(endTopic.label));
-              $('#outtro > h1').append("!");
+              $('#outtro > h2').append($('<br>'));
+              $('#outtro > h2').append($('<br>'));
+              $('#outtro > h2').append("Even ");
+              $('#outtro > h2').append($('<em>').text(endTopic.label));
+              $('#outtro > h2').append("!");
               setTimeout(function(){
                 AddShares();
               },2000);
@@ -141,7 +142,12 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
 
     /** Add Facebook button */
     /** Does not work */
-    $('#outtro').append($('<h1>').text('Share:'));
+    $('#outtro').append($('<p>').append($('<br>'))
+                                .append($('<br>'))
+                                .append($('<br>'))
+                                .append($('<br>'))
+                                .append($('<br>')));
+    $('#outtro').append($('<h2>').text('Share:'));
     $('#outtro').append($('<fb-like>').attr('data-send',"true")
                                       .attr('data-width',"450")
                                       .attr('data-show-faces',"true")
