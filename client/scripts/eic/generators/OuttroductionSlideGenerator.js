@@ -46,7 +46,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
 
         var startTopic = this.startTopic,
             endTopic = this.endTopic,
-            slide = this.createOuttroSlide('title', this.duration);
+            slide = this.createOuttroSlide('outtro', this.duration);
 
         this.done = true;
 
@@ -63,22 +63,22 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                                    .addClass(cssClass)
                                    .attr('id',"outtro");
 
-        var $outtro = $('<h2>').text("As you can see, ");
+        var $outtro = $('<h1>').text("As you can see, ");
         slide.$element.append($outtro);
         setTimeout(function(){
           //$('#outtro > h2').append($('<br>'));
-          $('#outtro > h2').append($('<em>').text(startTopic.first_name + ", "));
+          $('#outtro > h1').append($('<em>').text(startTopic.first_name + ", "));
           
           setTimeout(function(){
-            $('#outtro > h2').append($('<br>'));
-            $('#outtro > h2').append("You are connected to everything in this world,");
+            $('#outtro > h1').append($('<br>'));
+            $('#outtro > h1').append("You are connected to everything in this world,");
             $('#outtro').parent().children('.transition-out').remove();
             setTimeout(function(){
-              $('#outtro > h2').append($('<br>'));
-              $('#outtro > h2').append($('<br>'));
-              $('#outtro > h2').append("Even ");
-              $('#outtro > h2').append($('<em>').text(endTopic.label));
-              $('#outtro > h2').append("!");
+              $('#outtro > h1').append($('<br>'));
+              $('#outtro > h1').append($('<br>'));
+              $('#outtro > h1').append("Including ");
+              $('#outtro > h1').append($('<em>').text(endTopic.label));
+              $('#outtro > h1').append("!");
               setTimeout(function(){
                 AddShares();
               },2000);
@@ -105,7 +105,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
         var text = "As you can see, " +
                    startTopic.first_name + ", " +
                    "You are connected to everything in this world," +
-                   "Even " + endTopic.label + "!";
+                   "Including " + endTopic.label + "!";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
@@ -143,6 +143,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     /** Add Facebook button */
     /** Does not work */
     $('#outtro').append($('<p>').append($('<br>'))
+                                .append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>'))
                                 .append($('<br>'))
