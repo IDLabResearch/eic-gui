@@ -69,16 +69,15 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
         slide.$element.append($outro);
         setTimeout(function(){
           //$('#outro > h2').append($('<br>'));
-          $('#outro > h1').append($('<em>').text(startTopic.first_name + ", "));
+          $('#outro > h1').append($('<span>').text(startTopic.first_name + ", "));
           
           setTimeout(function(){
             $('#outro > h1').append($('<br>'));
-            $('#outro > h1').append("You are connected to everything in this world,");
+            $('#outro > h1').append("you are connected to everything in this world,");
             $('#outro').parent().children('.transition-out').remove();
             setTimeout(function(){
               $('#outro > h1').append($('<br>'));
-              $('#outro > h1').append($('<br>'));
-              $('#outro > h1').append("Including ");
+              $('#outro > h1').append("including ");
               $('#outro > h1').append($('<em>').text(endTopic.label));
               $('#outro > h1').append("!");
               setTimeout(function(){
@@ -106,8 +105,8 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
         
         var text = "As you can see, " +
                    startTopic.first_name + ", " +
-                   "You are connected to everything in this world," +
-                   "Including " + endTopic.label + "!";
+                   "you are connected to everything in this world," +
+                   "including " + endTopic.label + "!";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
