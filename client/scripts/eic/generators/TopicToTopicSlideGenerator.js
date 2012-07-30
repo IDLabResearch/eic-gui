@@ -39,7 +39,7 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
             story.steps.forEach(function (step) {
               self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
             });
-            self.addGenerator(new OutroductionSlideGenerator(self.startTopic,self.endTopic));
+            self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
           });
           this.initedEnd = true;
         }

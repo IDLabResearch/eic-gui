@@ -57,43 +57,30 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
       
       createOutroSlide: function (cssClass, duration) {
         var startTopic = this.startTopic,
-            endTopic = this.endTopic,
-            slide = new EventEmitter();
-      
-        // Create slide element.
-        slide.$element = $('<div>').addClass('slide')
-                                   .addClass(cssClass)
-                                   .attr('id',"outro");
+            endTopic = this.endTopic;
 
-        var $outro = $('<h1>').text("As you can see, ");
-        slide.$element.append($outro);
-        setTimeout(function(){
-          //$('#outro > h2').append($('<br>'));
-          $('#outro > h1').append($('<span>').text(startTopic.first_name + ", "));
-          
-          setTimeout(function(){
-            $('#outro > h1').append($('<br>'));
-            $('#outro > h1').append("you are connected to everything in this world,");
-            $('#outro').parent().children('.transition-out').remove();
-            setTimeout(function(){
-              $('#outro > h1').append($('<br>'));
-              $('#outro > h1').append("including ");
-              $('#outro > h1').append($('<em>').text(endTopic.label));
-              $('#outro > h1').append("!");
-              setTimeout(function(){
-                addShares();
-              },2000);
-            },1000);
-          },500);
-        },1000);
+        var $outro = $('<h1>').text("As you can see, "),
+            slide = this.createBaseSlide('outro', $outro, duration);
+        
+        slide.once('started', function () {
+          setTimeout(function () {
+            $outro.append($('<span>').text(startTopic.first_name + ", "));
+            setTimeout(function () {
+              $outro.append($('<br>'));
+              $outro.append("you are connected to everything in this world,");
+              setTimeout(function () {
+                $outro.append($('<br>'));
+                $outro.append("including ");
+                $outro.append($('<em>').text(endTopic.label));
+                $outro.append("!");
+                setTimeout(function () {
+                  addShares($outro.parent());
+                }, 2000);
+              }, 1000);
+            }, 500);
+          }, 1000);
+        });
 
-        // Set duration.
-        slide.duration = duration;
-      
-        // Set start and stop functions.
-        slide.start = $.proxy(slide, 'emit', 'started');
-        slide.stop  = $.proxy(slide, 'emit', 'stopped');
-      
         return slide;
       },
       
@@ -114,68 +101,61 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
       }
     });
 
-  function addShares() {
-    $('#outro').append($('<p>').append($('<br>'))
-                                .append($('<br>'))
-                                .append($('<br>'))
-                                .append($('<br>'))
-                                .append($('<br>'))
-                                .append($('<br>')));
+  function addShares($container) {
+    $container.append($('<p>').append($('<br>'))
+                              .append($('<br>'))
+                              .append($('<br>'))
+                              .append($('<br>'))
+                              .append($('<br>'))
+                              .append($('<br>')));
+    
+    var $buttons = $('<div>', { 'class': 'share' });
+    $container.append($('<h2>').text('Share:'), $buttons);
+    
     /** Add Facebook button */
-    $('#outro').append($('<h2>').text('Share:'));
     var $fblike = $('<div>').addClass("fb-like")
-                            .attr('data-href',"OUR URL")
-                            .attr('data-send',"false")
-                            .attr('data-layout',"button_count")
-                            .attr('data-width',"112")
-                            .attr('data-show-faces',"true")
-                            .attr('style',"padding-left:4em");
-    $('#outro').append($fblike);
+                            .attr('data-href', "OUR URL")
+                            .attr('data-send', " false")
+                            .attr('data-layout', "button_count")
+                            .attr('data-width', "112")
+                            .attr('data-show-faces', "true");
+    $buttons.append($('<div>', { 'class': 'facebook' }).append($fblike));
     // Render the button (Facebook API is already loaded)
     window.FB.XFBML.parse();
 
     /** Add Tweet button */
-    $('#outro').append($('<a>').attr('href',"https://twitter.com/share")
-                                .attr('data-lang',"en")
-                                .addClass("twitter-share-button")
-                                .text("Tweet")
-                                .attr('url',"OUR URL"));
+    var $tweet = $('<a>').attr('href', "https://twitter.com/share")
+                         .attr('data-lang', "en")
+                         .addClass("twitter-share-button")
+                         .text("Tweet")
+                         .attr('url', "OUR URL");
+    $buttons.append($('<div>', { 'class': 'twitter' }).append($tweet));
     // Render the button
     addTweetButton();
 
     /** Add Google Plus button */
     // Make sure the metadata is right
-    $('html').attr('itemscope',"")
-             .attr('itemtype',"http://schema.org/Demo");
-    $('head').append($('<meta>').attr('itemprop',"name")
-                                .attr('content',"Everything is connected"));
-    $('head').append($('<meta>').attr('itemprop',"name")
-                                .attr('content',"A demonstrator to show how everything is connected."));
+    $('html').attr('itemscope', "")
+             .attr('itemtype', "http://schema.org/Demo");
+    $('head').append($('<meta>').attr('itemprop', "name")
+                                .attr('content', "Everything is connected"));
+    $('head').append($('<meta>').attr('itemprop', "name")
+                                .attr('content', "A demonstrator to show how everything is connected."));
 
-    $('#outro').append($('<div>').addClass("g-plusone")
-                                  .attr('data-size',"medium")
-                                  .attr('data-href',"OUR URL"));
+    var $gplus = $('<div>').addClass("g-plusone")
+                           .attr('data-size', "medium")
+                           .attr('data-href', "OUR URL");
+    $buttons.append($('<div>', { 'class': 'googleplus' }).append($gplus));
     // Render the button
     addGPlusButton();
   }
 
   function addTweetButton() {
-    var js,fjs=document.getElementsByTagName('script')[0];
-    if(!document.getElementById('twitter-wjs')) {
-      js=document.createElement('script');
-      js.id='twitter-wjs';
-      js.src="https://platform.twitter.com/widgets.js";
-      fjs.parentNode.insertBefore(js,fjs);
-    }
+    $.getScript("https://platform.twitter.com/widgets.js");
   }
 
   function addGPlusButton() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript';
-    po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
+    $.getScript("https://apis.google.com/js/plusone.js");
   }
 
   return OutroductionSlideGenerator;
