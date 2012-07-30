@@ -17,7 +17,6 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     this.fbConnector = new FacebookConnector();
     
     BaseSlideGenerator.call(this);
-    this.slides = [];
     this.startTopic = startTopic;
     this.endTopic = endTopic;
     this.duration = duration || defaultDuration;
