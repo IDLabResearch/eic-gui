@@ -14,33 +14,6 @@ define(['lib/jquery',
       this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
 
       this.generators = [];
-<<<<<<< HEAD
-      //Create all generators depending on the type of the topic
-      this.addGenerator(new TitleSlideGenerator(topic), true);
-
-      switch (topic.type) {
-      case "date":
-        this.addGenerator(new DateSlideGenerator(topic));
-        break;
-      case "location":
-        //no break since location also accepts images and movies
-        this.addGenerator(new GoogleMapsSlideGenerator(topic));
-      case "building":
-      case "person":
-      default:
-        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
-        this.addGenerator(new YouTubeSlideGenerator(topic, {maxVideoCount: 2, maxVideoDuration: 6000, skipVideoDuration: 15000}), true);
-        break;
-      }
-
-
-      //      if (generators) {
-      //        for (var i = 0; i < generators.length; i++)
-      //          this.addGenerator(generators[i], true);
-      //      }
-
-=======
->>>>>>> 6645fa4829d2a3947b450220e6008d44073d1b1d
       this.topic = topic;
       this.description = description;
       this.first = true;
