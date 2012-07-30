@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 2000;
+  var defaultDuration = 2500;
   var repeat = false;
 
   /** Generator of images slides from Google Image search results.

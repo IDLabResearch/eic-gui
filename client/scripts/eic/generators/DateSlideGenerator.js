@@ -6,10 +6,10 @@ define(
       var defaultDuration = 2000;
 
       /** Generator that creates a Date slide for a datestring. */
-      function DateSlideGenerator(datestring) {
+      function DateSlideGenerator(topic) {
         BaseSlideGenerator.call(this);
 
-        this.topic = { label : datestring };
+        this.topic = topic;
 
         this.weekday = new Array(7);
         this.weekday[0] = "Sunday";

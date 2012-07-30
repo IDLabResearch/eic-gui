@@ -17,23 +17,21 @@ define(['lib/jquery',
 
       this.generators = [];
       //Create all generators depending on the type of the topic
-      this.addGenerator(new TitleSlideGenerator(topic),true);
-          
-      switch (topic.type) {          
-        case "date":
-          this.addGenerator(new DateSlideGenerator(topic))
-          break;
-        case "location":
-          //no break since location also accepts images and movies
-          this.addGenerator(
-            new GoogleMapsSlideGenerator(topic)
-            )
-        case "building":
-        case "person":
-        default :
-          this.addGenerator(new GoogleImageSlideGenerator(topic),true);
-          this.addGenerator(new YouTubeSlideGenerator(topic),true);         
-          break;      
+      this.addGenerator(new TitleSlideGenerator(topic), true);
+
+      switch (topic.type) {
+      case "date":
+        this.addGenerator(new DateSlideGenerator(topic));
+        break;
+      case "location":
+        //no break since location also accepts images and movies
+        this.addGenerator(new GoogleMapsSlideGenerator(topic));
+      case "building":
+      case "person":
+      default:
+        this.addGenerator(new GoogleImageSlideGenerator(topic), true);
+        this.addGenerator(new YouTubeSlideGenerator(topic, {maxVideoCount: 2, maxVideoDuration: 6000, skipVideoDuration: 15000}), true);
+        break;
       }
 
 
@@ -45,7 +43,6 @@ define(['lib/jquery',
       this.topic = topic;
       this.description = description;
       this.first = true;
-      this.slideCount = 0;
       this.durationLeft = 0;
       this.audioURL = '';
     }
@@ -58,8 +55,11 @@ define(['lib/jquery',
           //if the sound url is not yet retrieved and attached to the first slide (maxDuration still 0), don't give any slides
           if (this.durationLeft <= 0)
             return false;
-          
+          else
+            return true;
+
           return this.generators.some(function (g) {
+            //console.log('[' + Math.round(+new Date() / 1000) + ']Slides found in '+ g.prototype.constructor + ': ' + g.hasNext());
             return g.hasNext();
           });
         },
@@ -78,12 +78,12 @@ define(['lib/jquery',
           tts.once('speechReady', function (event, data) {
             self.durationLeft = data.snd_time;
             self.audioURL = data.snd_url;
-            console.log("Speech for topic " + self.topic.label + " received!");
+            console.log('[' + Math.round(+new Date() / 1000) + ']Speech for topic ' + self.topic.label + ' received!');
             //When speech is received, 'remind' the presenter that the slides are ready
             self.emitNewSlidesEvent();
           });
           tts.getSpeech(this.description, 'en_GB');
-          console.log("Getting speech for topic " + this.topic.label + " from service");
+          console.log('[' + Math.round(+new Date() / 1000) + ']Getting speech for topic ' + this.topic.label + ' from service');
         },
         
         next: function () {
@@ -101,15 +101,15 @@ define(['lib/jquery',
             slide.duration = this.generators[0].getDuration();
             this.first = false;
             
-            console.log('First slide '+this.topic.label+' added!');
+            console.log('[' + Math.round(+new Date() / 1000) + ']First slide ' + this.topic.label + ' added!');
           } else {
             slide = this.generators[i].next();
-            slide.duration = this.durationLeft < this.generators[i].getDuration() ? this.durationLeft + 1000 : this.generators[i].getDuration();
+            slide.duration = this.durationLeft < this.generators[i].getDuration() ? this.durationLeft : this.generators[i].getDuration();
           }
           
           this.durationLeft -= slide.duration;
           
-          console.log('New slide: duration '+ slide.duration + 'ms, '+ this.durationLeft + 'ms left!');
+          console.log('[' + Math.round(+new Date() / 1000) + ']New slide: duration ' + slide.duration + 'ms, ' + this.durationLeft + 'ms left!');
           return slide;
         },
         /** Add a child generator add the end of the list. */
