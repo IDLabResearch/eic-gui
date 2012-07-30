@@ -1,3 +1,7 @@
+/***** Settings *****/
+@width: 800px;
+@height: 600px;
+
 /***** Mixins *****/
 
 .transition (@transform, @origin) {
@@ -21,19 +25,27 @@
   transform: @transform;
 }
 
+.center-child-vertically() {
+  display: table;
+  
+  & > :first-child {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
 
 /***** Rules *****/
 
 .slides {
-  width: 800px;
-  height: 600px;
+  width: @width;
+  height: @height;
   border: 1px solid black;
   margin: 5em auto;
 }
 
 .slide {
-  width: 800px;
-  height: 600px;
+  width: @width;
+  height: @height;
   overflow: hidden;
   position: absolute;
   background: white url(/images/slide-background.jpg);
@@ -53,20 +65,21 @@
   /***** Slide types *****/
   &.title {
     .inner {
-      display: table;
+      .center-child-vertically();
     }
     h1 {
-      display: table-cell;
-      vertical-align: middle;
-      
       padding: 1em 1em 2em 1em;
       font-size: 4em;
     }
   }
 
   &.image {
-    text-align: center;
     background: rgba(0, 0, 0, .5);
+    
+    .inner {
+      .center-child-vertically();
+      text-align: center;
+    }
   }
   
   &.video {

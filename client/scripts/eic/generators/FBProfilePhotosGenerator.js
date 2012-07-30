@@ -54,13 +54,12 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       var $image = imageUrl;
       if (typeof imageUrl === 'string')
         $image = $('<img>').prop('src', imageUrl)
-                           .css({ 'min-height': '100%' });
-          
-      var slide = this.createBaseSlide('image', $image, duration || defaultDuration);
-      slide.on('started', function () {
-        setTimeout($.proxy($image, 'addClass', 'zoom'), 100);
-      });
-            
+                           .css({ 'min-height': '600px' });
+      
+      var $figure = $('<figure>').append($image);
+      var slide = this.createBaseSlide('image', $figure, duration || defaultDuration);
+      slide.on('started', function () { setTimeout($.proxy($image, 'addClass', 'zoom')); });
+      
       this.slides.push(slide);
       this.emit('newSlides');
     },

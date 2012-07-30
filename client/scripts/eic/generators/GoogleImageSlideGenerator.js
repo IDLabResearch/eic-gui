@@ -61,15 +61,10 @@ function ($, BaseSlideGenerator) {
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
-          slide = this.createBaseSlide('image', $image, defaultDuration);
-    //Ken Burns effect
-      slide.on('started', function () {
-        setTimeout(function () {
-          slide.$element.find("img").addClass('zoom');
-        },
-      100
-      );
-      });
+          $figure = $('<figure>').append($image),
+          slide = this.createBaseSlide('image', $figure, defaultDuration);
+
+      slide.on('started', function () { setTimeout($.proxy($image, 'addClass', 'zoom')); });
       this.slides.push(slide);
       this.emit('newSlides');
     },
