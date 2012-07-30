@@ -29,12 +29,7 @@ define(['lib/jquery',
           if (this.durationLeft <= 0)
             return false;
           else
-            return true;
-
-//          return this.generators.some(function (g) {
-//            //console.log('[' + Math.round(+new Date() / 1000) + ']Slides found in '+ g.prototype.constructor + ': ' + g.hasNext());
-//            return g.hasNext();
-//          });
+            return this.generators.some(function (g) { return g.hasNext(); });
         },
 
         /** Initialize all child generators. */
