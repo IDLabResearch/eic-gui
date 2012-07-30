@@ -1,8 +1,33 @@
+/***** Mixins *****/
+
+.transition (@transform, @origin) {
+  -moz-transform-origin: @origin;
+  -moz-transition: -moz-transform @transform;
+  -webkit-transform-origin: @origin;
+  -webkit-transition: -webkit-transform @transform;
+  -o-transform-origin: @origin;
+  -o-transition: -o-transform @transform;
+  -ms-transform-origin: @origin;
+  -ms-transition: -ms-transform @transform;
+  transform-origin: @origin;
+  transition: transform @transform;
+}
+
+.transform (@transform) {
+  -moz-transform: @transform;
+  -webkit-transform: @transform;
+  -o-transform: @transform;
+  -ms-transform: @transform;
+  transform: @transform;
+}
+
+
+/***** Rules *****/
+
 .slides {
   width: 800px;
   height: 600px;
   border: 1px solid black;
-  background-color: white;
   margin: 5em auto;
 }
 
@@ -11,7 +36,12 @@
   height: 600px;
   overflow: hidden;
   position: absolute;
-  background-color: white;
+  background: white url(/images/slide-background.jpg);
+  
+  .inner {
+    width: 100%;
+    height: 100%;
+  }
   
   /***** Transitions *****/
   &.transition-out {
@@ -22,48 +52,81 @@
   
   /***** Slide types *****/
   &.title {
+    .inner {
+      display: table;
+    }
     h1 {
-      padding: 1em; 
+      display: table-cell;
+      vertical-align: middle;
+      
+      padding: 1em 1em 2em 1em;
+      font-size: 4em;
     }
   }
 
   &.image {
     text-align: center;
+    background: rgba(0, 0, 0, .5);
   }
   
   &.video {
-    background-color: black;
+    background: black;
     
     video {
       width: 100%;
       height: 100%;
     }
   }
-}
+  
+  &.date {
+    text-align: center;
+    font: 40px Georgia, serif;
+    
+    .calendar {
+      margin: 100px 0 0 250px;
+      width:300px;
+      height:400px;
+      background-color: rgba(255, 255, 255, .8);
+      border: 2px solid #e34420;
+    }
+    .month {
+      margin-top: 15px;
+      text-transform: uppercase;
+    }
+    .year {
+      font-size: 30px;
+    }
+    .day {
+      margin: -20px 0 20px;
+      font-size: 200px;
+    }
+    .weekday {
+      font-size: 50px;
+    }
+  }
 
-.slide > img {
--moz-transform-origin: 50% 50%; 
--moz-transition: -moz-transform 30s linear; 
--webkit-transform-origin: 50% 50%; 
--webkit-transition: -webkit-transform 30s linear; 
--o-transform-origin: 50% 50%; 
--o-transition: -moz-transform 30s linear; 
--ms-transform-origin: 50% 50%; 
--ms-transition: -ms-transform 30s linear; 
-}
-.slide > #date {
--moz-transform-origin: 50% 50%; 
--moz-transition: -moz-transform 30s linear; 
--webkit-transform-origin: 50% 50%; 
--webkit-transition: -webkit-transform 30s linear; 
--o-transform-origin: 50% 50%; 
--o-transition: -moz-transform 30s linear; 
--ms-transform-origin: 50% 50%; 
--ms-transition: -ms-transform 30s linear; 
-}
-.zoom {
--moz-transform: scale(2) rotate(10deg);
--webkit-transform: scale(2) rotate(10deg);
--o-transform: scale(2) rotate(10deg);
--ms-transform: scale(2) rotate(10deg);
+  &.outtro {
+    .inner {
+      display: table;
+    }
+    h1 {
+      display: table-cell;
+      padding: 1em 1em 2em 1em;
+      font-size: 2em;
+    }
+    h2 {
+      display: table-cell;
+      padding: 1em 1em 0em 1em;
+      font-size: 2em;
+    }
+  }
+  
+  /***** Transitions *****/
+  &.image img, &.date .calendar {
+    .transition(30s linear, 50% 50%);
+  }
+  
+  .zoom {
+    .transform(scale(2) rotate(10deg));
+  }
 }

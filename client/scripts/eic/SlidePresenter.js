@@ -53,7 +53,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
 
           //self.$container.append(audioEl);
           }
-         
+
           window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive

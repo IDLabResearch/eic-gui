@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
 
-  var defaultDuration = 1000;
+  var defaultDuration = 1500;
 
   /** Generator that creates a title slide for a topic. */
   function TitleSlideGenerator(topic, duration) {
@@ -22,8 +22,6 @@ function ($, BaseSlideGenerator) {
     hasNext: function () {
       return this.done !== true;
     },
-    
-    getDuration: function () { return this.duration; },
 
     /** Advances to the title slide. */
     next: function () {

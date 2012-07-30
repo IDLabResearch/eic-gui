@@ -57,22 +57,19 @@ function ($, BaseSlideGenerator) {
       this.cnt += 1;
       return this.slides[(this.cnt - 1) % this.maxResults];
     },
-    
-    getDuration: function () {
-      return defaultDuration;
-    },
 
     /** Adds a new image slide. */
     addImageSlide: function (imageUrl) {
       var $image = $('<img>').attr('src', imageUrl),
           slide = this.createBaseSlide('image', $image, defaultDuration);
-	  slide.on('started',function(){
-	    setTimeout(function(){
-		  slide.$element.find("img").addClass('zoom');
-		  },
-		  100
-	    )
-	  });
+    //Ken Burns effect
+      slide.on('started', function () {
+        setTimeout(function () {
+          slide.$element.find("img").addClass('zoom');
+        },
+      100
+      );
+      });
       this.slides.push(slide);
       this.emit('newSlides');
     },

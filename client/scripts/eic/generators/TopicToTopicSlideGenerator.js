@@ -1,8 +1,9 @@
 define(['lib/jquery',
         'eic/generators/CombinedSlideGenerator',
         'eic/generators/IntroductionSlideGenerator',
-        'eic/generators/TopicSlideGenerator'],
-function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator) {
+        'eic/generators/TopicSlideGenerator',
+        'eic/generators/OuttroductionSlideGenerator'],
+function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OuttroductionSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
@@ -38,6 +39,7 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
             story.steps.forEach(function (step) {
               self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
             });
+            self.addGenerator(new OuttroductionSlideGenerator(self.startTopic,self.endTopic));
           });
           this.initedEnd = true;
         }

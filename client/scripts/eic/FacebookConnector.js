@@ -2,38 +2,17 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 	"use strict";
 
   var FB;
-
-  function findPlacesNearUser(id, callback) {
-    var place_id = '';
-
-    var latitude = '';
-    var longitude = '';
-
-    FB.api('/me', function (response) {
-      var query = FB.Data.query('select name, hometown_location from user where uid=' + id, response.id);
-      query.wait(function (rows) {
-        place_id = rows[0].hometown_location.id;
-        FB.api('/me', function (response) {
-          var query = FB.Data.query('select latitude, longitude from place where page_id=' + place_id, response.id);
-          query.wait(function (rows) {
-            latitude = rows[0].latitude;
-            longitude = rows[0].longitude;
-            FB.api('/search?center=' + latitude + ',' + longitude + '&type=place', function (response) {
-              callback(response);
-            });
-          });
-        });
-      });
-    });
-  }
+  $.getScript('http://connect.facebook.net/en_US/all.js');
 
   function FacebookConnector() {
     EventEmitter.call(this);
   }
 
-
   FacebookConnector.prototype = {
     init : function (login_action, logout_action) {
+      login_action = login_action || $.noop;
+      logout_action = logout_action || $.noop;
+      
       window.fbAsyncInit = function () {
         FB = window.FB;
 
@@ -45,49 +24,20 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
         });
 
         /* All the events registered */
-        FB.Event.subscribe('auth.login', function (response) {
-          // do something with response
-          login();
-        });
-        FB.Event.subscribe('auth.logout', function (response) {
-          // do something with response
-          logout();
-        });
+        FB.Event.subscribe('auth.login', login_action);
+        FB.Event.subscribe('auth.logout', logout_action);
 
         FB.getLoginStatus(function (response) {
-          if (response.session) {
-            // logged in and connected user, someone you know
-            login();
-          }
+          if (response.session)
+            login_action();
         });
       };
-
-      var e = document.createElement('script');
-      e.type = 'text/javascript';
-      e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-      e.async = true;
-      document.getElementById('fb-root').appendChild(e);
-
-      function login() {
-        (typeof login_action == 'undefined') ? console.log('login') : login_action();
-      }
-
-      function logout() {
-        (typeof logout_action == 'undefined') ? console.log('logout') : logout_action();
-
-      }
-
-
-      console.log("hello facebook");
     },
 
     connect : function (callback) {
       FB.login(function (response) {
         if (response.authResponse) {
-          console.log('Welcome!  Fetching your information.... ');
           FB.api('/me', function (profile) {
-            console.log('Good to see you, ' + profile.name + '.');
-            
             // Make profile behave like a Topic
             profile.uri = profile.link;
             profile.label = profile.name;
@@ -95,19 +45,18 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
             
             callback(0, profile);
           });
-
-        } else {
-          callback(1, null);
-          console.log('User cancelled login or did not fully authorize.');
         }
-      }, {
-        scope : 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday'
+        else {
+          callback('User cancelled login or did not fully authorize.');
+        }
+      },
+      {
+        scope: 'email,user_hometown,user_interests,user_likes,user_photos,user_birthday,user_about_me'
       });
     },
 
     disconnect : function (callback) {
       FB.logout(function (response) {
-        console.log("disconnecting");
         callback(0, response);
       });
     },
@@ -152,15 +101,24 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
     
-    findPlacesNearUser : function (facebook_id, callback) {
-      findPlacesNearUser(facebook_id, callback);
+    findPlacesNearMe : function (facebook_id, callback) {
+      FB.api('/me', function (response) {
+        var query = FB.Data.query('select name, hometown_location from user where uid={0}', response.id);
+        query.wait(function (rows) {
+          var place_id = rows[0].hometown_location.id;
+          FB.api('/me', function (response) {
+            var query = FB.Data.query('select latitude, longitude from place where page_id={0}', place_id);
+            query.wait(function (rows) {
+              var latitude = rows[0].latitude,
+                  longitude = rows[0].longitude;
+              FB.api('/search?center=' + latitude + ',' + longitude + '&type=place', function (response) {
+                callback(response);
+              });
+            });
+          });
+        });
+      });
     },
-    
-    findPlacesNearMe : function (type, callback) {
-    	//Any type value is supported, has no effect
-			findPlacesNearUser('{0}', callback);
-		}
-
   };
 
   return FacebookConnector;
