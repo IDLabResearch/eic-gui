@@ -1,25 +1,17 @@
-/*jshint browser: true*/
-
-define([ 'lib/jquery',
-    'eic/generators/BaseSlideGenerator',
-    'eic/TTSService', 'eic/FacebookConnector', 'lib/jvent'],
-function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
-
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/TTSService'],
+function ($, BaseSlideGenerator, TTSService) {
   "use strict";
-
-  var defaultDuration = 1000;
 
   /** Generator that creates outroductory slides */
   function OutroductionSlideGenerator(startTopic, endTopic, duration) {
     if (startTopic.type !== 'facebook')
       throw "The OutroductionSlideGenerator only works with start topics that are Facebook profiles.";
 
-    this.fbConnector = new FacebookConnector();
-    
     BaseSlideGenerator.call(this);
+    
     this.startTopic = startTopic;
     this.endTopic = endTopic;
-    this.duration = duration || defaultDuration;
+    this.duration = duration || 1000;
   }
 
   $.extend(OutroductionSlideGenerator.prototype,
@@ -44,33 +36,20 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
       next: function () {
         if (!this.hasNext())
           return;
-
-        var startTopic = this.startTopic,
-            endTopic = this.endTopic,
-            slide = this.createOutroSlide('outro', this.duration);
-
-        this.done = true;
-
-        return slide;
-      },
-      
-      createOutroSlide: function (cssClass, duration) {
-        var startTopic = this.startTopic,
-            endTopic = this.endTopic;
-
-        var $outro = $('<h1>').text("As you can see, "),
-            slide = this.createBaseSlide('outro', $outro, duration);
         
+        var self = this,
+            $outro = $('<h1>').text("As you can see, "),
+            slide = this.createBaseSlide('outro', $outro, this.duration);
         slide.once('started', function () {
           setTimeout(function () {
-            $outro.append($('<span>').text(startTopic.first_name + ", "));
+            $outro.append($('<span>').text(self.startTopic.first_name + ", "));
             setTimeout(function () {
               $outro.append($('<br>'));
               $outro.append("you are connected to everything in this world,");
               setTimeout(function () {
                 $outro.append($('<br>'));
                 $outro.append("including ");
-                $outro.append($('<em>').text(endTopic.label));
+                $outro.append($('<em>').text(self.endTopic.label));
                 $outro.append("!");
                 setTimeout(function () {
                   addShares($outro.parent());
@@ -79,8 +58,9 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
             }, 500);
           }, 1000);
         });
-        
         slide.audioURL = this.audioURL;
+        
+        this.done = true;
 
         return slide;
       },
@@ -101,13 +81,6 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
     });
 
   function addShares($container) {
-    $container.append($('<p>').append($('<br>'))
-                              .append($('<br>'))
-                              .append($('<br>'))
-                              .append($('<br>'))
-                              .append($('<br>'))
-                              .append($('<br>')));
-    
     var $buttons = $('<div>', { 'class': 'share' });
     $container.append($('<h2>').text('Share:'), $buttons);
     
@@ -130,7 +103,7 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                          .attr('url', "OUR URL");
     $buttons.append($('<div>', { 'class': 'twitter' }).append($tweet));
     // Render the button
-    addTweetButton();
+    $.getScript("https://platform.twitter.com/widgets.js");
 
     /** Add Google Plus button */
     // Make sure the metadata is right
@@ -146,14 +119,6 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
                            .attr('data-href', "OUR URL");
     $buttons.append($('<div>', { 'class': 'googleplus' }).append($gplus));
     // Render the button
-    addGPlusButton();
-  }
-
-  function addTweetButton() {
-    $.getScript("https://platform.twitter.com/widgets.js");
-  }
-
-  function addGPlusButton() {
     $.getScript("https://apis.google.com/js/plusone.js");
   }
 
