@@ -80,20 +80,20 @@ function ($, BaseSlideGenerator, TTSService, FacebookConnector, EventEmitter) {
             }, 500);
           }, 1000);
         });
+        
+        slide.audioURL = this.audioURL;
 
         return slide;
       },
       
       createSpeech: function () {
-        var startTopic = this.startTopic,
-            endTopic = this.endTopic,
-            tts = new TTSService(),
+        var tts = new TTSService(),
             self = this;
         
-        var text = "As you can see, " +
-                   startTopic.first_name + ", " +
+        var text = "So as you can see, " +
+                   this.startTopic.first_name + ", " +
                    "you are connected to everything in this world," +
-                   "including " + endTopic.label + "!";
+                   "including " + this.endTopic.label + "!";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
