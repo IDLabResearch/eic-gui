@@ -76,7 +76,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
             self = this;
         
         var text = "Once upon a time, " +
-                   startTopic.first_name + "wondered how " +
+                   startTopic.first_name + " wondered how " +
                    startTopic.relativePronoun + " was connected to everything in this world. ";
         
         tts.getSpeech(text, 'en_GB', function (response) {
