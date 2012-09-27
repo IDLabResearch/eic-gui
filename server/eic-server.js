@@ -1,14 +1,38 @@
 "use strict";
 var express = require('express'),
     less = require('less'),
-    fs = require('fs');
+    fs = require('fs'),
+    summ = require('./summarizer.js');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
+app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+//app.configure(function(){
+//    app.use(express.bodyParser());
+//    app.use(express.methodOverride());
+//    app.use(app.router);
+//});
+//app.use (function(req, res, next) {
+//    var data='';
+//    req.setEncoding('utf8');
+//    req.on('data', function(chunk) { 
+//       data += chunk;
+//    });
+//
+//    req.on('end', function() {
+//        req.body = data;
+//        next();
+//    });
+//});
 
 app.start = function (port, staticFolder) {
   port = port || 4000;
   this.staticFolder = staticFolder;
   
+  
+  //app.use(express.bodyParser());
+  //app.use(app.router); 
   this.listen(port);
   console.log('Everything Is Connected server running at http://localhost:' + port + '/');
 };
@@ -17,7 +41,9 @@ app.engine('.less', function (path, options, callback) {
   fs.readFile(path, 'utf8', function (error, contents) {
     if (error)
       return callback(error);
-    less.render(contents, { paths: [ app.staticFolder + '/stylesheets' ] }, callback);
+    less.render(contents, {
+      paths: [ app.staticFolder + '/stylesheets' ]
+    }, callback);
   });
 });
 
@@ -31,7 +57,13 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 });
 
 app.post('/stories', function (req, res) {
-  res.redirect(303, '/stories/1');
+  //res.redirect(303, '/stories/1');
+  summ.summarize(req, res);
+});
+
+app.get('/stories', function (req, res) {
+  //res.redirect(303, '/stories/1');
+  summ.summarize(req, res);
 });
 
 app.get(/^\/stories\/\d+$/, function (req, res) {
