@@ -25,15 +25,27 @@ summ.retrievePath = function (from, to) {
 
     //the whole response has been recieved, so we just print it out here
     response.on('end', function () {
-      var data = JSON.parse(str);
-      console.log(data.paths);
-
+      //var data = JSON.parse(str);
+      //TestData
+      var data = {
+        "execution_time":9100,
+        "paths":{
+          "vertices": [
+            'http:\/\/dbpedia.org\/resource\/David_Guetta',
+            'http:\/\/dbpedia.org\/resource\/Chris_Willis', 
+            'http:\/\/dbpedia.org\/resource\/United_States', 
+            'http:\/\/dbpedia.org\/resource\/Chicago_Theatre'
+          ],
+          "edges":[
+            'http:\/\/dbpedia.org\/ontology\/associatedMusicalArtist',
+            'http:\/\/dbpedia.org\/property\/birthPlace',
+            'http:\/\/dbpedia.org\/property\/place']
+        }
+      }
       
-      /*data.paths.forEach(function(path){
-        console.log(path);
-        
-        
-      });*/
+      data.paths.vertices.forEach(summ.retrieveAbstract);
+      data.paths.edges.forEach(summ.retrieveTranscription);
+      
     });
   }).on('error', function (e) {
     console.log("Got error: " + e.message);
@@ -41,17 +53,20 @@ summ.retrievePath = function (from, to) {
   console.log('Retrieving path from service: ' + url);
 }
 
-summ.retrieveAbstract = function (node) {
+summ.retrieveAbstract = function (vertice) {
+ 
   var client = new sparql.Client('http://dbpedia.org/sparql');
   
   client.query('select * where { ?s ?p ?o } limit 100', function(err){
     
-    }, function(res){
+  }, function(res){
     
-    });
+  });
+  console.log(vertice);
 }
 
-summ.retrieveTranscription = function () {
-  
-  }
+summ.retrieveTranscription = function (edge) {
+  var  property = edge.substr(edge.lastIndexOf('/'));
+  console.log(property);
+}
 
