@@ -6,33 +6,13 @@ var express = require('express'),
 
 var app = module.exports = express();
 app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
-//app.configure(function(){
-//    app.use(express.bodyParser());
-//    app.use(express.methodOverride());
-//    app.use(app.router);
-//});
-//app.use (function(req, res, next) {
-//    var data='';
-//    req.setEncoding('utf8');
-//    req.on('data', function(chunk) { 
-//       data += chunk;
-//    });
-//
-//    req.on('end', function() {
-//        req.body = data;
-//        next();
-//    });
-//});
+app.use(express.methodOverride());
+app.use(app.router);
 
 app.start = function (port, staticFolder) {
   port = port || 4000;
   this.staticFolder = staticFolder;
-  
-  
-  //app.use(express.bodyParser());
-  //app.use(app.router); 
+
   this.listen(port);
   console.log('Everything Is Connected server running at http://localhost:' + port + '/');
 };
@@ -58,7 +38,9 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 
 app.post('/stories', function (req, res) {
   //res.redirect(303, '/stories/1');
-  summ.summarize(req, res);
+  summ.summarize(req, res).on('end', function(){
+    
+  });
 });
 
 app.get('/stories', function (req, res) {
