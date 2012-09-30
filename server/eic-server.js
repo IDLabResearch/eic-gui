@@ -38,9 +38,7 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 
 app.post('/stories', function (req, res) {
   //res.redirect(303, '/stories/1');
-  summ.summarize(req, res).on('end', function(){
-    
-  });
+  summ.summarize(req, res);
 });
 
 app.get('/stories', function (req, res) {

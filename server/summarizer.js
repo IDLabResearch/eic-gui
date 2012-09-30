@@ -1,21 +1,17 @@
 "use strict";
 var http = require('http'),
-sparql = require('sparql');
+sparql = require('sparql'),
+events = require("events");
 
 var summ = module.exports;
 
 var result = [];
 
 summ.summarize = function (req, res) {
+  console.log('Summarization has started!');
   var from = req.param('from'),
   to = req.param('to');
   
-  summ.retrievePath(from, to);
-  
-  console.log('Summarization has started!');
-};
-
-summ.retrievePath = function (from, to) {
   var url = "http://pathfinding.restdesc.org/findPath?s1=" + from + "&s2=" + to;
   http.get(url, function (response) {
     var str = '';
@@ -62,12 +58,15 @@ summ.retrievePath = function (from, to) {
               console.log(desc.value);
         
               //Unique ID will be required!! Supply with path
-              result[vertice] = {
+              var id = data.paths.vertices.indexOf(vertice) * 2;
+              result[id] = {
                 label: label,
                 desc: desc
               };
-              if (result.length >= (data.paths.vertices.length + data.paths.edges.length)) {
-                summ.emit('end');
+              
+              if (Object.keys(result).length >= (data.paths.vertices.length + data.paths.edges.length)) {
+                res.send(JSON.stringify(result));
+                summ.sendResponse(res, result);
               }
             }
           });
@@ -88,10 +87,13 @@ summ.retrievePath = function (from, to) {
         } 
     
         var sentence = '\'s ' + parts.join(' ') + ' is ';
-  
-        result[edge] = sentence.toLowerCase();
-        if (result.length >= (data.paths.vertices.length + data.paths.edges.length)) {
-          summ.emit('end');
+        var id = ( data.paths.edges.indexOf(edge) * 2 ) + 1;
+        result[id] = sentence.toLowerCase();
+        console.log(result.length);
+        
+        if (Object.keys(result).length >= (data.paths.vertices.length + data.paths.edges.length)) {
+          res.send(JSON.stringify(result));
+          //summ.sendResponse(res, result);
         }
   
         console.log('Property: ' + property);
@@ -105,8 +107,15 @@ summ.retrievePath = function (from, to) {
   }).on('error', function (e) {
     console.log("Got error: " + e.message);
   });
+  
   console.log('Retrieving path from service: ' + url);
 };
 
+
+summ.sendResponse = function (res, result) {
+  console.log('Result: '+result);
+  res.redirect(303, '/stories/1');
+  //res.send(JSON.stringify(result));
+}
 
 
