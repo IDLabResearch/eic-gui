@@ -7,9 +7,9 @@ function ($, EventEmitter) {
   }
 
 	PathFinder.prototype = {
-    findSubject : function(object_value, type, callback) {
+    findSubject : function (object_value, type, callback) {
 			$.ajax({
-				  //TODO: Change to pathfinding.restdesc.org
+					//TODO: Change to pathfinding.restdesc.org
           url: "http://localhost:1112/findSubject?",
           dataType: "jsonp",
           data: {

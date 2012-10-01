@@ -30,7 +30,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
             self.createSpeech();
             self.createIntroSlideGenerators();
             //TODO: Move this to a better place in the code
-            new PathFinder().findSubject('"'+self.startTopic.music+'"', 'artist', function (response) {	
+            new PathFinder().findSubject('"' + self.startTopic.music + '"', 'artist', function (response) {
 							console.log(response.uri);
 						});
           });
