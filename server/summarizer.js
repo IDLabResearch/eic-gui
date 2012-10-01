@@ -1,14 +1,29 @@
 "use strict";
 var http = require('http'),
 sparql = require('sparql'),
-events = require("events");
+events = require("events"),
+sys = require('sys');
 
-var summ = module.exports;
+var result = {
+  topics : [], 
+  links : []
+};
 
-var result = [];
+function Summarizer() {
+  if(false === (this instanceof Summarizer)) {
+    return new Summarizer();
+  }
+    
+  events.EventEmitter.call(this);
+  this.result = [];
+}
+sys.inherits(Summarizer, events.EventEmitter);
 
-summ.summarize = function (req, res) {
+Summarizer.prototype.summarize = function (req, res) {
   console.log('Summarization has started!');
+  
+  var self = this;
+  
   var from = req.param('from'),
   to = req.param('to');
   
@@ -23,24 +38,24 @@ summ.summarize = function (req, res) {
 
     //the whole response has been recieved, so we just print it out here
     response.on('end', function () {
-      //summ.data = JSON.parse(str);
+      var data = JSON.parse(str);
       //TestData
-      var data = {
-        "execution_time": 9100,
-        "paths": {
-          "vertices": [
-          'http:\/\/dbpedia.org\/resource\/David_Guetta',
-          'http:\/\/dbpedia.org\/resource\/Chris_Willis',
-          'http:\/\/dbpedia.org\/resource\/United_States',
-          'http:\/\/dbpedia.org\/resource\/Chicago_Theatre'
-          ],
-          "edges": [
-          'http:\/\/dbpedia.org\/ontology\/associatedMusicalArtist',
-          'http:\/\/dbpedia.org\/property\/birthPlace',
-          'http:\/\/dbpedia.org\/property\/place'
-          ]
-        }
-      }
+//      var data = {
+//        "execution_time": 9100,
+//        "paths": {
+//          "vertices": [
+//          'http:\/\/dbpedia.org\/resource\/David_Guetta',
+//          'http:\/\/dbpedia.org\/resource\/Chris_Willis',
+//          'http:\/\/dbpedia.org\/resource\/United_States',
+//          'http:\/\/dbpedia.org\/resource\/Chicago_Theatre'
+//          ],
+//          "edges": [
+//          'http:\/\/dbpedia.org\/ontology\/associatedMusicalArtist',
+//          'http:\/\/dbpedia.org\/property\/birthPlace',
+//          'http:\/\/dbpedia.org\/property\/place'
+//          ]
+//        }
+//      }
       function retrieveAbstract(vertice) {
  
         var client = new sparql.Client('http://dbpedia.org/sparql');
@@ -54,19 +69,21 @@ summ.summarize = function (req, res) {
             else {
               var label = res.results.bindings[0].label;
               var desc = res.results.bindings[0].desc;
-              console.log(label.value);
-              console.log(desc.value);
         
               //Unique ID will be required!! Supply with path
-              var id = data.paths.vertices.indexOf(vertice) * 2;
-              result[id] = {
-                label: label,
-                desc: desc
+              //var id = data.paths.vertices.indexOf(vertice) * 2;
+              var id = data.paths.vertices.indexOf(vertice)
+               
+              result.topics[id] = {
+                topic : {
+                  type: 'person',
+                  label: label.value
+                },
+                text : desc.value
               };
               
-              if (Object.keys(result).length >= (data.paths.vertices.length + data.paths.edges.length)) {
-                res.send(JSON.stringify(result));
-                summ.sendResponse(res, result);
+              if ((result.topics.length  == data.paths.vertices.length) && (result.links.length == data.paths.edges.length)) {
+                self.emit('generated',result);
               }
             }
           });
@@ -87,23 +104,23 @@ summ.summarize = function (req, res) {
         } 
     
         var sentence = '\'s ' + parts.join(' ') + ' is ';
-        var id = ( data.paths.edges.indexOf(edge) * 2 ) + 1;
-        result[id] = sentence.toLowerCase();
-        console.log(result.length);
+        var id =  data.paths.edges.indexOf(edge);
+        result.links[id] = sentence.toLowerCase();
         
-        if (Object.keys(result).length >= (data.paths.vertices.length + data.paths.edges.length)) {
-          res.send(JSON.stringify(result));
-          //summ.sendResponse(res, result);
+        
+        if ((result.topics.length  == data.paths.vertices.length) && (result.links.length == data.paths.edges.length)) {
+          self.emit('generated',result);
         }
   
         console.log('Property: ' + property);
-        console.log('Generated sentence: ' + result[edge]);
+        console.log('Generated sentence: ' + result.links[id]);
       };
       
       data.paths.vertices.forEach(retrieveAbstract);
       data.paths.edges.forEach(retrieveTranscription);
-     
+
     });
+    return this;
   }).on('error', function (e) {
     console.log("Got error: " + e.message);
   });
@@ -111,11 +128,4 @@ summ.summarize = function (req, res) {
   console.log('Retrieving path from service: ' + url);
 };
 
-
-summ.sendResponse = function (res, result) {
-  console.log('Result: '+result);
-  res.redirect(303, '/stories/1');
-  //res.send(JSON.stringify(result));
-}
-
-
+module.exports.Summarizer = Summarizer;

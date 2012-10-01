@@ -1,8 +1,8 @@
 "use strict";
 var express = require('express'),
-    less = require('less'),
-    fs = require('fs'),
-    summ = require('./summarizer.js');
+less = require('less'),
+fs = require('fs'),
+summ = require('./summarizer.js');
 
 var app = module.exports = express();
 app.use(express.bodyParser());
@@ -38,14 +38,34 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 
 app.post('/stories', function (req, res) {
   //res.redirect(303, '/stories/1');
-  summ.summarize(req, res);
+  var summarizer = new summ.Summarizer();
+
+  summarizer.on('generated',function(result){
+    for (var i = 1; i < result.topics.length; i++){
+      result.topics[i].text = result.topics[i - 1].label + result.links[i - 1] + result.topics[i].label + '.' + result.topics[i].text;
+    }
+
+    res.json({steps: result.topics});
+  });
+  summarizer.summarize(req, res);
 });
 
 app.get('/stories', function (req, res) {
   //res.redirect(303, '/stories/1');
-  summ.summarize(req, res);
+  var summarizer = new summ.Summarizer();
+
+  summarizer.on('generated',function(result){
+    for (var i = 1; i < result.topics.length; i++){
+      result.topics[i].text = result.topics[i - 1].topic.label + result.links[i - 1] + result.topics[i].topic.label + '. ' + result.topics[i].text;
+    }
+
+    res.json({steps: result.topics});
+  });
+  summarizer.summarize(req, res);
 });
 
 app.get(/^\/stories\/\d+$/, function (req, res) {
   res.sendfile(__dirname + req.url + '.json');
 });
+
+
