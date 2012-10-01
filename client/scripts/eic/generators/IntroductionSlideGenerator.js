@@ -4,9 +4,9 @@ define([ 'lib/jquery',
     'eic/generators/FBProfilePhotosGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/GoogleMapsSlideGenerator',
-    'eic/FacebookConnector', 'eic/TTSService'],
+    'eic/FacebookConnector', 'eic/TTSService', 'eic/PathFinder'],
 function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
-          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService) {
+          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService, PathFinder) {
 
   "use strict";
 
@@ -29,6 +29,10 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
           this.fetchTopicInformation(function () {
             self.createSpeech();
             self.createIntroSlideGenerators();
+            //TODO: Move this to a better place in the code
+            new PathFinder().findSubject('"'+self.startTopic.music+'"', 'artist', function (response) {	
+							console.log(response.uri);
+						});
           });
           this.inited = true;
         }
@@ -53,8 +57,11 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         
         new FacebookConnector().get('music', function (response) {
           profile.music = response.data[0].name;
+          console.log(profile.music);
           callback.call(self);
         });
+        
+				
       },
       
       createIntroSlideGenerators: function () {
