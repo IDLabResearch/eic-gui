@@ -37,11 +37,10 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 });
 
 app.post('/stories', function (req, res) {
-  //res.redirect(303, '/stories/1');
   var summarizer = new summ.Summarizer();
 
-  summarizer.on('generated',function(result){
-    for (var i = 1; i < result.topics.length; i++){
+  summarizer.on('generated', function (result) {
+    for (var i = 1; i < result.topics.length; i++) {
       result.topics[i].text = result.topics[i - 1].label + result.links[i - 1] + result.topics[i].label + '.' + result.topics[i].text;
     }
 
@@ -51,11 +50,10 @@ app.post('/stories', function (req, res) {
 });
 
 app.get('/stories', function (req, res) {
-  //res.redirect(303, '/stories/1');
   var summarizer = new summ.Summarizer();
 
-  summarizer.on('generated',function(result){
-    for (var i = 1; i < result.topics.length; i++){
+  summarizer.on('generated', function (result) {
+    for (var i = 1; i < result.topics.length; i++) {
       result.topics[i].text = result.topics[i - 1].topic.label + result.links[i - 1] + result.topics[i].topic.label + '. ' + result.topics[i].text;
     }
 

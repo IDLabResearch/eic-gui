@@ -5,12 +5,12 @@ events = require("events"),
 sys = require('sys');
 
 var result = {
-  topics : [], 
+  topics : [],
   links : []
 };
 
 function Summarizer() {
-  if(false === (this instanceof Summarizer)) {
+  if (false === (this instanceof Summarizer)) {
     return new Summarizer();
   }
     
@@ -61,9 +61,9 @@ Summarizer.prototype.summarize = function (req, res) {
         var client = new sparql.Client('http://dbpedia.org/sparql');
   
         var query = 'select ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
-        console.log('Executing SPARQL Query for ' + vertice)
-        client.query(query, 
-          function (err,res) {
+        console.log('Executing SPARQL Query for ' + vertice);
+        client.query(query,
+          function (err, res) {
             if (err)
               console.log('SPARQL error: ' + err);
             else {
@@ -71,8 +71,7 @@ Summarizer.prototype.summarize = function (req, res) {
               var desc = res.results.bindings[0].desc;
         
               //Unique ID will be required!! Supply with path
-              //var id = data.paths.vertices.indexOf(vertice) * 2;
-              var id = data.paths.vertices.indexOf(vertice)
+              var id = data.paths.vertices.indexOf(vertice);
                
               result.topics[id] = {
                 topic : {
@@ -83,7 +82,7 @@ Summarizer.prototype.summarize = function (req, res) {
               };
               
               if ((result.topics.length  == data.paths.vertices.length) && (result.links.length == data.paths.edges.length)) {
-                self.emit('generated',result);
+                self.emit('generated', result);
               }
             }
           });
@@ -91,17 +90,17 @@ Summarizer.prototype.summarize = function (req, res) {
     
         console.log('Node: ' + vertice);
         console.log('Extracted text: ' + result[vertice]);
-      };
+      }
 
       function retrieveTranscription(edge) {
         var  property = edge.substr(edge.lastIndexOf('/') + 1);
   
         //Split the string with caps
-        var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1);
+        var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
 
         if (parts[0].indexOf('has') > -1 || parts[0].indexOf('is') > -1) {
           parts.shift();
-        } 
+        }
     
         var sentence = '\'s ' + parts.join(' ') + ' is ';
         var id =  data.paths.edges.indexOf(edge);
@@ -109,12 +108,12 @@ Summarizer.prototype.summarize = function (req, res) {
         
         
         if ((result.topics.length  == data.paths.vertices.length) && (result.links.length == data.paths.edges.length)) {
-          self.emit('generated',result);
+          self.emit('generated', result);
         }
   
         console.log('Property: ' + property);
         console.log('Generated sentence: ' + result.links[id]);
-      };
+      }
       
       data.paths.vertices.forEach(retrieveAbstract);
       data.paths.edges.forEach(retrieveTranscription);
