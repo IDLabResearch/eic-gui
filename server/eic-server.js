@@ -6,8 +6,8 @@ var express = require('express'),
 
 var app = module.exports = express();
 app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
+app.use(express.methodOverride());
+app.use(app.router);
 //app.configure(function(){
 //    app.use(express.bodyParser());
 //    app.use(express.methodOverride());
@@ -16,7 +16,7 @@ app.use(express.bodyParser());
 //app.use (function(req, res, next) {
 //    var data='';
 //    req.setEncoding('utf8');
-//    req.on('data', function(chunk) { 
+//    req.on('data', function(chunk) {
 //       data += chunk;
 //    });
 //
@@ -32,7 +32,7 @@ app.start = function (port, staticFolder) {
   
   
   //app.use(express.bodyParser());
-  //app.use(app.router); 
+  //app.use(app.router);
   this.listen(port);
   console.log('Everything Is Connected server running at http://localhost:' + port + '/');
 };
