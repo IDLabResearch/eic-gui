@@ -1,7 +1,7 @@
-define(['lib/jquery', 'eic/AutocompleteTopic',
+define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/AutocompleteTopicDbPedia',
         'eic/FacebookConnector',
         'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
-function ($, autocompleteTopic,
+function ($, autocompleteTopic, autocompleteTopicDbPedia,
           FacebookConnector,
           TopicToTopicSlideGenerator, SlidePresenter) {
   "use strict";
@@ -83,8 +83,10 @@ function ($, autocompleteTopic,
 
       // Make sure the topic is empty (browsers can cache text).
       $('#topic').val('');
-      autocompleteTopic('#topic');
-
+      
+      autocompleteTopicDbPedia('#topic');
+			//autocompleteTopic('#topic');
+			
       // Don't let empty links trigger a location change.
       $('a[href=#]').prop('href', 'javascript:;');
     },
