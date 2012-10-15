@@ -8,8 +8,7 @@ function ($) {
       autoFocus: true,
       source: function (request, response) {
 				$.ajax({
-					//TODO: Change to pathfinding.restdesc.org
-          url: "http://localhost:1112/findPrefix",
+          url: "http://pathfinding.restdesc.org/findPrefix",
           dataType: "jsonp",
           data: {
             q: request.term
