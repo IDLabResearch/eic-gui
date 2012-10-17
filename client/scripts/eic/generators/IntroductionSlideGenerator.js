@@ -54,12 +54,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         profile.relativePronoun = this.startTopic.gender === 'male' ? 'he' : 'she';
         profile.fullHometown = profile.hometown.name;
         profile.shortHometown = profile.fullHometown.replace(/,.+$/, '');
-        
-        new FacebookConnector().get('music', function (response) {
-          profile.music = response.data[0].name;
-          console.log(profile.music);
-          callback.call(self);
-        });
+        callback.call(self);
         
 				
       },

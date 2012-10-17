@@ -10,7 +10,7 @@ function ($, EventEmitter) {
     findSubject : function (object_value, type, callback) {
 			$.ajax({
           url: "http://pathfinding.restdesc.org/findSubject",
-          dataType: "jsonp",
+          dataType: "json",
           data: {
             object_value: object_value,
             type: type
