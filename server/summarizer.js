@@ -62,74 +62,7 @@ Summarizer.prototype.summarize = function (req, res) {
         //          ]
         //        }
         //      }
-        function retrieveAbstract(vertice) {
-          //var client = new sparql.Client('http://sparql.sindice.com/sparql');
-          var client = new sparql.Client('http://dbpedia.org/sparql');
-          var query = 'select ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
         
-          console.log('Executing SPARQL Query for ' + vertice);
-          client.query(query,
-            function (err, res) {
-              if (err)
-                console.log('SPARQL error: ' + err);
-              else {
-                console.log('SPARQL result: ' + res);
-                var label = res.results.bindings[0].label;
-                var desc = res.results.bindings[0].desc;
-        
-                //Unique ID will be required!! Supply with path
-                var id = paths.vertices.indexOf(vertice);
-               
-                result.topics[id] = {
-                  topic : {
-                    type: 'person',
-                    label: label.value
-                  },
-                  text : desc.value
-                };
-              
-                if ((result.topics.length  == paths.vertices.length) && (result.links.length == paths.edges.length)) {
-                  self.emit('generated', result);
-                }
-              }
-              console.log('Resource: ' + vertice);
-              console.log('Extracted text: ' + result[vertice]);
-            });
-        }
-
-        function retrieveTranscription(edge) {
-          var  property = edge.substr(edge.lastIndexOf('/') + 1);
-          console.log('Extracting sentence for ' + edge);
-          //Split the string with caps
-          var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
-
-          if (parts[0].indexOf('has') > -1 || parts[0].indexOf('is') > -1) {
-            parts.shift();
-          }
-    
-          var sentence = [
-          {
-            type: 'direct',
-            value:'\'s ' + parts.join(' ').toLowerCase() + ' is '
-          },
-
-          {
-            type: 'indirect',
-            value:'\'s the ' + parts.join(' ').toLowerCase() + ' of '
-          }
-          ];
-          var id =  paths.edges.indexOf(edge);
-
-          result.links[id] = sentence;
-        
-        
-          if ((result.topics.length  == paths.vertices.length) && (result.links.length == paths.edges.length)) {
-            self.emit('generated', result);
-          }
-  
-          console.log('Property: ' + property);
-          console.log('Generated sentence: ' + result.links[id]);
-        }
  
         paths.vertices.forEach(retrieveAbstract);
         paths.edges.forEach(retrieveTranscription);
@@ -142,5 +75,74 @@ Summarizer.prototype.summarize = function (req, res) {
   
   console.log('Retrieving path from service: ' + url);
 };
+
+function retrieveAbstract(vertice) {
+  //var client = new sparql.Client('http://sparql.sindice.com/sparql');
+  var client = new sparql.Client('http://dbpedia.org/sparql');
+  var query = 'select ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
+        
+  console.log('Executing SPARQL Query for ' + vertice);
+  client.query(query,
+    function (err, res) {
+      if (err)
+        console.log('SPARQL error: ' + err);
+      else {
+        console.log('SPARQL result: ' + res);
+        var label = res.results.bindings[0].label;
+        var desc = res.results.bindings[0].desc;
+        
+        //Unique ID will be required!! Supply with path
+        var id = paths.vertices.indexOf(vertice);
+               
+        result.topics[id] = {
+          topic : {
+            type: 'person',
+            label: label.value
+          },
+          text : desc.value
+        };
+              
+        if ((result.topics.length  == paths.vertices.length) && (result.links.length == paths.edges.length)) {
+          self.emit('generated', result);
+        }
+      }
+      console.log('Resource: ' + vertice);
+      console.log('Extracted text: ' + result[vertice]);
+    });
+}
+
+function retrieveTranscription(edge) {
+  var  property = edge.substr(edge.lastIndexOf('/') + 1);
+  console.log('Extracting sentence for ' + edge);
+  //Split the string with caps
+  var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+
+  if (parts[0].indexOf('has') > -1 || parts[0].indexOf('is') > -1) {
+    parts.shift();
+  }
+    
+  var sentence = [
+  {
+    type: 'direct',
+    value:'\'s ' + parts.join(' ').toLowerCase() + ' is '
+  },
+
+  {
+    type: 'indirect',
+    value:'\'s the ' + parts.join(' ').toLowerCase() + ' of '
+  }
+  ];
+  var id =  paths.edges.indexOf(edge);
+
+  result.links[id] = sentence;
+        
+        
+  if ((result.topics.length  == paths.vertices.length) && (result.links.length == paths.edges.length)) {
+    self.emit('generated', result);
+  }
+  
+  console.log('Property: ' + property);
+  console.log('Generated sentence: ' + result.links[id]);
+}
 
 module.exports.Summarizer = Summarizer;
