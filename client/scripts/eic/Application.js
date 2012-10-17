@@ -1,14 +1,15 @@
 define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/AutocompleteTopicDbPedia',
         'eic/FacebookConnector',
-        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter'],
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter', 'eic/TopicSelector'],
 function ($, autocompleteTopic, autocompleteTopicDbPedia,
           FacebookConnector,
-          TopicToTopicSlideGenerator, SlidePresenter) {
+          TopicToTopicSlideGenerator, SlidePresenter, TopicSelector) {
   "use strict";
   
   // The main "Everything Is Connected" application.
   function Application() {
     this.facebookConnector = new FacebookConnector();
+    this.topicSelector = new TopicSelector();
     this.generator = new TopicToTopicSlideGenerator();
   }
   
@@ -26,15 +27,19 @@ function ($, autocompleteTopic, autocompleteTopicDbPedia,
       $('#facebook').text('Connecting…');
       
       this.facebookConnector.connect(function (error, profile) {
-        self.generator.setStartTopic(profile);
-        
-        // Update connection status.
-        $('#facebook').text('Connected as ' + profile.name + '.');
+        self.topicSelector.selectTopicFromProfile(profile, function (selectedTopic, selectedUri) {
+          profile.selectedTopic = selectedTopic;
+          profile.selectedUri = selectedUri;
+          self.generator.setStartTopic(profile);
+          
+          // Update connection status.
+          $('#facebook').text('Connected as ' + profile.name + '.');
 
-        // Enable second step.
-        $('.step.two').removeClass('inactive');
-        $('#topic').prop('disabled', false)
-                   .focus();
+          // Enable second step.
+          $('.step.two').removeClass('inactive');
+          $('#topic').prop('disabled', false)
+                     .focus();
+        });
       });
     },
     
