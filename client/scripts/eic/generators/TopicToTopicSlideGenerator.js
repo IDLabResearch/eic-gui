@@ -40,7 +40,7 @@ define(['lib/jquery',
               }).success(function (path) {
                 console.log('Path received!');
                 var summ = new Summarizer();
-                $(summ).one('generated', function(event, story){
+                $(summ).one('generated', function (event, story) {
                   console.log(story);
                   story.steps.forEach(function (step) {
                     self.addGenerator(new TopicSlideGenerator(step.topic, step.text));

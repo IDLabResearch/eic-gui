@@ -1,4 +1,4 @@
-define(['lib/jquery'],function ($){
+define(['lib/jquery'], function ($) {
   "use strict";
 
   function Summarizer() {
@@ -23,13 +23,13 @@ define(['lib/jquery'],function ($){
         for (var i = 1; i < result.topics.length; i++) {
           var glue = '';
           var sentence = result.links[i - 1][Math.round(Math.random())];
-          switch (sentence.type){
-            case 'direct':
-              glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ' ;
-              break;
-            case 'indirect':
-              glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ' ;
-              break;
+          switch (sentence.type) {
+          case 'direct':
+            glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
+            break;
+          case 'indirect':
+            glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
+            break;
           }
           console.log(result.topics[0]);
           console.log(result.links);
@@ -49,7 +49,7 @@ define(['lib/jquery'],function ($){
         console.log('Executing SPARQL Query for ' + vertice);
 
         $.ajax({
-          url:endpoint,
+          url: endpoint,
           dataType: 'jsonp',
           data: {
             query: query,
@@ -79,7 +79,7 @@ define(['lib/jquery'],function ($){
             console.log('Resource: ' + vertice);
             console.log('Extracted text: ' + desc);
           },
-          error: function(err){
+          error: function (err) {
             console.log('SPARQL error: ' + err);
           }
         });
@@ -96,15 +96,14 @@ define(['lib/jquery'],function ($){
         }
     
         var sentence = [
-        {
-          type: 'direct',
-          value:'\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
-        },
-
-        {
-          type: 'indirect',
-          value:'\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
-        }
+          {
+            type: 'direct',
+            value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+          },
+          {
+            type: 'indirect',
+            value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+          }
         ];
         var id =  paths.edges.indexOf(edge);
 
@@ -122,7 +121,7 @@ define(['lib/jquery'],function ($){
       $(paths.vertices).each(retrieveAbstract);
       $(paths.edges).each(retrieveTranscription);
     }
-  }
+  };
   return Summarizer;
 });
 
