@@ -10,6 +10,7 @@ function ($, EventEmitter) {
     findSubject : function (object_value, type, callback) {
 			$.ajax({
           url: "http://pathfinding.restdesc.org/findSubject",
+          //url: "http://157.193.213.21:11112/findSubject",
           dataType: "json",
           data: {
             object_value: object_value,
@@ -17,6 +18,9 @@ function ($, EventEmitter) {
           },
           success: function (data) {
             callback(data);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            callback({error: textStatus});
           }
         });
     }

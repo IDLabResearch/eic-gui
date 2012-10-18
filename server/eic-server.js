@@ -37,47 +37,11 @@ app.get(/^\/(?:[\-\w]+\/)*(?:(?:[\-\w]+\.)+[\-\w]+)?$/, function (req, res) {
 });
 
 app.post('/stories', function (req, res) {
-//  var summarizer = new summ.Summarizer();
-//
-//  summarizer.on('generated', function (result) {
-//    for (var i = 1; i < result.topics.length; i++) {
-//      result.topics[i].text = result.topics[i - 1].label + result.links[i - 1] + result.topics[i].label + '.' + result.topics[i].text;
-//    }
-//
-//    res.json({
-//      steps: result.topics
-//      });
-//  });
-//  summarizer.summarize(req, res);
-res.redirect(303, '/stories/1');
+  res.redirect(303, '/stories/1');
 });
 
 app.get('/stories', function (req, res) {
-//  var summarizer = new summ.Summarizer();
-//
-//  summarizer.on('generated', function (result) {
-//    for (var i = 1; i < result.topics.length; i++) {
-//      var glue = '';
-//      switch (result.links[i - 1].type){
-//        case 'direct':
-//          glue = result.topics[i - 1].topic.label + result.links[i - 1] + result.topics[i].topic.label + '. ' ;
-//          break;
-//        case 'indirect':
-//          glue = result.topics[i].topic.label + result.links[i - 1] + result.topics[i - 1].topic.label + '. ' ;
-//          break;
-//      }
-//      console.log(result.topics[0]);
-//      console.log(result.links);
-//      result.topics[i].text = glue + result.topics[i].text;
-//    }
-//
-//    res.json({
-//      steps: result.topics
-//      });
-//  });
-//  summarizer.summarize(req, res);
-res.redirect(303, '/stories/1');
-
+  res.redirect(303, '/stories/1');
 });
 
 app.get(/^\/stories\/\d+$/, function (req, res) {

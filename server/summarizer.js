@@ -45,25 +45,7 @@ Summarizer.prototype.summarize = function (req, res) {
               
         var data = JSON.parse(str);
         var paths = data.paths[0];
-        //TestData
-        //      var data = {
-        //        "execution_time": 9100,
-        //        "paths": {
-        //          "vertices": [
-        //          'http:\/\/dbpedia.org\/resource\/David_Guetta',
-        //          'http:\/\/dbpedia.org\/resource\/Chris_Willis',
-        //          'http:\/\/dbpedia.org\/resource\/United_States',
-        //          'http:\/\/dbpedia.org\/resource\/Chicago_Theatre'
-        //          ],
-        //          "edges": [
-        //          'http:\/\/dbpedia.org\/ontology\/associatedMusicalArtist',
-        //          'http:\/\/dbpedia.org\/property\/birthPlace',
-        //          'http:\/\/dbpedia.org\/property\/place'
-        //          ]
-        //        }
-        //      }
-        
- 
+         
         paths.vertices.forEach(retrieveAbstract);
         paths.edges.forEach(retrieveTranscription);
       }
