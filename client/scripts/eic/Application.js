@@ -14,31 +14,24 @@ function ($, autocompleteTopic, FacebookConnector,
   Application.prototype = {
     // Initializes the application.
     init: function () {
-      this.facebookConnector.init();
+      var self = this;
       this.initControls();
+      this.facebookConnector.init();
+
+      // Select the topic when the user connects to Facebook
+      this.facebookConnector.once('connected', function (event, profile) {
+        self.topicSelector.selectTopicFromProfile(profile, function (topic, uri) {
+          profile.selectedTopic = topic;
+          profile.selectedUri = uri;
+          self.generator.setStartTopic(profile);
+        });
+      });
     },
 
     // Lets the user connect with a Facebook account.
     connectToFacebook: function () {
-      var self = this;
-
       $('#facebook').text('Connecting…');
-
-      this.facebookConnector.connect(function (error, profile) {
-        self.topicSelector.selectTopicFromProfile(profile, function (selectedTopic, selectedUri) {
-          profile.selectedTopic = selectedTopic;
-          profile.selectedUri = selectedUri;
-          self.generator.setStartTopic(profile);
-
-          // Update connection status.
-          $('#facebook').text('Connected as ' + profile.name + '.');
-
-          // Enable second step.
-          $('.step.two').removeClass('inactive');
-          $('#topic').prop('disabled', false)
-                     .focus();
-        });
-      });
+      this.facebookConnector.connect();
     },
 
     // Updates the goal topic.
@@ -89,6 +82,17 @@ function ($, autocompleteTopic, FacebookConnector,
 
       // Don't let empty links trigger a location change.
       $('a[href=#]').prop('href', 'javascript:;');
+
+      // Update the controls when the user connects to Facebook
+      this.facebookConnector.once('connected', function (event, profile) {
+        // Update connection status.
+        $('#facebook').text('Connected as ' + profile.name + '.');
+
+        // Enable second step.
+        $('.step.two').removeClass('inactive');
+        $('#topic').prop('disabled', false)
+                   .focus();
+      });
     },
   };
 

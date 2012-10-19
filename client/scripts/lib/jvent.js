@@ -184,7 +184,7 @@
 			}
 
 			if (collection[event.type] instanceof Array) {
-				var listeners = collection[event.type],
+				var listeners = collection[event.type].slice(),
 					i = 0,
 					len = listeners.length;
 

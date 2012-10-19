@@ -4,9 +4,9 @@ define([ 'lib/jquery',
     'eic/generators/FBProfilePhotosGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/GoogleMapsSlideGenerator',
-    'eic/FacebookConnector', 'eic/TTSService', 'eic/PathFinder'],
+    'eic/TTSService', 'eic/PathFinder'],
 function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
-          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, FacebookConnector, TTSService, PathFinder) {
+          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService, PathFinder) {
 
   "use strict";
 

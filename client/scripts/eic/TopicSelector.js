@@ -2,14 +2,16 @@ define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], f
 	"use strict";
   function TopicSelector() {
     EventEmitter.call(this);
+    this.facebookConnector = new FacebookConnector();
   }
   TopicSelector.prototype = {
-    init : function () {
+    init: function () {
+      this.facebookConnector.init();
     },
 
-    selectTopicFromProfile : function (profile, callback) {
+    selectTopicFromProfile: function (profile, callback) {
       var self = this;
-      new FacebookConnector().get('music', function (response) {
+      this.facebookConnector.get('music', function (response) {
           var responses = response.data;
           var count = 0;
           var topics = [];
@@ -43,7 +45,7 @@ define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], f
         });
     },
 
-    getURI : function (topic, callback) {
+    getURI: function (topic, callback) {
       new PathFinder().findSubject('"' + topic + '"', 'artist', function (response) {
 							callback(response.uri, response.wikiPageWikiLinks, response.error);
 						});

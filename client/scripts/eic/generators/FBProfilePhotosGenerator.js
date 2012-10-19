@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
   "use strict";
 
   var defaultDuration = 3000;
-  
+
   var mosaicShow = false;
   var mosaicMaxNumTilesWide = 7;
   var mosaicSlideDuration = 2500;
@@ -12,7 +12,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
    */
   function FBProfilePhotosGenerator(maxResults) {
     BaseSlideGenerator.call(this);
-    this.fbConnector = new FacebookConnector();
+    this.facebookConnector = new FacebookConnector();
     this.maxResults = maxResults || 7;
     this.slides = [];
   }
@@ -30,17 +30,18 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
         return;
 
       var self = this;
-      
-      $(self).queue(profilePictures(self, self.fbConnector));
+      this.facebookConnector.init();
+
+      $(self).queue(profilePictures(self, self.facebookConnector));
 
       if (mosaicShow) {
-        $(self).queue(composeFBMosaic(self, 'neighboorhoud', this.fbConnector.findPlacesNearMe));
-        $(self).queue(composeFBMosaic(self, 'likes', this.fbConnector.get));
-        $(self).queue(composeFBMosaic(self, 'music', this.fbConnector.get));
-        $(self).queue(composeFBMosaic(self, 'movies', this.fbConnector.get));
-        $(self).queue(composeFBMosaic(self, 'friends', this.fbConnector.get));
+        $(self).queue(composeFBMosaic(self, 'neighboorhoud', this.facebookConnector.findPlacesNearMe));
+        $(self).queue(composeFBMosaic(self, 'likes', this.facebookConnector.get));
+        $(self).queue(composeFBMosaic(self, 'music', this.facebookConnector.get));
+        $(self).queue(composeFBMosaic(self, 'movies', this.facebookConnector.get));
+        $(self).queue(composeFBMosaic(self, 'friends', this.facebookConnector.get));
       }
-      
+
       this.inited = true;
     },
 
@@ -55,11 +56,11 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       if (typeof imageUrl === 'string')
         $image = $('<img>').prop('src', imageUrl)
                            .css({ 'min-height': '600px' });
-      
+
       var $figure = $('<figure>').append($image);
       var slide = this.createBaseSlide('image', $figure, duration || defaultDuration);
       slide.on('started', function () { setTimeout($.proxy($image, 'addClass', 'zoom')); });
-      
+
       this.slides.push(slide);
       this.emit('newSlides');
     },
@@ -70,7 +71,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
       target.addImageSlide(response, mosaicSlideDuration);
     });
   }
- 
+
   function placeImages(target, myPlaces, type, response, queue) {
     var q = $({});
     var sqrt = Math.floor(Math.sqrt(response.data.length));
@@ -85,14 +86,14 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
 
   function placeImage(target, myPlaces, place, type, queue, max) {
     if (type == 'friends') {
-      target.fbConnector.getPlace(place.id + '/picture', function (response) {
+      target.facebookConnector.getPlace(place.id + '/picture', function (response) {
         myPlaces.push(response.data.url);
         if (myPlaces.length == max) {
           queue.dequeue("s");
         }
       });
     } else {
-      target.fbConnector.getPlace(place.id, function (response) {
+      target.facebookConnector.getPlace(place.id, function (response) {
         myPlaces.push(response.picture);
         if (myPlaces.length == max) {
           queue.dequeue("s");
@@ -101,8 +102,8 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     }
   }
 
-  function profilePictures(target, fbConnector) {
-    fbConnector.get('photos?fields=source', function (response) {
+  function profilePictures(target, facebookConnector) {
+    facebookConnector.get('photos?fields=source', function (response) {
       response.data.slice(0, target.maxResults).forEach(function (photo) {
         target.addImageSlide(photo.source);
       });
@@ -136,7 +137,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     var images = {};
     var loadedImages = 0;
     var numImages = sources.length;
-    
+
     for (var src in sources) {
       images[src] = new Image();
       images[src].onload = function () {
@@ -165,7 +166,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     //callback(image.src);
     callback(canvas);
   }
-  
+
   function composeFBMosaic(target, type, fb_connector_call) {
     var q = $({});
     var items = [];
@@ -173,7 +174,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnecto
     fb_connector_call(type, function (response) {
       $(target).queue(placeImages(target, items, type, response, q));
     });
-    
+
     q.queue("s", function () {
       addSlides(target, items);
       q.dequeue("s");
