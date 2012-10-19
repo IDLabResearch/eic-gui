@@ -1,32 +1,36 @@
 define(['lib/jquery', 'lib/jquery.ui.autocomplete'],
 function ($) {
   "use strict";
-  
+
   function autocompleteTopic(selector) {
-    $(selector).autocomplete({
+    $(selector).catcomplete({
       delay: 50,
       autoFocus: true,
       source: function (request, response) {
-        $.ajax({
-          url: "http://en.wikipedia.org/w/api.php",
-          dataType: "jsonp",
+				$.ajax({
+          url: "http://pathfinding.restdesc.org/findPrefix",
+          dataType: "json",
           data: {
-            action: "opensearch",
-            format: "json",
-            search: request.term
+            q: request.term
           },
           success: function (data) {
-            response(data[1]);
+            response(data);
           }
         });
       },
       select: function (event, ui) {
-        // Also update if a value is selected (instead of typed).
-        $(this).val(ui.item.value)
-               .trigger('change');
+        $(this).val(ui.item.label);
+        $(this).data('uri', ui.item && ui.item.uri);
+        $(this).trigger('change');
+      },
+      focus: function (event, ui) {
+        $(this).data('uri', ui.item && ui.item.uri);
+      },
+      change: function (event, ui) {
+        $(this).data('uri', ui.item && ui.item.uri);
       }
     });
   }
-  
+
   return autocompleteTopic;
 });
