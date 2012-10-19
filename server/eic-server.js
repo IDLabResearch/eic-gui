@@ -1,8 +1,7 @@
 "use strict";
 var express = require('express'),
 less = require('less'),
-fs = require('fs'),
-summ = require('./summarizer.js');
+fs = require('fs');
 
 var app = module.exports = express();
 app.use(express.bodyParser());
