@@ -21,6 +21,7 @@ function ($) {
       select: function (event, ui) {
         $(this).val(ui.item.label);
         $(this).data('uri', ui.item && ui.item.uri);
+        $(this).trigger('change');
       },
       focus: function (event, ui) {
         $(this).data('uri', ui.item && ui.item.uri);
