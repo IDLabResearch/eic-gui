@@ -17,13 +17,16 @@ function ($) {
             response(data);
           }
         });
-        
       },
       select: function (event, ui) {
-        // Also update if a value is selected (instead of typed).
-        $(this).data('uri',ui.item.value);
-        $(this).val(ui.item.label)
-               .trigger('change');
+        $(this).val(ui.item.label);
+        $(this).data('uri', ui.item && ui.item.uri);
+      },
+      focus: function (event, ui) {
+        $(this).data('uri', ui.item && ui.item.uri);
+      },
+      change: function (event, ui) {
+        $(this).data('uri', ui.item && ui.item.uri);
       }
     });
   }
