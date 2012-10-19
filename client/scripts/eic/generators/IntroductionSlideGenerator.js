@@ -29,10 +29,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
           this.fetchTopicInformation(function () {
             self.createSpeech();
             self.createIntroSlideGenerators();
-            //TODO: Move this to a better place in the code
-            new PathFinder().findSubject('"' + self.startTopic.music + '"', 'artist', function (response) {
-							console.log(response.uri);
-						});
+            
           });
           this.inited = true;
         }
@@ -79,7 +76,8 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         
         var text = "Once upon a time, " +
                    startTopic.first_name + " wondered how " +
-                   startTopic.relativePronoun + " was connected to everything in this world. ";
+                   startTopic.relativePronoun + " was connected to everything in this world. " +
+                   "You see, according to his Facebook page, " + startTopic.first_name + " likes " + startTopic.selectedTopic + ".";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;

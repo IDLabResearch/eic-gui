@@ -1,11 +1,12 @@
 define(['lib/jquery',
   'eic/generators/CombinedSlideGenerator',
+  'eic/generators/LoadingSlideGenerator',
   'eic/generators/IntroductionSlideGenerator',
   'eic/generators/TopicSlideGenerator',
   'eic/generators/OutroductionSlideGenerator',
   'eic/Summarizer'
   ],
-  function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator, Summarizer) {
+  function ($, CombinedSlideGenerator, LoadingSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator, Summarizer) {
     "use strict";
 
     var defaultDuration = 1000;
@@ -23,6 +24,7 @@ define(['lib/jquery',
           if (this.startTopic) {
             if (!this.initedStart) {
               CombinedSlideGenerator.prototype.init.call(this);
+              this.addGenerator(new LoadingSlideGenerator("Please wait while we load your personal movie..."));
               this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
               this.initedStart = true;
             }
@@ -44,7 +46,7 @@ define(['lib/jquery',
                     story.steps.forEach(function (step) {
                       self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
                     });
-                  //self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
+                  self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                   });
                   var path = {
                     "execution_time": 20110,
@@ -73,11 +75,10 @@ define(['lib/jquery',
                   story.steps.forEach(function (step) {
                     self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
                   });
-                //self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
+                self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                 });
                 summ.summarize(path);
               });
-
               this.initedEnd = true;
             }
           }
