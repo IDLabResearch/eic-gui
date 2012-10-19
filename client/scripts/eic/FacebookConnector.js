@@ -2,7 +2,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 	"use strict";
 
   var FB;
-  $.getScript('http://connect.facebook.net/en_US/all.js');
+  var connectorScriptLoaded = false;
 
   function FacebookConnector() {
     EventEmitter.call(this);
@@ -32,10 +32,14 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
             login_action();
         });
       };
+      if (!connectorScriptLoaded) {
+        $.getScript('http://connect.facebook.net/en_US/all.js');
+        connectorScriptLoaded = true;
+      }
     },
 
     connect : function (callback) {
-      window.FB.login(function (response) {
+      FB.login(function (response) {
         if (response.authResponse) {
           FB.api('/me', function (profile) {
             // Make profile behave like a Topic
