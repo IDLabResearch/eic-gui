@@ -9,7 +9,7 @@ function ($) {
       source: function (request, response) {
 				$.ajax({
           url: "http://pathfinding.restdesc.org/findPrefix",
-          dataType: "jsonp",
+          dataType: "json",
           data: {
             q: request.term
           },
@@ -21,7 +21,8 @@ function ($) {
       },
       select: function (event, ui) {
         // Also update if a value is selected (instead of typed).
-        $(this).val(ui.item.value)
+        $(this).data('uri',ui.item.value);
+        $(this).val(ui.item.label)
                .trigger('change');
       }
     });

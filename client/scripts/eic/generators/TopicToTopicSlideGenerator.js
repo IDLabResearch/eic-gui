@@ -36,16 +36,44 @@ define(['lib/jquery',
                 data: {
                   s1: this.startTopic.selectedUri,
                   s2: this.endTopic.uri
+                },
+                error: function(){
+                  var summ = new Summarizer();
+                  $(summ).one('generated', function (event, story) {
+                    console.log(story);
+                    story.steps.forEach(function (step) {
+                      self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
+                    });
+                  //self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
+                  });
+                  var path = {
+                    "execution_time": 20110,
+                    "paths": [
+                    {
+                      "edges": [
+                      "http://dbpedia.org/ontology/associatedBand",
+                      "http://dbpedia.org/property/naissanceLieu",
+                      "http://dbpedia.org/property/lieu"
+                      ],
+                      "vertices": [
+                      "http://dbpedia.org/resource/David_Guetta",
+                      "http://dbpedia.org/resource/Chris_Willis",
+                      "http://dbpedia.org/resource/%C3%89tats-Unis",
+                      "http://dbpedia.org/resource/Chicago_Theatre"
+                      ]
+                    }
+                    ]
+                  }
+                  summ.summarize(path);
                 }
               }).success(function (path) {
                 console.log('Path received!');
                 var summ = new Summarizer();
                 $(summ).one('generated', function (event, story) {
-                  console.log(story);
                   story.steps.forEach(function (step) {
                     self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
                   });
-                  self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
+                //self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                 });
                 summ.summarize(path);
               });

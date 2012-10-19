@@ -31,8 +31,6 @@ define(['lib/jquery'], function ($) {
             glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
             break;
           }
-          console.log(result.topics[0]);
-          console.log(result.links);
           result.topics[i].text = glue + result.topics[i].text;
         }
 
@@ -42,25 +40,32 @@ define(['lib/jquery'], function ($) {
       }
       
       function retrieveAbstract(index, vertice) {
-        var endpoint = 'http://dbpedia.org/sparql?query=';
-        //var endpoint = 'http://restdesc.elis.ugent.be:8891/sparql?default-graph-uri=&query=';
+        //var endpoint = 'http://dbpedia.restdesc.org/?query=';
+        var endpoint = 'http://DBpedia.org/sparql?query=';
         var query = 'SELECT ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
         
         console.log('Executing SPARQL Query for ' + vertice);
 
         $.ajax({
           url: endpoint,
-          dataType: 'jsonp',
+          dataType: 'json',
           data: {
             query: query,
-            format: 'application/sparql-results+json'
+            format: 'application/json'
           },
-          contentType: 'application/sparql-results+json',
           success: function (res) {
-            console.log('SPARQL result: ' + res);
+            console.log('SPARQL result: ' + res.results.bindings);
+            
+            if (res.results.bindings.length === 0)
+              console.log('SPARQL result is empty!');
+              
             var label = res.results.bindings[0].label;
             var desc = res.results.bindings[0].desc;
-        
+            
+            var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
+            var sentences = desc.value.match(tregex);
+            desc = sentences[0] + sentences[1] + sentences[2];
+            
             //Unique ID will be required!! Supply with path
             var id = paths.vertices.indexOf(vertice);
                
@@ -69,7 +74,7 @@ define(['lib/jquery'], function ($) {
                 type: 'person',
                 label: label.value
               },
-              text : desc.value
+              text : desc
             };
               
             if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {

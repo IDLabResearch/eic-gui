@@ -47,12 +47,13 @@ function ($, autocompleteTopic, autocompleteTopicDbPedia,
     updateTopic: function () {
       var label = $('#topic').val(),
           valid = label.trim().length > 0;
-      
+
       this.topic = {
         label: label,
-        uri: valid ? 'http://dbpedia.org/resource/' + label.replace(/[^\w]/g, '_') : ''
+        //uri: valid ? 'http://dbpedia.org/resource/' + label.replace(/[^\w]/g, '_') : ''
+        uri: valid ? $('#topic').data('uri') : ''
       };
-      
+
       // Enable third step if the topic is valid.
       $('.step.three')[valid ? 'removeClass' : 'addClass']('inactive');
       $('#play').prop('disabled', !valid);
