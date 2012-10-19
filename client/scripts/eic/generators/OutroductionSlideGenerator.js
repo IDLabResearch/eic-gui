@@ -49,7 +49,7 @@ function ($, BaseSlideGenerator, TTSService) {
               setTimeout(function () {
                 $outro.append($('<br>'));
                 $outro.append("including ");
-                $outro.append($('<em>').text(self.endTopic.label));
+                $outro.append($('<span>').text(self.endTopic.label));
                 $outro.append("!");
                 setTimeout(function () {
                   addShares($outro.parent());
