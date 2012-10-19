@@ -35,7 +35,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     },
 
     connect : function (callback) {
-      FB.login(function (response) {
+      window.FB.login(function (response) {
         if (response.authResponse) {
           FB.api('/me', function (profile) {
             // Make profile behave like a Topic
