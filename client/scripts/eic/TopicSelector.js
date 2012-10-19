@@ -6,7 +6,7 @@ define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], f
   TopicSelector.prototype = {
     init : function () {
     },
-    
+
     selectTopicFromProfile : function (profile, callback) {
       var self = this;
       new FacebookConnector().get('music', function (response) {
@@ -42,13 +42,13 @@ define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], f
           });
         });
     },
-    
+
     getURI : function (topic, callback) {
       new PathFinder().findSubject('"' + topic + '"', 'artist', function (response) {
 							callback(response.uri, response.wikiPageWikiLinks, response.error);
 						});
     },
   };
-  
+
   return TopicSelector;
 });

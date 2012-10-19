@@ -1,7 +1,7 @@
 define(['lib/jquery', 'lib/jvent'],
   function ($, EventEmitter) {
     "use strict";
-    
+
     var local = false;
     var server = local ? 'restdesc.org:5555' : 'vaas.acapela-group.com';
 

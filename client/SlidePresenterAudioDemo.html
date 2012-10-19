@@ -11,7 +11,7 @@
           var description = $('#description').val();
           var generators = new eic.TopicSlideGenerator(topic, description);
           var presenter = new eic.SlidePresenter('#main .slides', generators,'#main .audio');
-       
+
           presenter.start();
         });
       }

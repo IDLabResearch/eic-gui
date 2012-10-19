@@ -10,12 +10,12 @@ define(['lib/jquery'], function ($) {
 
   Summarizer.prototype = {
     summarize : function (data) {
-    
+
       console.log('Summarization has started!');
 
       var paths = data.paths[0];
       var self = this;
-      
+
       /**
        * Generate the result formatted as the 'test' .json
        */
@@ -38,12 +38,12 @@ define(['lib/jquery'], function ($) {
           steps: result.topics
         };
       }
-      
+
       function retrieveAbstract(index, vertice) {
         //var endpoint = 'http://dbpedia.restdesc.org/?query=';
         var endpoint = 'http://DBpedia.org/sparql?query=';
         var query = 'SELECT ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
-        
+
         console.log('Executing SPARQL Query for ' + vertice);
 
         $.ajax({
@@ -55,20 +55,20 @@ define(['lib/jquery'], function ($) {
           },
           success: function (res) {
             console.log('SPARQL result: ' + res.results.bindings);
-            
+
             if (res.results.bindings.length === 0)
               console.log('SPARQL result is empty!');
-              
+
             var label = res.results.bindings[0].label;
             var desc = res.results.bindings[0].desc;
-            
+
             var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
             var sentences = desc.value.match(tregex);
             desc = sentences[0] + sentences[1] + sentences[2];
-            
+
             //Unique ID will be required!! Supply with path
             var id = paths.vertices.indexOf(vertice);
-               
+
             self.result.topics[id] = {
               topic : {
                 type: 'person',
@@ -76,11 +76,11 @@ define(['lib/jquery'], function ($) {
               },
               text : desc
             };
-              
+
             if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
               $(self).trigger('generated', formatResult(self.result));
             }
-            
+
             console.log('Resource: ' + vertice);
             console.log('Extracted text: ' + desc);
           },
@@ -95,11 +95,11 @@ define(['lib/jquery'], function ($) {
         console.log('Extracting sentence for ' + edge);
         //Split the string with caps
         var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
-        
+
         if (parts[0] === 'has' || parts[0] === 'is') {
           parts.shift();
         }
-    
+
         var sentence = [
           {
             type: 'direct',
@@ -113,16 +113,16 @@ define(['lib/jquery'], function ($) {
         var id =  paths.edges.indexOf(edge);
 
         self.result.links[id] = sentence;
-        
-        
+
+
         if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
           $(self).trigger('generated', formatResult(self.result));
         }
-  
+
         console.log('Property: ' + property);
         console.log('Generated sentence: ' + self.result.links[id]);
       }
-      
+
       $(paths.vertices).each(retrieveAbstract);
       $(paths.edges).each(retrieveTranscription);
     }
@@ -131,4 +131,4 @@ define(['lib/jquery'], function ($) {
 });
 
 
-   
+

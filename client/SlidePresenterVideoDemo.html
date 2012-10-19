@@ -6,7 +6,7 @@
   <script>
     function startApplication($, eic) {
       var generators = new eic.CombinedSlideGenerator();
-      
+
       generators.addGenerator(new eic.TitleSlideGenerator('SlidePresenter with video'));
       [
         'http://ninsuna.elis.ugent.be/Media/Apple/Act+of+God/Trailer.mp4?track=5;4',
@@ -16,7 +16,7 @@
         generators.addGenerator(new eic.VideoSlideGenerator(videoUrl));
       });
       generators.addGenerator(new eic.TitleSlideGenerator('The end'));
-      
+
       var presenter = new eic.SlidePresenter('#main .slides', generators);
       presenter.start();
     }

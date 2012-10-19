@@ -1,24 +1,20 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html>
   <head>
     <title></title>
     <meta charset="UTF-8">
     <script>
-      function startApplication($, eic) {       
+      function startApplication($, eic) {
         var tts = new eic.TTSGenerator();
-        
+
         $('#send').click(function() {
           var text = $('#text').val();
-                      
+
           tts.once('speechReady',function(event,data){
             $("#result").append('Length: '+data.snd_time+' ms<br>');
             $("#result").append("<audio src='"+data.snd_url+"' controls='controls' />");
           });
-          tts.getSpeech(text,'en_GB'); 
+          tts.getSpeech(text,'en_GB');
         });
       }
     </script>

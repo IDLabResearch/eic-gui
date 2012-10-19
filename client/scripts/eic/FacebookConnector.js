@@ -12,7 +12,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     init : function (login_action, logout_action) {
       login_action = login_action || $.noop;
       logout_action = logout_action || $.noop;
-      
+
       window.fbAsyncInit = function () {
         FB = window.FB;
 
@@ -46,7 +46,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
             profile.uri = profile.link;
             profile.label = profile.name;
             profile.type = "facebook";
-            
+
             callback(0, profile);
           });
         }
@@ -76,7 +76,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
         callback(response);
       });
     },
-    
+
     findPlace : function (query, callback) {
       FB.api('/search?q=' + query + '&type=place', function (response) {
         callback(response);
@@ -98,13 +98,13 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
         });
       });
     },
-    
+
     getPlace: function (place_fb_id, callback) {
 			FB.api('/' + place_fb_id, function (response) {
         callback(response);
       });
     },
-    
+
     findPlacesNearMe : function (facebook_id, callback) {
       FB.api('/me', function (response) {
         var query = FB.Data.query('select name, hometown_location from user where uid={0}', response.id);
