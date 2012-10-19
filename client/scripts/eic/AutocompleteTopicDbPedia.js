@@ -9,7 +9,7 @@ function ($) {
       source: function (request, response) {
 				$.ajax({
           url: "http://pathfinding.restdesc.org/findPrefix",
-          dataType: "jsonp",
+          dataType: "json",
           data: {
             q: request.term
           },
