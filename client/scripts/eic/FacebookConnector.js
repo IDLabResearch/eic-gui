@@ -1,29 +1,46 @@
 define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 	"use strict";
 
+  /***** Facebook loader *****/
+  /* Internal reference to window.FB, will be initialized in fbAsyncInit. */
   var FB;
-  var connectorScriptLoaded = false;
+
+  /* Call the specified function when Facebook is ready. */
+  function onFacebookReady(callback) {
+    if (FB) return callback();
+    onFacebookReady.callbacks.push(callback);
+  }
+  onFacebookReady.callbacks = [];
+
+  /* Initialization function that will be called by the Facebook API. */
+  window.fbAsyncInit = function () {
+    // Initialize the Facebook API for our application
+    FB = window.FB;
+    FB.init({
+      appId: '412169445496429',
+      status: true,
+      cookie: true,
+      xfbml: true
+    });
+
+    // Execute pending callbacks
+    onFacebookReady.callbacks.each(function (callback) { callback();  });
+    delete onFacebookReady.callbacks;
+  };
+  // Load the Facebook API script
+  $.getScript('http://connect.facebook.net/en_US/all.js');
+
 
   function FacebookConnector() {
     EventEmitter.call(this);
   }
 
   FacebookConnector.prototype = {
-    init : function (login_action, logout_action) {
+    init: function (login_action, logout_action) {
       login_action = login_action || $.noop;
       logout_action = logout_action || $.noop;
 
-      window.fbAsyncInit = function () {
-        FB = window.FB;
-
-        FB.init({
-          appId : '412169445496429',
-          status : true,
-          cookie : true,
-          xfbml : true
-        });
-
-        /* All the events registered */
+      onFacebookReady(function () {
         FB.Event.subscribe('auth.login', login_action);
         FB.Event.subscribe('auth.logout', logout_action);
 
@@ -31,14 +48,10 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
           if (response.session)
             login_action();
         });
-      };
-      if (!connectorScriptLoaded) {
-        $.getScript('http://connect.facebook.net/en_US/all.js');
-        connectorScriptLoaded = true;
-      }
+      });
     },
 
-    connect : function (callback) {
+    connect: function (callback) {
       FB.login(function (response) {
         if (response.authResponse) {
           FB.api('/me', function (profile) {
@@ -59,37 +72,37 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
 
-    disconnect : function (callback) {
+    disconnect: function (callback) {
       FB.logout(function (response) {
         callback(0, response);
       });
     },
 
-    get : function (item_type, callback) {
+    get: function (item_type, callback) {
       FB.api('/me/' + item_type, function (response) {
         callback(response);
       });
     },
 
-    findEvent : function (query, callback) {
+    findEvent: function (query, callback) {
       FB.api('/search?q=' + query + '&type=event', function (response) {
         callback(response);
       });
     },
 
-    findPlace : function (query, callback) {
+    findPlace: function (query, callback) {
       FB.api('/search?q=' + query + '&type=place', function (response) {
         callback(response);
       });
     },
 
-    findBusinessByGeoLocation : function (query, latitude, longitude, distance, callback) {
+    findBusinessByGeoLocation: function (query, latitude, longitude, distance, callback) {
       FB.api('/search?q=' + query + 'center=' + latitude + ',' + longitude + '&distance=' + distance + '&type=place', function (response) {
         callback(response);
       });
     },
 
-    findPlaceById : function (place_fb_id, callback) {
+    findPlaceById: function (place_fb_id, callback) {
       //Interesting parameters: description and number of times users checked in a location
       FB.api('/me', function (response) {
         var query = FB.Data.query('select name, latitude, longitude, description, geometry, checkin_count, display_subtext from place where page_id=' + place_fb_id, response.id);
@@ -105,7 +118,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       });
     },
 
-    findPlacesNearMe : function (facebook_id, callback) {
+    findPlacesNearMe: function (facebook_id, callback) {
       FB.api('/me', function (response) {
         var query = FB.Data.query('select name, hometown_location from user where uid={0}', response.id);
         query.wait(function (rows) {
