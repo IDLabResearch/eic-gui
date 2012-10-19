@@ -1,7 +1,7 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
   "use strict";
 
-  var defaultDuration = 1000;
+  var defaultDuration = 3000;
   
   var mosaicShow = false;
   var mosaicMaxNumTilesWide = 7;

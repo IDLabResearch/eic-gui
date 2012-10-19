@@ -24,8 +24,8 @@ define(['lib/jquery',
           if (this.startTopic) {
             if (!this.initedStart) {
               CombinedSlideGenerator.prototype.init.call(this);
-              this.addGenerator(new LoadingSlideGenerator("Please wait while we load your personal movie..."));
               this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
+              this.addGenerator(this.loader = new LoadingSlideGenerator());
               this.initedStart = true;
             }
 
@@ -78,6 +78,9 @@ define(['lib/jquery',
                 self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                 });
                 summ.summarize(path);
+
+                // give the generators some time to load and stop waiting
+                setTimeout(function () { self.loader.stopWaiting() }, 5000);
               });
               this.initedEnd = true;
             }

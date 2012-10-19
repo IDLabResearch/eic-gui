@@ -61,7 +61,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
             self = this;
         
         [
-          new TitleSlideGenerator(startTopic.first_name + " Is Connected", 3000),
+          new TitleSlideGenerator(startTopic.first_name + " Is Connected", 5000),
           new FBProfilePhotosGenerator(6),
         ]
         .forEach(function (generator) {
