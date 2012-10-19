@@ -1,9 +1,10 @@
 define(['lib/jquery',
         'eic/generators/CombinedSlideGenerator',
+        'eic/generators/LoadingSlideGenerator',
         'eic/generators/IntroductionSlideGenerator',
         'eic/generators/TopicSlideGenerator',
         'eic/generators/OutroductionSlideGenerator'],
-function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator) {
+function ($, CombinedSlideGenerator, LoadingSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator) {
   "use strict";
 
   var defaultDuration = 1000;
@@ -21,6 +22,7 @@ function ($, CombinedSlideGenerator, IntroductionSlideGenerator, TopicSlideGener
       if (this.startTopic) {
         if (!this.initedStart) {
           CombinedSlideGenerator.prototype.init.call(this);
+          this.addGenerator(new LoadingSlideGenerator("Please wait while we load your personal movie..."));
           this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
           this.initedStart = true;
         }
