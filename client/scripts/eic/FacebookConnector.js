@@ -25,7 +25,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     // Initialize the Facebook API for our application
     FB = window.FB;
     FB.init({
-      appId: '412169445496429',
+      appId: window.fbAppId || '412169445496429',
       status: true,
       cookie: true,
       xfbml: true
