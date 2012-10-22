@@ -49,36 +49,39 @@ define(['lib/jquery',
                     self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                   });
                   var path = {
-                    "execution_time": 20110,
+                    "execution_time": 999999,
                     "paths": [{
                       "edges": [
                         "http://dbpedia.org/ontology/associatedBand",
-                        "http://dbpedia.org/property/naissanceLieu",
-                        "http://dbpedia.org/property/lieu"
+                        "http://dbpedia.org/property/birthPlace",
+                        "http://dbpedia.org/property/place"
                       ],
                       "vertices": [
                         "http://dbpedia.org/resource/David_Guetta",
                         "http://dbpedia.org/resource/Chris_Willis",
-                        "http://dbpedia.org/resource/%C3%89tats-Unis",
+                        "http://dbpedia.org/resource/United_States",
                         "http://dbpedia.org/resource/Chicago_Theatre"
                       ]
                     }]
                   };
                   summ.summarize(path);
-                }
-              }).success(function (path) {
-                console.log('Path received!');
-                var summ = new Summarizer();
-                $(summ).one('generated', function (event, story) {
-                  story.steps.forEach(function (step) {
-                    self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
+                },
+                success: function (path) {
+                  console.log('Path received!');
+                  var summ = new Summarizer();
+                  $(summ).one('generated', function (event, story) {
+                    story.steps.forEach(function (step) {
+                      self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
+                    });
+                    self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                   });
-                  self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
-                });
-                summ.summarize(path);
+                  summ.summarize(path);
 
-                // give the generators some time to load and stop waiting
-                setTimeout(function () { self.loader.stopWaiting(); }, 5000);
+                  // give the generators some time to load and stop waiting
+                  setTimeout(function () {
+                    self.loader.stopWaiting();
+                  }, 5000);
+                }
               });
               this.initedEnd = true;
             }

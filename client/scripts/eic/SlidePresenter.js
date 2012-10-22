@@ -7,9 +7,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
     this.generator = generator;
 
     this.$audioContainer.jPlayer({
-      ready: function () {
-
-      },
+      ready: function () {},
       errorAlerts: true,
       swfPath: "/js",
       supplied: "mp3"
@@ -29,7 +27,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
       function showNext() {
         // if slides are available, show them
         if (self.generator.hasNext()) {
-
+          console.log('[' + Math.round(+new Date() / 1000) + ']Showing new slide');
           // remove children that were transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
@@ -47,19 +45,18 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
           // if slide contains a description, send it to TTS service
           if (currentSlide.audioURL) {
             console.log("URL " + currentSlide.audioURL + " detected in slide!");
-            //var audioEl = $("<audio src='" + currentSlide.audioURL + "' autoplay='autoplay' style='display: none;'/>");
+
             self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
             console.log("Playing " + currentSlide.audioURL);
 
           //self.$container.append(audioEl);
           }
-
           window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive
         else {
           self.generator.once('newSlides', showNext);
-          console.log("No new slides!");
+          console.log('[' + Math.round(+new Date() / 1000) + ']No new slides!');
         }
       }
       showNext();

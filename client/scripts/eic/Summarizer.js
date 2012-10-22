@@ -42,8 +42,9 @@ define(['lib/jquery'], function ($) {
       function retrieveAbstract(index, vertice) {
         //var endpoint = 'http://dbpedia.restdesc.org/?query=';
         var endpoint = 'http://DBpedia.org/sparql?query=';
+        //var query = 'SELECT ?label ?desc ?type where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label; a ?type . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
         var query = 'SELECT ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
-
+        
         console.log('Executing SPARQL Query for ' + vertice);
 
         $.ajax({
