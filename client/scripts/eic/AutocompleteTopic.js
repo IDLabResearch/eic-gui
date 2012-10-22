@@ -1,6 +1,10 @@
 define(['lib/jquery', 'lib/jquery.ui.autocomplete'],
 function ($) {
   "use strict";
+  
+  /*
+   * Extend to facebook & DBPedia
+   **/
 
   function autocompleteTopic(selector) {
     $(selector).catcomplete({

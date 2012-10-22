@@ -3,6 +3,10 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
 function ($, autocompleteTopic, FacebookConnector,
           TopicToTopicSlideGenerator, SlidePresenter, TopicSelector) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   **/
 
   // The main "Everything Is Connected" application.
   function Application() {

@@ -8,6 +8,10 @@ define(['lib/jquery',
   ],
   function ($, CombinedSlideGenerator, LoadingSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator, Summarizer) {
     "use strict";
+    
+    /*
+    * CLEANUP
+    **/
 
     var defaultDuration = 1000;
 
@@ -40,31 +44,7 @@ define(['lib/jquery',
                   s2: this.endTopic.uri
                 },
                 error: function () {
-                  var summ = new Summarizer();
-                  $(summ).one('generated', function (event, story) {
-                    console.log(story);
-                    story.steps.forEach(function (step) {
-                      self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
-                    });
-                    self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
-                  });
-                  var path = {
-                    "execution_time": 999999,
-                    "paths": [{
-                      "edges": [
-                        "http://dbpedia.org/ontology/associatedBand",
-                        "http://dbpedia.org/property/birthPlace",
-                        "http://dbpedia.org/property/place"
-                      ],
-                      "vertices": [
-                        "http://dbpedia.org/resource/David_Guetta",
-                        "http://dbpedia.org/resource/Chris_Willis",
-                        "http://dbpedia.org/resource/United_States",
-                        "http://dbpedia.org/resource/Chicago_Theatre"
-                      ]
-                    }]
-                  };
-                  summ.summarize(path);
+                  //Error fallback...
                 },
                 success: function (path) {
                   console.log('Path received!');

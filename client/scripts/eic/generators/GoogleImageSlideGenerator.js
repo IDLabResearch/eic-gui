@@ -1,6 +1,11 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   * Avoid images that don't exists
+   **/
 
   var defaultDuration = 2500;
   var repeat = false;

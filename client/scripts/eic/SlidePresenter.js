@@ -1,5 +1,9 @@
 define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   **/
 
   function SlidePresenter(container, generator, audioContainer) {
     this.$container = $(container);
@@ -48,8 +52,6 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
 
             self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
             console.log("Playing " + currentSlide.audioURL);
-
-          //self.$container.append(audioEl);
           }
           window.setTimeout(showNext, nextSlide.duration);
         }

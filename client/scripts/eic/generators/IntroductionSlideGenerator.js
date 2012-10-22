@@ -7,8 +7,12 @@ define([ 'lib/jquery',
     'eic/TTSService', 'eic/PathFinder'],
 function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
           GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService, PathFinder) {
-
   "use strict";
+  
+  /*
+   * CLEANUP
+   * Male/female does not work
+   **/
 
   /** Generator that creates introductory slides */
   function IntroductionSlideGenerator(startTopic) {

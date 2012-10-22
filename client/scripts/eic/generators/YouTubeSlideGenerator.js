@@ -2,6 +2,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
   
+  /*
+   * CLEANUP
+   **/
+  
   var playerCount = 0;
 
   /** Generator of YouTube videos using the YouTube API

@@ -1,5 +1,10 @@
 define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], function ($, EventEmitter, FacebookConnector, PathFinder) {
 	"use strict";
+  
+  /*
+   * CLEANUP
+   **/
+    
   function TopicSelector() {
     EventEmitter.call(this);
     this.facebookConnector = new FacebookConnector();
@@ -47,8 +52,8 @@ define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], f
 
     getURI: function (topic, callback) {
       new PathFinder().findSubject('"' + topic + '"', 'artist', function (response) {
-							callback(response.uri, response.wikiPageWikiLinks, response.error);
-						});
+        callback(response.uri, response.wikiPageWikiLinks, response.error);
+      });
     },
   };
 

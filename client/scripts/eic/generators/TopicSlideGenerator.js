@@ -8,6 +8,10 @@ define(['lib/jquery',
   'eic/generators/YouTubeSlideGenerator'],
   function ($, TTSService, CombinedSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
     "use strict";
+    
+    /*
+    * CLEANUP
+    **/
 
     function TopicSlideGenerator(topic, description) {
       CombinedSlideGenerator.call(this);

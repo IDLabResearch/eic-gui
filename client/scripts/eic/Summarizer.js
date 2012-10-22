@@ -1,5 +1,9 @@
 define(['lib/jquery'], function ($) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   **/
 
   function Summarizer() {
     this.result = {

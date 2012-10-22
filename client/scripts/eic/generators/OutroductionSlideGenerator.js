@@ -1,6 +1,11 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/TTSService'],
 function ($, BaseSlideGenerator, TTSService) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   * Add Path
+   **/
 
   /** Generator that creates outroductory slides */
   function OutroductionSlideGenerator(startTopic, endTopic, duration) {

@@ -1,5 +1,10 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/FacebookConnector'], function ($, BaseSlideGenerator, FacebookConnector) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   **/
+  
 
   var defaultDuration = 3000;
 

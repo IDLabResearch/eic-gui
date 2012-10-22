@@ -1,6 +1,11 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
+  
+  /*
+   * CLEANUP
+   * Nices vizualisation
+   **/
 
   var defaultDuration = 2500;
 

@@ -2,6 +2,11 @@ define(['lib/jquery', 'lib/jvent'],
 function ($, EventEmitter) {
   "use strict";
   
+  /*
+   * CLEANUP
+   * renamed
+   **/
+  
   function PathFinder() {
 		EventEmitter.call(this);
   }
