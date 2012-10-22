@@ -2,6 +2,11 @@
   <head>
     <meta charset='utf-8'>
     <title>Everything Is Connected</title>
+    <% if (environment === 'development') { %>
+      <script>
+        fbAppId = '117119395112649';
+      </script>
+    <% } %>
     <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
     <link rel="stylesheet" href="stylesheets/main" />
     <link href="http://fonts.googleapis.com/css?family=Lilita+One|Shanti" rel="stylesheet" type="text/css">
