@@ -40,8 +40,8 @@ define(['lib/jquery',
                 url: "http://pathfinding.restdesc.org/findPath",
                 dataType: "JSON",
                 data: {
-                  s1: this.startTopic.selectedUri,
-                  s2: this.endTopic.uri
+                  from: this.startTopic.selectedUri,
+                  to: this.endTopic.uri
                 },
                 error: function () {
                   //Error fallback...
