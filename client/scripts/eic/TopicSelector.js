@@ -1,5 +1,5 @@
-define(['lib/jquery'],
-function ($) {
+define(['lib/jquery', 'config/URLs'],
+function ($, urls) {
 	"use strict";
 
   // Topic selector with a user's Facebook profile as input
@@ -18,7 +18,7 @@ function ($) {
 
         // Convert likes to URIs
         $.ajax({
-          url: "http://pathfinding.restdesc.org/subjects",
+          url: urls.topics,
           dataType: "json",
           data: {
             label: likes.map(function (l) { return l.name; }).join()

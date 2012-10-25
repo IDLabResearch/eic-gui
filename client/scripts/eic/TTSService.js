@@ -1,9 +1,6 @@
-define(['lib/jquery', 'lib/jvent'],
-  function ($, EventEmitter) {
+define(['lib/jquery', 'lib/jvent', 'config/URLs'],
+  function ($, EventEmitter, urls) {
     "use strict";
-
-    var local = false;
-    var server = local ? 'restdesc.org:5555' : 'vaas.acapela-group.com';
 
     function TTSService() {
       EventEmitter.call(this);
@@ -26,7 +23,7 @@ define(['lib/jquery', 'lib/jvent'],
         var self = this;
         console.log('Requesting audio URL...');
         $.ajax({
-          url: 'http://' + server + '/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?',
+          url: urls.speech,
           type: 'GET',
           data: {
             prot_vers: 2,
