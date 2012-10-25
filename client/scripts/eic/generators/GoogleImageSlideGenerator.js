@@ -1,7 +1,7 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
 function ($, BaseSlideGenerator) {
   "use strict";
-  
+
   /*
    * CLEANUP
    * Avoid images that don't exists
@@ -15,10 +15,10 @@ function ($, BaseSlideGenerator) {
    */
   function GoogleImageSlideGenerator(topic, maxResults) {
     BaseSlideGenerator.call(this);
-    
+
     if (typeof topic === "string")
       topic = { label: topic };
-    
+
     this.topic = topic;
     this.maxResults = maxResults || 4;
     this.slides = [];
@@ -42,13 +42,21 @@ function ($, BaseSlideGenerator) {
         data: {
           q: this.topic.label,
           imgsz: 'xxlarge',
-          rsz: this.maxResults,
+          // search more images than needed, in case some of them don't load
+          rsz: Math.floor(this.maxResults * 1.5),
         },
         dataType: 'jsonp',
       })
       .success(function (response) {
         response.responseData.results.forEach(function (result) {
-          self.addImageSlide(result.url);
+          // preload the image to avoid broken images on slides
+          var image = new Image();
+          $(image).load(function () {
+            // add the image if it loads and we still need slides
+            if (self.slides.length < self.maxResults)
+              self.addImageSlide(result.url);
+          });
+          image.src = result.url;
         });
       });
       this.inited = true;
@@ -58,7 +66,7 @@ function ($, BaseSlideGenerator) {
     next: function () {
       if (!repeat)
         return this.slides.shift();
-        
+
       this.cnt += 1;
       return this.slides[(this.cnt - 1) % this.maxResults];
     },
