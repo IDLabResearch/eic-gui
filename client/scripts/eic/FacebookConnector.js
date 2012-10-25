@@ -65,6 +65,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       if (response.status == "connected") {
         var self = this;
         this.getProfile(function (profile) {
+          profile.connector = self;
           self.emit('connected', profile);
         });
       }

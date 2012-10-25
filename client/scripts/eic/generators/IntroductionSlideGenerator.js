@@ -62,7 +62,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
       createIntroSlideGenerators: function () {
         this.addGenerators([
           new TitleSlideGenerator(this.profile.first_name + " Is Connected", 5000),
-          new FBProfilePhotosGenerator(6),
+          new FBProfilePhotosGenerator(this.profile, 5),
         ]);
       },
 
