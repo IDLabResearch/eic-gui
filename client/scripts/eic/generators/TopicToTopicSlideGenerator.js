@@ -49,13 +49,12 @@ define(['lib/jquery',
                     story.steps.forEach(function (step) {
                       self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
                     });
+                    // give the generators some time to load and stop waiting
+                    setTimeout(function () {
+                      self.loader.stopWaiting();
+                    }, 5000);
                   });
                   summ.summarize(path);
-
-                  // give the generators some time to load and stop waiting
-                  setTimeout(function () {
-                    self.loader.stopWaiting();
-                  }, 5000);
                 }
               });
               this.initedEnd = true;
