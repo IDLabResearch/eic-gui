@@ -43,42 +43,49 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
         };
       }
 
-      function retrieveTranscription(index, edge) {
-        var  property = edge.substr(edge.lastIndexOf('/') + 1);
-        console.log('Extracting sentence for ' + edge);
-        //Split the string with caps
-        var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
-
-        if (parts[0] === 'has' || parts[0] === 'is') {
-          parts.shift();
-        }
-
-        var sentence = [
-        {
-          type: 'direct',
-          value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
-        },
-        {
-          type: 'indirect',
-          value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
-        }
-        ];
+      function retrieveTranscriptions(edges) {
         
-        self.result.links[index] = sentence;
+        function retrieveTranscription(index, edge) {
+          var  property = edge.substr(edge.lastIndexOf('/') + 1);
+          console.log('Extracting sentence for ' + edge);
+          //Split the string with caps
+          var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
+
+          if (parts[0] === 'has' || parts[0] === 'is') {
+            parts.shift();
+          }
+
+          var sentence = [
+          {
+            type: 'direct',
+            value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+          },
+          {
+            type: 'indirect',
+            value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+          }
+          ];
+        
+          self.result.links[index] = sentence;
 
 
-        if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
-          $(self).trigger('generated', formatResult(self.result));
+          if ((self.result.topics.length  == paths.vertices.length) 
+            && (self.result.links.length == paths.edges.length)) {
+            $(self).trigger('generated', formatResult(self.result));
+          }
+
+          console.log('Property: ' + property);
+          console.log('Generated sentence '+index+': ' + self.result.links[index][0].value);
         }
-
-        console.log('Property: ' + property);
-        console.log('Generated sentence '+index+': ' + self.result.links[index][0].value);
+        
+        $(edges).each(retrieveTranscription);
       }
-
+      
       function retrieveAbstracts(vertices) {
         $.ajax({
           url: urls.abstracts,
           dataType: 'json',
+          type: "GET",
           data: {
             uri: vertices.join(',')
           },
@@ -86,7 +93,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             if (abstracts.length === 0)
               console.log('No abstracts found!');
             
-            for (var i = 0;j<vertices.length;i++){
+            function retrieveAbstract(index, vertice){
               var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
               var sentences = abstracts[vertice].match(tregex);
               var desc = '';
@@ -96,18 +103,21 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
                 if (j > 2)
                   break;
               }              
-              self.result.topics[i] = {
+              self.result.topics[index] = {
                 topic : {
                   type: 'person',
                   label: abstracts[vertice].label
                 },
                 text : desc
               };
-            }
-
-            if (self.result.links.length == paths.edges.length) {
+      
+              if ((self.result.topics.length  == paths.vertices.length) 
+                && (self.result.links.length == paths.edges.length)) {
                 $(self).trigger('generated', formatResult(self.result));
+              }
             }
+            
+            $(vertices).each(retrieveAbstract);
 
             console.log('Resource: ' + vertice);
             console.log('Extracted text: ' + desc);
@@ -118,9 +128,9 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
         });
       }
       
-      
+      retrieveTranscripts(paths.edges);
       retrieveAbstracts(paths.vertices);
-      $(paths.edges).each(retrieveTranscription);
+      
     }
   };
   return Summarizer;
