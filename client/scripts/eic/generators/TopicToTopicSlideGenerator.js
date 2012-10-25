@@ -37,17 +37,16 @@ define(['lib/jquery',
               var self = this;
               $.ajax({
                 type: "GET",
-                url: "http://pathfinding.restdesc.org/findPath",
+                url: "http://pathfinding.restdesc.org/paths",
                 dataType: "JSON",
                 data: {
-                  from: this.startTopic.selectedUri,
+                  from: this.startTopic.like.uri,
                   to: this.endTopic.uri
                 },
                 error: function () {
-                  //Error fallback...
+                  // To do: error fallback
                 },
                 success: function (path) {
-                  console.log('Path received!');
                   var summ = new Summarizer();
                   $(summ).one('generated', function (event, story) {
                     story.steps.forEach(function (step) {

@@ -12,11 +12,9 @@ function ($) {
       autoFocus: true,
       source: function (request, response) {
 				$.ajax({
-          url: "http://pathfinding.restdesc.org/findPrefix",
+          url: "http://pathfinding.restdesc.org/prefixes",
           dataType: "json",
-          data: {
-            q: request.term
-          },
+          data: { query: request.term },
           success: function (data) {
             response(data);
           }

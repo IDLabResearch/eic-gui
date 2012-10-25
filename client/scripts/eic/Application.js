@@ -11,7 +11,7 @@ function ($, autocompleteTopic, FacebookConnector,
   // The main "Everything Is Connected" application.
   function Application() {
     this.facebookConnector = new FacebookConnector();
-    this.topicSelector = new TopicSelector();
+    this.topicSelector = new TopicSelector(this.facebookConnector);
     this.generator = new TopicToTopicSlideGenerator();
   }
 
@@ -24,9 +24,8 @@ function ($, autocompleteTopic, FacebookConnector,
 
       // Select the topic when the user connects to Facebook
       this.facebookConnector.once('connected', function (event, profile) {
-        self.topicSelector.selectTopicFromProfile(profile, function (topic, uri) {
-          profile.selectedTopic = topic;
-          profile.selectedUri = uri;
+        self.topicSelector.selectTopic(function (topic) {
+          profile.like = topic;
           self.generator.setStartTopic(profile);
         });
       });

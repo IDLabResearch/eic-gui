@@ -4,9 +4,9 @@ define([ 'lib/jquery',
     'eic/generators/FBProfilePhotosGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/GoogleMapsSlideGenerator',
-    'eic/TTSService', 'eic/PathFinder'],
+    'eic/TTSService'],
 function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
-          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService, PathFinder) {
+          GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService) {
   "use strict";
   
   /*
@@ -81,7 +81,7 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
         var text = "Once upon a time, " +
                    startTopic.first_name + " wondered how " +
                    startTopic.relativePronoun + " was connected to everything in this world. " +
-                   "You see, according to his Facebook page, " + startTopic.first_name + " likes " + startTopic.selectedTopic + ".";
+                   "You see, according to his Facebook page, " + startTopic.first_name + " likes " + startTopic.like.label + ".";
         
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;

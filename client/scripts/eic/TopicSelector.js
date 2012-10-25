@@ -1,58 +1,41 @@
-define(['lib/jquery', 'lib/jvent', 'eic/FacebookConnector', 'eic/PathFinder'], function ($, EventEmitter, FacebookConnector, PathFinder) {
+define(['lib/jquery'],
+function ($) {
 	"use strict";
-  
-  /*
-   * CLEANUP
-   **/
-    
-  function TopicSelector() {
-    EventEmitter.call(this);
-    this.facebookConnector = new FacebookConnector();
+
+  // Topic selector with a user's Facebook profile as input
+  function TopicSelector(facebookConnector) {
+    this.facebookConnector = facebookConnector;
   }
+
   TopicSelector.prototype = {
-    init: function () {
-      this.facebookConnector.init();
-    },
-
-    selectTopicFromProfile: function (profile, callback) {
-      var self = this;
+    // Select a topic, based on the user's Facebook profile
+    selectTopic: function (callback) {
       this.facebookConnector.get('music', function (response) {
-          var responses = response.data;
-          var count = 0;
-          var topics = [];
-          var uris = [];
-          var supports = [];
-          var maxTopic;
-          var maxUri;
-          var maxSupport = 0;
-          $.each(responses, function (index, r) {
-            var topic = r.name;
-            self.getURI(topic, function (uri, wikiPageWikiLinks, error) {
-              if (error === undefined) {
-                topics.push(topic);
-                uris.push(uri);
-                supports.push(parseInt(wikiPageWikiLinks, 10));
-              }
-              count++;
-              if (count == responses.length) {
-                var index;
-                for (index = 0; index < supports.length; index++) {
-                  if (supports[index] > maxSupport) {
-                    maxSupport = supports[index];
-                    maxTopic = topics[index];
-                    maxUri = uris[index];
-                  }
-                }
-                callback(maxTopic, maxUri);
-              }
-            });
-          });
-        });
-    },
+        // Check user likes
+        var likes = response.data;
+        if (!likes.length)
+          throw "This user has no likes, so no topic can be found.";
 
-    getURI: function (topic, callback) {
-      new PathFinder().findSubject('"' + topic + '"', 'artist', function (response) {
-        callback(response.uri, response.wikiPageWikiLinks, response.error);
+        // Convert likes to URIs
+        $.ajax({
+          url: "http://pathfinding.restdesc.org/subjects",
+          dataType: "json",
+          data: {
+            label: likes.map(function (l) { return l.name; }).join()
+          },
+          error: function (jqXHR, textStatus) {
+            throw "Error finding topic from likes: " + textStatus;
+          },
+          success: function (topics) {
+            if (!topics.length)
+              throw "None of the user's likes could be mapped to a topic.";
+
+            // Return the topic with the highest connectivity
+            callback(topics.reduce(function (prev, cur) {
+              return cur.connectivity > prev.connectivity ? cur : prev;
+            }));
+          },
+        });
       });
     },
   };
