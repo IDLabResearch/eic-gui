@@ -46,7 +46,7 @@ define(['lib/jquery',
           case "date":
             this.addGenerator(new DateSlideGenerator(this.topic));
             break;
-          case "location":
+          case "http://dbpedia.org/ontology/PopulatedPlace":
             this.addGenerator(new GoogleMapsSlideGenerator(this.topic));
             this.addGenerator(new GoogleImageSlideGenerator(this.topic));
             this.addGenerator(new YouTubeSlideGenerator(this.topic));

@@ -95,7 +95,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             
             function retrieveAbstract(index, vertice){
               var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
-              var sentences = abstracts[vertice].match(tregex);
+              var sentences = abstracts[vertice]['abstract'].match(tregex);
               var desc = '';
               
               for (var j = 0;j<sentences.length;j++){
@@ -128,7 +128,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
         });
       }
       
-      retrieveTranscripts(paths.edges);
+      retrieveTranscriptions(paths.edges);
       retrieveAbstracts(paths.vertices);
       
     }
