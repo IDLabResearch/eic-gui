@@ -1,5 +1,5 @@
-define(['lib/jquery', 'lib/jquery.ui.autocomplete'],
-function ($) {
+define(['lib/jquery', 'lib/jquery.ui.autocomplete', 'config/URLs'],
+function ($, autocomplete, urls) {
   "use strict";
   
   /*
@@ -12,7 +12,7 @@ function ($) {
       autoFocus: true,
       source: function (request, response) {
 				$.ajax({
-          url: "http://pathfinding.restdesc.org/prefixes",
+          url: urls.autocompletion,
           dataType: "json",
           data: { query: request.term },
           success: function (data) {

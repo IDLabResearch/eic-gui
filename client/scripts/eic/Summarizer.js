@@ -1,4 +1,4 @@
-define(['lib/jquery'], function ($) {
+define(['lib/jquery', 'config/URLs'], function ($, urls) {
   "use strict";
   
   /*
@@ -76,10 +76,8 @@ define(['lib/jquery'], function ($) {
       }
 
       function retrieveAbstracts(vertices) {
-        var url = 'http://pathfinding.restdesc.org/descriptions'
-      
         $.ajax({
-          url: url,
+          url: urls.abstracts,
           dataType: 'json',
           data: {
             uri: vertices.join(',')
