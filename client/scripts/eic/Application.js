@@ -1,7 +1,11 @@
 define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
-        'eic/generators/TopicToTopicSlideGenerator', 'eic/SlidePresenter', 'eic/TopicSelector'],
+        'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
+        'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
+        'eic/SlidePresenter', 'eic/TopicSelector'],
 function ($, autocompleteTopic, FacebookConnector,
-          TopicToTopicSlideGenerator, SlidePresenter, TopicSelector) {
+          IntroductionSlideGenerator, OutroductionSlideGenerator,
+          TopicToTopicSlideGenerator, CombinedSlideGenerator,
+          SlidePresenter, TopicSelector) {
   "use strict";
   
   /*
@@ -12,7 +16,7 @@ function ($, autocompleteTopic, FacebookConnector,
   function Application() {
     this.facebookConnector = new FacebookConnector();
     this.topicSelector = new TopicSelector(this.facebookConnector);
-    this.generator = new TopicToTopicSlideGenerator();
+    this.generator = new CombinedSlideGenerator();
   }
 
   Application.prototype = {
@@ -24,9 +28,14 @@ function ($, autocompleteTopic, FacebookConnector,
 
       // Select the topic when the user connects to Facebook
       this.facebookConnector.once('connected', function (event, profile) {
-        self.topicSelector.selectTopic(function (topic) {
-          profile.like = topic;
-          self.generator.setStartTopic(profile);
+        self.profile = profile;
+        self.topicSelector.selectTopic(function (startTopic) {
+          // add introduction generator
+          self.generator.addGenerator(new IntroductionSlideGenerator(profile, startTopic));
+
+          // add topic-to-topic generator
+          self.topicToTopic = new TopicToTopicSlideGenerator(startTopic);
+          self.generator.addGenerator(self.topicToTopic);
         });
       });
     },
@@ -39,11 +48,11 @@ function ($, autocompleteTopic, FacebookConnector,
 
     // Updates the goal topic.
     updateTopic: function () {
-      this.topic = {
+      this.endTopic = {
         label: $('#topic').val(),
         uri: $('#topic').data('uri') || ''
       };
-      var valid = this.topic.uri.length > 0;
+      var valid = this.endTopic.uri.length > 0;
 
       // Enable third step if the topic is valid.
       $('.step.three')[valid ? 'removeClass' : 'addClass']('inactive');
@@ -65,8 +74,11 @@ function ($, autocompleteTopic, FacebookConnector,
       $slides.hide();
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
 
-      // Create and start the slide show.
-      this.generator.setEndTopic(this.topic);
+      // Fix the end topic and create final generators for the slide show
+      this.topicToTopic.setEndTopic(this.endTopic);
+      this.generator.addGenerator(new OutroductionSlideGenerator(this.profile, this.endTopic));
+
+      // Start the slide show.
       var presenter = new SlidePresenter($slides, this.generator, $audio);
       presenter.start();
     },

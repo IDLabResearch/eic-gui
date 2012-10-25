@@ -50,7 +50,14 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       generator.on('newSlides', this.emitNewSlidesEvent);
       if (generator.hasNext())
         this.emitNewSlidesEvent();
-    }
+    },
+
+    /** Add child generators add the end of the list. */
+    addGenerators: function (generators, suppressInit) {
+      var self = this;
+      if (generators)
+        generators.forEach(function (g) { self.addGenerator(g); }, suppressInit);
+    },
   });
   
   return CombinedSlideGenerator;

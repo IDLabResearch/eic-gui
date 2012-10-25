@@ -1,12 +1,10 @@
 define(['lib/jquery',
   'eic/generators/CombinedSlideGenerator',
   'eic/generators/LoadingSlideGenerator',
-  'eic/generators/IntroductionSlideGenerator',
   'eic/generators/TopicSlideGenerator',
-  'eic/generators/OutroductionSlideGenerator',
   'eic/Summarizer'
   ],
-  function ($, CombinedSlideGenerator, LoadingSlideGenerator, IntroductionSlideGenerator, TopicSlideGenerator, OutroductionSlideGenerator, Summarizer) {
+  function ($, CombinedSlideGenerator, LoadingSlideGenerator, TopicSlideGenerator, Summarizer) {
     "use strict";
     
     /*
@@ -28,7 +26,6 @@ define(['lib/jquery',
           if (this.startTopic) {
             if (!this.initedStart) {
               CombinedSlideGenerator.prototype.init.call(this);
-              this.addGenerator(new IntroductionSlideGenerator(this.startTopic));
               this.addGenerator(this.loader = new LoadingSlideGenerator());
               this.initedStart = true;
             }
@@ -40,7 +37,7 @@ define(['lib/jquery',
                 url: "http://pathfinding.restdesc.org/paths",
                 dataType: "JSON",
                 data: {
-                  from: this.startTopic.like.uri,
+                  from: this.startTopic.uri,
                   to: this.endTopic.uri
                 },
                 error: function () {
@@ -52,7 +49,6 @@ define(['lib/jquery',
                     story.steps.forEach(function (step) {
                       self.addGenerator(new TopicSlideGenerator(step.topic, step.text));
                     });
-                    self.addGenerator(new OutroductionSlideGenerator(self.startTopic, self.endTopic));
                   });
                   summ.summarize(path);
 
