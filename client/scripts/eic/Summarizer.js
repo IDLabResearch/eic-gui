@@ -28,12 +28,12 @@ define(['lib/jquery'], function ($) {
           var glue = '';
           var sentence = result.links[i - 1][Math.round(Math.random())];
           switch (sentence.type) {
-          case 'direct':
-            glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
-            break;
-          case 'indirect':
-            glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
-            break;
+            case 'direct':
+              glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
+              break;
+            case 'indirect':
+              glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
+              break;
           }
           result.topics[i].text = glue + result.topics[i].text;
         }
@@ -41,58 +41,6 @@ define(['lib/jquery'], function ($) {
         return {
           steps: result.topics
         };
-      }
-
-      function retrieveAbstract(index, vertice) {
-        //var endpoint = 'http://dbpedia.restdesc.org/?query=';
-        var endpoint = 'http://DBpedia.org/sparql?query=';
-        //var query = 'SELECT ?label ?desc ?type where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label; a ?type . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
-        var query = 'SELECT ?label ?desc where { <' + vertice + '> rdfs:comment ?desc; rdfs:label ?label . FILTER(langMatches(lang(?desc), "EN")). FILTER(langMatches(lang(?label), "EN")) } limit 1';
-        
-        console.log('Executing SPARQL Query for ' + vertice);
-
-        $.ajax({
-          url: endpoint,
-          dataType: 'json',
-          data: {
-            query: query,
-            format: 'application/json'
-          },
-          success: function (res) {
-            console.log('SPARQL result: ' + res.results.bindings);
-
-            if (res.results.bindings.length === 0)
-              console.log('SPARQL result is empty!');
-
-            var label = res.results.bindings[0].label;
-            var desc = res.results.bindings[0].desc;
-
-            var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
-            var sentences = desc.value.match(tregex);
-            desc = sentences[0] + sentences[1] + sentences[2];
-
-            //Unique ID will be required!! Supply with path
-            var id = paths.vertices.indexOf(vertice);
-
-            self.result.topics[id] = {
-              topic : {
-                type: 'person',
-                label: label.value
-              },
-              text : desc
-            };
-
-            if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
-              $(self).trigger('generated', formatResult(self.result));
-            }
-
-            console.log('Resource: ' + vertice);
-            console.log('Extracted text: ' + desc);
-          },
-          error: function (err) {
-            console.log('SPARQL error: ' + err);
-          }
-        });
       }
 
       function retrieveTranscription(index, edge) {
@@ -106,18 +54,17 @@ define(['lib/jquery'], function ($) {
         }
 
         var sentence = [
-          {
-            type: 'direct',
-            value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
-          },
-          {
-            type: 'indirect',
-            value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
-          }
+        {
+          type: 'direct',
+          value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+        },
+        {
+          type: 'indirect',
+          value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+        }
         ];
-        var id =  paths.edges.indexOf(edge);
-
-        self.result.links[id] = sentence;
+        
+        self.result.links[index] = sentence;
 
 
         if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
@@ -125,10 +72,56 @@ define(['lib/jquery'], function ($) {
         }
 
         console.log('Property: ' + property);
-        console.log('Generated sentence: ' + self.result.links[id]);
+        console.log('Generated sentence '+index+': ' + self.result.links[index][0].value);
       }
 
-      $(paths.vertices).each(retrieveAbstract);
+      function retrieveAbstracts(vertices) {
+        var url = 'http://pathfinding.restdesc.org/descriptions'
+      
+        $.ajax({
+          url: url,
+          dataType: 'json',
+          data: {
+            uri: vertices.join(',')
+          },
+          success: function (abstracts) {
+            if (abstracts.length === 0)
+              console.log('No abstracts found!');
+            
+            for (var i = 0;j<vertices.length;i++){
+              var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
+              var sentences = abstracts[vertice].match(tregex);
+              var desc = '';
+              
+              for (var j = 0;j<sentences.length;j++){
+                desc += sentences[j];
+                if (j > 2)
+                  break;
+              }              
+              self.result.topics[i] = {
+                topic : {
+                  type: 'person',
+                  label: abstracts[vertice].label
+                },
+                text : desc
+              };
+            }
+
+            if (self.result.links.length == paths.edges.length) {
+                $(self).trigger('generated', formatResult(self.result));
+            }
+
+            console.log('Resource: ' + vertice);
+            console.log('Extracted text: ' + desc);
+          },
+          error: function (err) {
+            console.log('Error retrieving abstracts: ' + err);
+          }
+        });
+      }
+      
+      
+      retrieveAbstracts(paths.vertices);
       $(paths.edges).each(retrieveTranscription);
     }
   };
