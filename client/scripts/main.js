@@ -23,6 +23,9 @@
       'lib/jvent': {
         exports: 'jvent'
       },
+      'lib/jplayer.min': {
+        deps: ['lib/jquery']
+      },
     },
   });
 
