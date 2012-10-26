@@ -17,7 +17,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
 
       console.log('Summarization has started!');
 
-      var paths = data.paths[0];
+      var path = data.path;
       var self = this;
 
       /**
@@ -46,8 +46,8 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
       function retrieveTranscriptions(edges) {
         
         function retrieveTranscription(index, edge) {
-          var  property = edge.substr(edge.lastIndexOf('/') + 1);
-          console.log('Extracting sentence for ' + edge);
+          var  property = edge.uri.substr(edge.uri.lastIndexOf('/') + 1);
+          console.log('Extracting sentence for ' + edge.uri);
           //Split the string with caps
           var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
 
@@ -57,19 +57,19 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
 
           var sentence = [
           {
-            type: 'direct',
-            value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+            type: 'indirect',
+            value: edge.inverse ? '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is ' : '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
           },
           {
-            type: 'indirect',
-            value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+            type: 'direct',
+            value: edge.inverse ? '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of ' : '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
           }
           ];
         
           self.result.links[index] = sentence;
 
 
-          if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
+          if ((self.result.topics.length + self.result.links.length) === path.length) {
             $(self).trigger('generated', formatResult(self.result));
           }
 
@@ -81,25 +81,30 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
       }
       
       function retrieveAbstracts(vertices) {
+        var uri = []
+        vertices.forEach(function(vertice){
+          uri.push(vertice.uri);
+        });
+                
         $.ajax({
           url: urls.abstracts,
           dataType: 'json',
-          type: "GET",
           data: {
-            uri: vertices.join(',')
+            uri: uri.join(',')
           },
           success: function (abstracts) {
             if (abstracts.length === 0)
               console.log('No abstracts found!');
             
             function retrieveAbstract(index, vertice) {
+              var uri = vertice.uri || '';
               var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
               
               function getLabel(item){
                 if (item.label)
                   return item.label;
                 
-                var label = vertice.substr(vertice.lastIndexOf('/') + 1);
+                var label = uri.substr(uri.lastIndexOf('/') + 1);
                   
                 return label.replace(/[^A-Za-z0-9]/g, ' ');
               }
@@ -118,18 +123,18 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
                 return desc;
               }
             
-              var item = abstracts[vertice] || {};
+              var item = abstracts[uri] || {};
               var desc = getDescription(item)
 
               self.result.topics[index] = {
                 topic : {
-                  type: 'person',
+                  type: item.type || '',
                   label: getLabel(item)
                 },
                 text : desc
               };
       
-              if ((self.result.topics.length  == paths.vertices.length) && (self.result.links.length == paths.edges.length)) {
+              if ((self.result.topics.length + self.result.links.length) === path.length) {
                 $(self).trigger('generated', formatResult(self.result));
               }
               
@@ -138,8 +143,6 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             }
             
             $(vertices).each(retrieveAbstract);
-
-            
           },
           error: function (err) {
             console.log('Error retrieving abstracts: ' + err);
@@ -147,8 +150,12 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
         });
       }
       
-      retrieveTranscriptions(paths.edges);
-      retrieveAbstracts(paths.vertices);
+      retrieveTranscriptions(path.filter(function(obj){
+        return obj.type === 'link'
+      }));
+      retrieveAbstracts(path.filter(function(obj){
+        return obj.type === 'node'
+      }));
       
     }
   };
