@@ -28,12 +28,12 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           var glue = '';
           var sentence = result.links[i - 1][Math.round(Math.random())];
           switch (sentence.type) {
-          case 'direct':
-            glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
-            break;
-          case 'indirect':
-            glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
-            break;
+            case 'direct':
+              glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
+              break;
+            case 'indirect':
+              glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
+              break;
           }
           result.topics[i].text = glue + result.topics[i].text;
         }
@@ -56,14 +56,14 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           }
 
           var sentence = [
-            {
-              type: 'direct',
-              value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
-            },
-            {
-              type: 'indirect',
-              value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
-            }
+          {
+            type: 'direct',
+            value: '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+          },
+          {
+            type: 'indirect',
+            value: '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+          }
           ];
         
           self.result.links[index] = sentence;
@@ -94,20 +94,37 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             
             function retrieveAbstract(index, vertice) {
               var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
-              var abstract = abstracts[vertice]['abstract'] || '';
-              var sentences = abstract.match(tregex) || [];
-              var desc = '';
               
-              for (var j = 0;j < sentences.length; j++) {
-                desc += sentences[j];
-                if (j > 2)
-                  break;
+              function getLabel(item){
+                if (item.label)
+                  return item.label;
+                
+                var label = vertice.substr(vertice.lastIndexOf('/') + 1);
+                  
+                return label.replace(/[^A-Za-z0-9]/g, ' ');
               }
               
+              function getDescription(item) {
+                var abstract = item.abstract || '';
+             
+                var sentences = abstract.match(tregex) || [];
+                var desc = '';
+              
+                for (var j = 0;j < sentences.length; j++) {
+                  desc += sentences[j];
+                  if (j > 2)
+                    break;
+                }
+                return desc;
+              }
+            
+              var item = abstracts[vertice] || {};
+              var desc = getDescription(item)
+
               self.result.topics[index] = {
                 topic : {
                   type: 'person',
-                  label: abstracts[vertice].label
+                  label: getLabel(item)
                 },
                 text : desc
               };
