@@ -28,7 +28,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       this.facebookConnector.init();
 
       this.facebookConnector.get('photos?fields=source', function (response) {
-        response.data.slice(0, self.maxResults).forEach(function (photo) {
+        shuffle(response.data).slice(0, self.maxResults).forEach(function (photo) {
           self.addImageSlide(photo.source);
         });
       });
@@ -56,6 +56,18 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
       this.emit('newSlides');
     },
   });
+
+  // Return a shuffled version of the specified array
+  function shuffle(array) {
+    var shuffled = array.slice();
+    for(var i = 1; i < array.length; i++) {
+       var temp = shuffled[i],
+           j = Math.floor(Math.random() * (i + 1));
+       shuffled[i] = shuffled[j];
+       shuffled[j] = temp;
+     }
+    return shuffled;
+  }
 
   return FBProfilePhotosGenerator;
 });
