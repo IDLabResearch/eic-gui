@@ -1,6 +1,6 @@
 define(['lib/jquery', 'config/URLs'], function ($, urls) {
   "use strict";
-  
+
   /*
    * CLEANUP
    **/
@@ -28,12 +28,12 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           var glue = '';
           var sentence = result.links[i - 1][Math.round(Math.random())];
           switch (sentence.type) {
-            case 'direct':
-              glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
-              break;
-            case 'indirect':
-              glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
-              break;
+          case 'direct':
+            glue = result.topics[i - 1].topic.label + sentence.value + result.topics[i].topic.label + '. ';
+            break;
+          case 'indirect':
+            glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
+            break;
           }
           result.topics[i].text = glue + result.topics[i].text;
         }
@@ -44,7 +44,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
       }
 
       function retrieveTranscriptions(edges) {
-        
+
         function retrieveTranscription(index, edge) {
           var  property = edge.uri.substr(edge.uri.lastIndexOf('/') + 1);
           console.log('Extracting sentence for ' + edge.uri);
@@ -56,18 +56,17 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           }
 
           var sentence = [
-          {
-            type: 'indirect',
-            value: edge.inverse ? '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is ' : '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
-          },
-          {
-            type: 'direct',
-            value: edge.inverse ? '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of ' : '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
-          }
+            {
+              type: 'indirect',
+              value: edge.inverse ? '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is ' : '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of '
+            },
+            {
+              type: 'direct',
+              value: edge.inverse ? '\'s the ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' of ' : '\'s ' + decodeURIComponent(parts.join(' ').toLowerCase()) + ' is '
+            }
           ];
-        
-          self.result.links[index] = sentence;
 
+          self.result.links[index] = sentence;
 
           if ((self.result.topics.length + self.result.links.length) === path.length) {
             $(self).trigger('generated', formatResult(self.result));
@@ -76,16 +75,13 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           console.log('Property: ' + property);
           console.log('Generated sentence ' + index + ': ' + self.result.links[index][0].value);
         }
-        
+
         $(edges).each(retrieveTranscription);
       }
-      
+
       function retrieveAbstracts(vertices) {
-        var uri = []
-        vertices.forEach(function(vertice){
-          uri.push(vertice.uri);
-        });
-                
+        var uri = vertices.map(function (vertice) { return vertice.uri; });
+
         $.ajax({
           url: urls.abstracts,
           dataType: 'json',
@@ -95,26 +91,26 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           success: function (abstracts) {
             if (abstracts.length === 0)
               console.log('No abstracts found!');
-            
+
             function retrieveAbstract(index, vertice) {
               var uri = vertice.uri || '';
               var tregex = /\n|([^\r\n.!?]+([.!?]+|$))/gim;
-              
-              function getLabel(item){
+
+              function getLabel(item) {
                 if (item.label)
                   return item.label;
-                
+
                 var label = uri.substr(uri.lastIndexOf('/') + 1);
-                  
+
                 return label.replace(/[^A-Za-z0-9]/g, ' ');
               }
-              
+
               function getDescription(item) {
                 var abstract = item.abstract || '';
-             
+
                 var sentences = abstract.match(tregex) || [];
                 var desc = '';
-              
+
                 for (var j = 0;j < sentences.length; j++) {
                   desc += sentences[j];
                   if (j > 2)
@@ -122,9 +118,9 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
                 }
                 return desc;
               }
-            
-              var item = abstracts[uri] || {};
-              var desc = getDescription(item)
+
+              var item = abstracts[uri] || {},
+                  desc = getDescription(item);
 
               self.result.topics[index] = {
                 topic : {
@@ -133,15 +129,15 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
                 },
                 text : desc
               };
-      
+
               if ((self.result.topics.length + self.result.links.length) === path.length) {
                 $(self).trigger('generated', formatResult(self.result));
               }
-              
+
               console.log('Resource: ' + vertice);
               console.log('Extracted text: ' + desc);
             }
-            
+
             $(vertices).each(retrieveAbstract);
           },
           error: function (err) {
@@ -149,14 +145,9 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           }
         });
       }
-      
-      retrieveTranscriptions(path.filter(function(obj){
-        return obj.type === 'link'
-      }));
-      retrieveAbstracts(path.filter(function(obj){
-        return obj.type === 'node'
-      }));
-      
+
+      retrieveTranscriptions(path.filter(function (o) { return o.type === 'link'; }));
+      retrieveAbstracts(path.filter(function (o) { return o.type === 'node';  }));
     }
   };
   return Summarizer;

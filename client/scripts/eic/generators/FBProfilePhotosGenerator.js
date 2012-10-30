@@ -60,12 +60,12 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
   // Return a shuffled version of the specified array
   function shuffle(array) {
     var shuffled = array.slice();
-    for(var i = 1; i < array.length; i++) {
-       var temp = shuffled[i],
-           j = Math.floor(Math.random() * (i + 1));
-       shuffled[i] = shuffled[j];
-       shuffled[j] = temp;
-     }
+    for (var i = 1; i < array.length; i++) {
+      var temp = shuffled[i],
+          j = Math.floor(Math.random() * (i + 1));
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
     return shuffled;
   }
 
