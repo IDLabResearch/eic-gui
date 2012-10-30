@@ -40,8 +40,8 @@ function ($, urls) {
             topics = topics.filter(function (t) { return t.connectivity > 0; })
                            .sort(function (a, b) { return b.connectivity - a.connectivity; });
             // Pick one of the most connected topics
-            var topic = topics[(Math.random() *
-                                Math.min(topics.length - 1, topCandidates - 1)).toFixed()];
+            var topic = topics[Math.floor(Math.random() *
+                                          Math.min(topics.length, topCandidates))];
             callback(topic);
           },
         });
