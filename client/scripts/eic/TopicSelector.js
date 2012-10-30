@@ -3,7 +3,7 @@ function ($, urls) {
 	"use strict";
 
   // The topic is selected from the top `topCandidates` most connected topics
-  var topCandidates = 3;
+  var topCandidates = 10;
 
   // Topic selector with a user's Facebook profile as input
   function TopicSelector(facebookConnector) {
@@ -13,9 +13,12 @@ function ($, urls) {
   TopicSelector.prototype = {
     // Select a topic, based on the user's Facebook profile
     selectTopic: function (callback) {
-      this.facebookConnector.get('music', function (response) {
-        // Check user likes
-        var likes = response.data;
+      var self = this;
+      var likes = [];
+      self.facebookConnector.get('likes', function (response) {
+        $.each(response.data, function (index, like) {
+          likes.push(like);
+        });
         if (!likes.length)
           throw "This user has no likes, so no topic can be found.";
 
@@ -34,11 +37,11 @@ function ($, urls) {
               throw "None of the user's likes could be mapped to a topic.";
 
             // Sort the topics by descending connectivity
-            topics = topics.filter(function(t) { return t.connectivity > 0 })
-                           .sort(function (a, b) { return b.connectivity - a.connectivity; })
+            topics = topics.filter(function (t) { return t.connectivity > 0; })
+                           .sort(function (a, b) { return b.connectivity - a.connectivity; });
             // Pick one of the most connected topics
             var topic = topics[(Math.random() *
-                                Math.min(topics.length, topCandidates - 1)).toFixed()];
+                                Math.min(topics.length - 1, topCandidates - 1)).toFixed()];
             callback(topic);
           },
         });
