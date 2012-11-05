@@ -3,7 +3,7 @@
   name: "main",
   out: "main-built.js",
   paths: {
-    requireLib: 'lib/require',
+    requireLib: 'lib/almond',
   },
   include: ['requireLib', 'lib/jquery.ui.autocomplete'],
   shim: {
