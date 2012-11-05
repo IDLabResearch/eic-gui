@@ -1,10 +1,8 @@
-
 (function (requirejs) {
   "use strict";
 
   requirejs.config({
-    baseUrl : 'scripts',
-    shim : {
+    shim: {
       'lib/jquery': {
         exports: 'jQuery'
       },
@@ -33,5 +31,5 @@
     new Application().init();
     
   });
-})(window.requirejs);
+})(requirejs);
 

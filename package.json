@@ -8,6 +8,7 @@
     "sparql": "0.1.x"
   },
   "devDependencies": {
-    "jshint": "0.7.x"
+    "jshint": "0.7.x",
+    "requirejs": "2.1.x"
   }
 }
