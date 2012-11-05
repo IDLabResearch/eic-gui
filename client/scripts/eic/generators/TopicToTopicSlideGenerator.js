@@ -45,6 +45,7 @@ define(['lib/jquery',
                 error: function () {
                   console.log("No path found.");
                   self.addGenerator(new ErrorSlideGenerator('Oops! Something went wrong connecting you to ' + self.endTopic.label + '.'));
+                  self.loader.stopWaiting();
                 },
                 success: function (path) {
                   var summ = new Summarizer();
