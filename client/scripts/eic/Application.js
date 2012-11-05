@@ -1,10 +1,12 @@
 define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
         'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
         'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
+        'eic/generators/ErrorSlideGenerator',
         'eic/SlidePresenter', 'eic/TopicSelector'],
 function ($, autocompleteTopic, FacebookConnector,
           IntroductionSlideGenerator, OutroductionSlideGenerator,
           TopicToTopicSlideGenerator, CombinedSlideGenerator,
+          ErrorSlideGenerator,
           SlidePresenter, TopicSelector) {
   "use strict";
   
@@ -39,7 +41,7 @@ function ($, autocompleteTopic, FacebookConnector,
             self.generator.addGenerator(self.topicToTopic);
           },
           function (error) {
-            window.alert(error);
+            self.generator.addGenerator(new ErrorSlideGenerator(error));
           });
       });
     },
@@ -79,7 +81,8 @@ function ($, autocompleteTopic, FacebookConnector,
       $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
 
       // Fix the end topic and create final generators for the slide show
-      this.topicToTopic.setEndTopic(this.endTopic);
+      if (this.topicToTopic)
+        this.topicToTopic.setEndTopic(this.endTopic);
       this.generator.addGenerator(new OutroductionSlideGenerator(this.profile, this.endTopic));
 
       // Start the slide show.
