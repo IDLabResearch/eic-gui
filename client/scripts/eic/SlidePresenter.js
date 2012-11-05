@@ -32,10 +32,14 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
         // if slides are available, show them
         if (self.generator.hasNext()) {
           console.log('[' + Math.round(+new Date() / 1000) + ']Showing new slide');
-          // remove children that were transitioning out
+          // remove children that are still transitioning out
           self.$container.children('.transition-out').remove();
           // start the transition of other children
-          self.$container.children().addClass('transition-out');
+          var children = self.$container.children();
+          children.addClass('transition-out');
+          window.setTimeout(function () {
+            children.remove();
+          }, 1000);
           // add the next slide and start it
           var nextSlide = self.generator.next();
           self.$container.prepend(nextSlide.$element);
