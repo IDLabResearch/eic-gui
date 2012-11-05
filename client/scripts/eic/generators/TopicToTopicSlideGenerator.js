@@ -3,9 +3,10 @@ define(['lib/jquery',
   'eic/generators/LoadingSlideGenerator',
   'eic/generators/TopicSlideGenerator',
   'eic/generators/ErrorSlideGenerator',
-  'eic/Summarizer'
+  'eic/Summarizer',
+  'config/URLs',
   ],
-  function ($, CombinedSlideGenerator, LoadingSlideGenerator, TopicSlideGenerator, ErrorSlideGenerator, Summarizer) {
+  function ($, CombinedSlideGenerator, LoadingSlideGenerator, TopicSlideGenerator, ErrorSlideGenerator, Summarizer, urls) {
     "use strict";
     
     /*
@@ -35,7 +36,7 @@ define(['lib/jquery',
               var self = this;
               $.ajax({
                 type: "GET",
-                url: "http://pathfinding.restdesc.org/paths",
+                url: urls.paths,
                 dataType: "JSON",
                 data: {
                   from: this.startTopic.uri,

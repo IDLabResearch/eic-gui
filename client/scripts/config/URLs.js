@@ -6,5 +6,6 @@ define(function () {
     abstracts: "http://pathfinding.restdesc.org/descriptions",
     topics: "http://pathfinding.restdesc.org/subjects",
     speech: "http://vaas.acapela-group.com/webservices/1-32-01-JSON/synthesizer.php?jsoncallback=?",
+    paths: "http://pathfinding.restdesc.org/paths",
   }
 });
