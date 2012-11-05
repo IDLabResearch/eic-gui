@@ -11,7 +11,8 @@ node -e "$(cat <<END_NODE
          .replace(/<script[^>]+>/, '<script src="scripts/main.js">')
          .replace('stylesheets/main', 'stylesheets/main.css')
   console.log(index);
-END_NODE)" > output/index.html
+END_NODE
+)" > output/index.html
 
 echo Compiling stylesheet
 mkdir output/stylesheets
