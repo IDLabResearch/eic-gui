@@ -57,7 +57,8 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
             self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
             console.log("Playing " + currentSlide.audioURL);
           }
-          window.setTimeout(showNext, nextSlide.duration);
+          if (nextSlide.duration)
+            window.setTimeout(showNext, nextSlide.duration);
         }
         // else, wait for new slides to arrive
         else {
