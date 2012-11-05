@@ -1,0 +1,28 @@
+#!/bin/sh
+
+echo Creating output directory
+rm -r output
+mkdir output
+
+echo Compiling main HTML file
+node -e "$(cat <<END_NODE
+  file = require('fs').readFileSync('client/index.html.ejs', 'utf8');
+  index = require('ejs').render(file, { environment: 'build' })
+         .replace(/<script[^>]+>/, '<script src="scripts/main.js">')
+         .replace('stylesheets/main', 'stylesheets/main.css')
+  console.log(index);
+END_NODE)" > output/index.html
+
+echo Compiling stylesheet
+mkdir output/stylesheets
+node_modules/less/bin/lessc client/stylesheets/main.less > output/stylesheets/main.css
+
+echo Copying image files
+cp -r client/images output
+
+echo Compiling JavaScript files
+cd client/scripts
+../../node_modules/requirejs/bin/r.js -o app.build.js
+cd ../..
+mkdir output/scripts
+mv client/scripts/main-built.js output/scripts/main.js
