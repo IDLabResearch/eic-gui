@@ -16,7 +16,14 @@ END_NODE
 
 echo Compiling stylesheet
 mkdir output/stylesheets
-node_modules/less/bin/lessc client/stylesheets/main.less > output/stylesheets/main.css
+node_modules/less/bin/lessc client/stylesheets/main.less > output/stylesheets/main_full.css
+if rainpress --help > /dev/null 2>&1; then
+  echo Compressing stylesheet
+  rainpress output/stylesheets/main_full.css > output/stylesheets/main.css
+  rm output/stylesheets/main_full.css
+else
+  mv output/stylesheets/main_full.css output/stylesheets/main.css
+fi
 
 echo Copying image files
 cp -r client/images output
