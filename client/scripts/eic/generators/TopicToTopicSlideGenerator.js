@@ -2,9 +2,10 @@ define(['lib/jquery',
   'eic/generators/CombinedSlideGenerator',
   'eic/generators/LoadingSlideGenerator',
   'eic/generators/TopicSlideGenerator',
+  'eic/generators/ErrorSlideGenerator',
   'eic/Summarizer'
   ],
-  function ($, CombinedSlideGenerator, LoadingSlideGenerator, TopicSlideGenerator, Summarizer) {
+  function ($, CombinedSlideGenerator, LoadingSlideGenerator, TopicSlideGenerator, ErrorSlideGenerator, Summarizer) {
     "use strict";
     
     /*
@@ -41,7 +42,8 @@ define(['lib/jquery',
                   to: this.endTopic.uri
                 },
                 error: function () {
-                  // To do: error fallback
+                  console.log("No path found.");
+                  self.addGenerator(new ErrorSlideGenerator('Oops! Something went wrong connecting you to ' + self.endTopic.label + '.'));
                 },
                 success: function (path) {
                   var summ = new Summarizer();
