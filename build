@@ -12,12 +12,19 @@ node -e "$(cat <<END_NODE
          .replace('stylesheets/main', 'stylesheets/main.css')
   console.log(index);
 END_NODE
-)" > output/index.html
+)" > output/index_full.html
+if which html5small > /dev/null 2>&1; then
+  echo Compressing main HTML file
+  html5small output/index_full.html > output/index.html
+  rm output/index_full.html
+else
+  mv output/index_full.html output/index.html
+fi
 
 echo Compiling stylesheet
 mkdir output/stylesheets
 node_modules/less/bin/lessc --compress client/stylesheets/main.less > output/stylesheets/main_full.css
-if csspress --help > /dev/null 2>&1; then
+if which csspress > /dev/null 2>&1; then
   echo Compressing stylesheet
   csspress output/stylesheets/main_full.css > output/stylesheets/main.css
   rm output/stylesheets/main_full.css
