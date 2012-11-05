@@ -31,6 +31,7 @@
 
   require(['eic/Application'], function (Application) {
     new Application().init();
+    
   });
 })(window.requirejs);
 

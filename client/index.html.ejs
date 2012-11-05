@@ -1,61 +1,92 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset='utf-8'>
-    <title>Everything Is Connected</title>
+    <title></title>
     <% if (environment === 'development') { %>
-      <script>
-        fbAppId = '117119395112649';
-      </script>
+    <script>
+      fbAppId = '117119395112649';
+    </script>
     <% } %>
     <script data-main="scripts/main" src="scripts/lib/require.js" async></script>
     <link rel="stylesheet" href="stylesheets/main" />
-    <link href="http://fonts.googleapis.com/css?family=Lilita+One|Shanti" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div id="main">
-      <header>
-        <h1>Everything Is Connected</h1>
-        <h2>
-          Watch the movie that connects <em>you</em>
-          <br>
-          to anything or anyone in the world.
-        </h2>
-      </header>
-
-      <div class="step one">
-        <h2>Tell about yourself</h2>
-        <p>
-          Connect with your Facebook account.
-        </p>
-        <div id="fb-root">
+    <div id="frame">
+      <div id="title_1" class="title">
+        <div class="content">Everything</div>
+        <div class="pieces">
         </div>
-        <p id="facebook">
-          <a id="facebook-connect" href="#">Connect</a>
-        </p>
       </div>
-      <div class="step two inactive">
-        <h2>Choose your topic</h2>
-        <p>
-          Select who or what you want to connect to by typing below.
-        </p>
-        <p>
-          <input id="topic" disabled />
-        </p>
+
+      <div id="title_2" class="title"><div class="pieces">
+        </div>
+        <div class="content">Is</div>
       </div>
-      <div class="step three inactive">
-        <h2>Watch your movie</h2>
-        <p>
-          Have a seat, relax, and enjoy your personal movie.
-        </p>
-        <p>
-          <input id="play" type="button" value="Play my movie" disabled />
-        </p>
+
+      <div id="title_3" class="title">
+        <div class="pieces">
+        </div>
+        <div class="content">Connected</div>
+      </div>
+      <div id="subtitle">
+        Watch the movie that connects <em>you</em>to anything or anyone in the world.        
+      </div>
+
+      <div id="play" class="title">
+        <div class="pieces">
+        </div>
+        <div class="content">Go!</div>
+      </div>
+
+      <div id="logos">
+        <img src="images/iMinds.jpg" height="40" />
+        <img src="images/UGent.jpg" height="40" />
+        <img src="images/mml.jpg" height="40" />
+      </div>
+
+      <div id="steps">
+        <div class="pieces">
+        </div>
+        <div class="content">
+          <div id="step_1" class="step">
+            <div class="number">1</div>
+            <div class="text">Choose your starting point<br><input id="begintopic" /><div id="fb-root">
+              </div>
+              <p id="facebook">
+                <a id="facebook-connect" href="#">or connect with <img src="images/f_logo.png" width="20" height="20"></a>
+              </p>
+            </div>
+            <div class="nav">
+              <span class="button button_hover next">Next</span>
+            </div>
+          </div>
+          <div id="step_3" class="step">
+            <div class="number">2</div>
+            <div class="text">Choose your destination<br><input id="endtopic" /></div>
+            <div class="nav">
+              <span class="button button_hover back">Back</span>
+              <span class="button button_hover next">Next</span>
+            </div>
+          </div>
+          <div id="step_4" class="step">
+            <div class="number">3</div>
+            <div class="text"><span class='play_button'>Play!</span></div>
+            <div class="nav">
+              <span class="button button_hover back">Back</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <footer>
-      <p>
-        &copy; 2012 Multimedia Lab &ndash; iMinds / Ghent University
-      </p>
-    </footer>
+    <div id="screen">
+
+    </div>
   </body>
+  <footer>
+    <p>
+      &copy; 2012 Multimedia Lab &ndash; iMinds / Ghent University
+    </p>
+  </footer>
 </html>
+
