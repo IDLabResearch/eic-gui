@@ -16,7 +16,7 @@ END_NODE
 
 echo Compiling stylesheet
 mkdir output/stylesheets
-node_modules/less/bin/lessc client/stylesheets/main.less > output/stylesheets/main_full.css
+node_modules/less/bin/lessc --compress client/stylesheets/main.less > output/stylesheets/main_full.css
 if csspress --help > /dev/null 2>&1; then
   echo Compressing stylesheet
   csspress output/stylesheets/main_full.css > output/stylesheets/main.css
