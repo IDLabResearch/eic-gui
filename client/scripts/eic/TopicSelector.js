@@ -36,15 +36,19 @@ function ($, urls) {
             if (!topics.length)
               throw "None of the user's likes could be mapped to a topic.";
 
-            // Use only strongly connected topics (if they exist)
-            if (topics.some(hasLargeConnectivity))
-              topics = topics.filter(hasLargeConnectivity);
-
-            // Pick one of the most connected topics
+            // Try to use only strongly connected topics
             topics = topics.sort(function (a, b) { return b.connectivity - a.connectivity; });
-            var topic = topics[Math.floor(Math.random() *
-                                          Math.min(topics.length, topCandidates))];
-            callback(topic);
+            if (hasLargeConnectivity(topics[0])) {
+              // Pick one of the most connected topics
+              topics = topics.filter(hasLargeConnectivity);
+              var randomTopic = topics[Math.floor(Math.random() *
+                                                  Math.min(topics.length, topCandidates))];
+              callback(randomTopic);
+            }
+            // If no strongly connected topic exists, use the most-connected topic.
+            else {
+              callback(topics[0]);
+            }
           },
         });
       });
