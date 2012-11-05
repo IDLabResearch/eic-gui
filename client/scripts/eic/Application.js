@@ -92,6 +92,8 @@ function ($, autocompleteTopic, FacebookConnector,
 
     // Initialize the HTML controls (bind events, set up autocomplete, ...).
     initControls: function () {
+      var self = this;
+
       // Initialize the controls of each step.
       $('#facebook-connect').click($.proxy(this, 'connectToFacebook'));
       $('#topic').on('change keyup', $.proxy(this, 'updateTopic'));
@@ -106,9 +108,18 @@ function ($, autocompleteTopic, FacebookConnector,
       $('a[href=#]').prop('href', 'javascript:;');
 
       // Update the controls when the user connects to Facebook
-      this.facebookConnector.once('connected', function (event, profile) {
+      self.facebookConnector.once('connected', function (event, profile) {
         // Update connection status.
-        $('#facebook').text('Connected as ' + profile.name + '.');
+        $('#facebook').empty().append(
+          'Connected as ' + profile.name + '. ',
+          $('<a>', {
+            text: 'Disconnect',
+            href: '#',
+            click: function () {
+              self.facebookConnector.disconnect($.proxy(window.location, 'reload'));
+              return false;
+            },
+          }));
 
         // Enable second step.
         $('.step.two').removeClass('inactive');
