@@ -29,14 +29,18 @@ function ($, autocompleteTopic, FacebookConnector,
       // Select the topic when the user connects to Facebook
       this.facebookConnector.once('connected', function (event, profile) {
         self.profile = profile;
-        self.topicSelector.selectTopic(function (startTopic) {
-          // add introduction generator
-          self.generator.addGenerator(new IntroductionSlideGenerator(profile, startTopic));
+        self.topicSelector.selectTopic().then(
+          function (startTopic) {
+            // add introduction generator
+            self.generator.addGenerator(new IntroductionSlideGenerator(profile, startTopic));
 
-          // add topic-to-topic generator
-          self.topicToTopic = new TopicToTopicSlideGenerator(startTopic);
-          self.generator.addGenerator(self.topicToTopic);
-        });
+            // add topic-to-topic generator
+            self.topicToTopic = new TopicToTopicSlideGenerator(startTopic);
+            self.generator.addGenerator(self.topicToTopic);
+          },
+          function (error) {
+            window.alert(error);
+          });
       });
     },
 

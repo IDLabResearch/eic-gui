@@ -15,12 +15,13 @@ function ($, urls) {
 
   TopicSelector.prototype = {
     // Select a topic, based on the user's Facebook profile
-    selectTopic: function (callback) {
+    selectTopic: function () {
       var self = this;
+      var demand = $.Deferred();
       self.facebookConnector.get('likes', function (response) {
         var likes = response.data;
         if (!likes.length)
-          throw "This user has no likes, so no topic can be found.";
+          return demand.reject("You have no likes, so no topic can be found.");
 
         // Convert likes to URIs
         $.ajax({
@@ -29,12 +30,12 @@ function ($, urls) {
           data: {
             label: likes.map(function (l) { return l.name; }).join()
           },
-          error: function (jqXHR, textStatus) {
-            throw "Error finding topic from likes: " + textStatus;
+          error: function (jqXHR, textStatus, errorThrown) {
+            demand.reject("Error finding topic from likes: " + errorThrown);
           },
           success: function (topics) {
             if (!topics.length)
-              throw "None of the user's likes could be mapped to a topic.";
+              return demand.reject("None of your likes could be mapped to a topic.");
 
             // Try to use only strongly connected topics
             topics = topics.sort(function (a, b) { return b.connectivity - a.connectivity; });
@@ -43,15 +44,16 @@ function ($, urls) {
               topics = topics.filter(hasLargeConnectivity);
               var randomTopic = topics[Math.floor(Math.random() *
                                                   Math.min(topics.length, topCandidates))];
-              callback(randomTopic);
+              demand.resolve(randomTopic);
             }
             // If no strongly connected topic exists, use the most-connected topic.
             else {
-              callback(topics[0]);
+              demand.resolve(topics[0]);
             }
           },
         });
       });
+      return demand.promise();
     },
   };
 
