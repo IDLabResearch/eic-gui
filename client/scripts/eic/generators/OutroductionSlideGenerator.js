@@ -47,10 +47,10 @@ function ($, BaseSlideGenerator, TTSService) {
             slide = this.createBaseSlide('outro', $outro, this.duration);
         slide.once('started', function () {
           setTimeout(function () {
-            $outro.append($('<span>').text(self.startTopic.first_name || self.startTopic.label + ", "));
+            $outro.append($('<span>').text(self.startTopic.label || self.startTopic.first_name + ','));
             setTimeout(function () {
               $outro.append($('<br>'));
-              $outro.append(self.startTopic.first_name ? "you are " : "is " + "connected to everything in this world,");
+              $outro.append((self.startTopic.first_name ? "you are " : "is ") + "connected to everything in this world,");
               setTimeout(function () {
                 $outro.append($('<br>'));
                 $outro.append("including ");
@@ -75,8 +75,8 @@ function ($, BaseSlideGenerator, TTSService) {
             self = this;
         
         var text = "So as you can see, " +
-                   this.startTopic.first_name || this.startTopic.label +
-                   self.startTopic.first_name ? ", you are " : " is " + "connected to everything in this world," +
+                   (this.startTopic.first_name || this.startTopic.label) +
+                   (self.startTopic.first_name ? ", you are " : " is ") + "connected to everything in this world," +
                    "including " + this.endTopic.label + "!";
         
         tts.getSpeech(text, 'en_GB', function (response) {
