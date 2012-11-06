@@ -1,6 +1,8 @@
 define(['lib/jquery', 'config/URLs'], function ($, urls) {
   "use strict";
 
+  var maxSentences = 1;
+
   /*
    * CLEANUP
    **/
@@ -107,15 +109,8 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
 
               function getDescription(item) {
                 var abstract = item.abstract || '';
-
                 var sentences = abstract.match(tregex) || [];
-                var desc = '';
-
-                for (var j = 0;j < sentences.length; j++) {
-                  desc += sentences[j];
-                  if (j > 2)
-                    break;
-                }
+                var desc = sentences.slice(0, maxSentences).join(' ');
                 return desc;
               }
 
