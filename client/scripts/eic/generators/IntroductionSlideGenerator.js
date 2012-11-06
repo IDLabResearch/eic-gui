@@ -51,9 +51,10 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
 
       fetchTopicInformation: function (callback) {
         var self = this,
-            profile = this.profile;
-        profile.genderType = this.profile.gender === 'male' ? 'man' : 'woman';
-        profile.relativePronoun = this.profile.gender === 'male' ? 'he' : 'she';
+            profile = this.profile,
+            male = this.profile.gender === 'male';
+        profile.personalPronoun = male ? 'he' : 'she';
+        profile.possessivePronoun = male  ? 'his' : 'her';
         profile.fullHometown = profile.hometown.name;
         profile.shortHometown = profile.fullHometown.replace(/,.+$/, '');
         callback.call(self);
@@ -72,8 +73,9 @@ function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerat
 
         var text = "Once upon a time, " +
                    this.profile.first_name + " wondered how " +
-                   this.profile.relativePronoun + " was connected to everything in this world. " +
-                   "You see, according to his Facebook page, " + this.profile.first_name + " likes " + this.likedTopic.label + ".";
+                   this.profile.personalPronoun + " was connected to everything in this world. " +
+                   "You see, according to " + this.profile.possessivePronoun + " Facebook page, " +
+                   this.profile.first_name + " likes " + this.likedTopic.label + ".";
 
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
