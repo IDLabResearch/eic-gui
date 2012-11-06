@@ -5,7 +5,7 @@
   paths: {
     requireLib: 'lib/almond',
   },
-  include: ['requireLib', 'lib/jquery.ui.autocomplete'],
+  include: ['requireLib', 'analytics.js'],
   shim: {
     'lib/jquery': {
       exports: 'jQuery'
