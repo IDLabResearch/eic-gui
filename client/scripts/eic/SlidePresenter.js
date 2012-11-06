@@ -26,47 +26,52 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
       this.generator.init();
 
       var self = this;
-      var currentSlide;
+      var currentSlide, nextSlide;
 
-      function showNext() {
-        // if slides are available, show them
+      function loadNext() {
+        // if slides are available, load them
         if (self.generator.hasNext()) {
-          console.log('[' + Math.round(+new Date() / 1000) + ']Showing new slide');
-          // remove children that are still transitioning out
-          self.$container.children('.transition-out').remove();
-          // start the transition of other children
-          var children = self.$container.children();
-          children.addClass('transition-out');
-          window.setTimeout(function () {
-            children.remove();
-          }, 1000);
-          // add the next slide and start it
-          var nextSlide = self.generator.next();
-          self.$container.prepend(nextSlide.$element);
-          nextSlide.start();
-
-          // stop the previous slide
-          if (currentSlide)
-            currentSlide.stop();
-          currentSlide = nextSlide;
-
-          // if slide contains a description, send it to TTS service
-          if (currentSlide.audioURL) {
-            console.log("URL " + currentSlide.audioURL + " detected in slide!");
-
-            self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
-            console.log("Playing " + currentSlide.audioURL);
-          }
-          if (nextSlide.duration)
-            window.setTimeout(showNext, nextSlide.duration);
+          console.log('[' + Math.round(+new Date() / 1000) + '] Loading new slide');
+          nextSlide = self.generator.next();
+          showNext();
         }
         // else, wait for new slides to arrive
         else {
-          self.generator.once('newSlides', showNext);
-          console.log('[' + Math.round(+new Date() / 1000) + ']No new slides!');
+          self.generator.once('newSlides', loadNext);
+          console.log('[' + Math.round(+new Date() / 1000) + '] No new slides!');
         }
       }
-      showNext();
+
+      function showNext() {
+        console.log('[' + Math.round(+new Date() / 1000) + '] Showing new slide');
+        // remove children that are still transitioning out
+        self.$container.children('.transition-out').remove();
+        // start the transition of other children
+        var children = self.$container.children();
+        children.addClass('transition-out');
+        window.setTimeout(function () {
+          children.remove();
+        }, 1000);
+
+        // start next slide
+        self.$container.prepend(nextSlide.$element);
+        nextSlide.start();
+
+        // stop the previous slide
+        if (currentSlide)
+          currentSlide.stop();
+        currentSlide = nextSlide;
+
+        // if slide contains a description, send it to TTS service
+        if (currentSlide.audioURL) {
+          console.log("URL " + currentSlide.audioURL + " detected in slide!");
+          self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
+          console.log("Playing " + currentSlide.audioURL);
+        }
+        if (nextSlide.duration)
+          window.setTimeout(loadNext, nextSlide.duration);
+      }
+      loadNext();
 
       this.started = true;
     }
