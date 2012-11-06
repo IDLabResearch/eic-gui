@@ -5,16 +5,12 @@
       }
 
       #frame, #screen {
+        display: none;
         position: relative;
         margin: auto;
         overflow: hidden;
         height: 600px;
         width: 800px;
-      }
-
-      #screen {
-        display: none;
-        top: -600px
       }
 
       #subtitle {
@@ -77,6 +73,8 @@
       #play .content {
         font-family: JennaSue;
         margin-top: 60px;
+        font-weight: bolder;
+        margin-left: 20px;
       }
 
       #logos {
@@ -110,14 +108,15 @@
       }
 
       #steps .number {
-        font-size: 180px;
+        margin-top: -40px;
+        font-size: 200px;
         color: #E20177;
         font-weight: bold;
         width:100%;
       }
 
       #steps .text {
-        margin-top: -35px;
+        margin-top: -60px;
         color:#fff;
         font-size: 28px;
         /*Hack for anti aliasing */
@@ -127,16 +126,13 @@
       #step_1 {
         text-align: right;
 
-      }
-
-      #step_1 .number {
-        margin-left: 5px;
-      }
+      }      
 
       #facebook-connect {
         text-decoration: none;
         color: #fff;
-        cursor: pointer
+        cursor: pointer;
+        font-size: 20px;
       }
 
       #facebook-connect:hover {
@@ -144,13 +140,17 @@
         color: #E20177
       }
 
+      #facebook {
+        font-size: 20px;
+      }
+
+      #facebook .profile_name{
+        color: #E20177;
+      }
+
       #step_3 {
         text-align: right;
         -webkit-transform: rotate(90deg)
-      }
-
-      #step_3 .number {
-        margin-left: 5px;
       }
 
       #step_4 {
@@ -158,8 +158,12 @@
         -webkit-transform: rotate(-90deg)
       }
 
+      #step_1 .number, #step_3 .number  {
+        margin-left: 10px;
+      }
+
       #step_4 .number {
-        margin-left: -5px;
+        margin-right: 10px;
       }
 
       #piece_1 .close {
@@ -179,27 +183,35 @@
         padding: 4px 10px;
         -webkit-border-radius: 5px;
         font: normal 14px/16px Helvetica, Arial, sans-serif;
-        font-weight: bold
-      }
-      
-      .button_hover {
+        font-weight: bold;
         cursor: pointer;
       }
-
-      .button_hover:hover {
-        background-color: #E20177;
+      
+      .button:hover
+      {
+          background-color: #E20177;
       }
 
       .disabled {
+        cursor: default;
         background-color: #ccc;
       }
 
-      .play_button {
+      .disabled:hover {
+        background-color: #ccc;
+      }
+
+      .play_button 
+      {
+        margin-top: -50px;
+        margin-bottom: -20px;
+        display: block;
         font-size: 90px;
         cursor: pointer;
       }
 
-      .play_button:hover {
+      .play_button:hover 
+      {
         color: #E20177;
       }
 

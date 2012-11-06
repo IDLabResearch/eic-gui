@@ -9,8 +9,8 @@ function ($, BaseSlideGenerator, TTSService) {
 
   /** Generator that creates outroductory slides */
   function OutroductionSlideGenerator(startTopic, endTopic, duration) {
-    if (startTopic.type !== 'facebook')
-      throw "The OutroductionSlideGenerator only works with start topics that are Facebook profiles.";
+    if (!startTopic)
+      throw "The OutroductionSlideGenerator has no starttopic";
 
     BaseSlideGenerator.call(this);
     
@@ -47,10 +47,10 @@ function ($, BaseSlideGenerator, TTSService) {
             slide = this.createBaseSlide('outro', $outro, this.duration);
         slide.once('started', function () {
           setTimeout(function () {
-            $outro.append($('<span>').text(self.startTopic.first_name + ", "));
+            $outro.append($('<span>').text(self.startTopic.first_name || self.startTopic.label + ", "));
             setTimeout(function () {
               $outro.append($('<br>'));
-              $outro.append("you are connected to everything in this world,");
+              $outro.append(self.startTopic.first_name ? "you are " : "is " + "connected to everything in this world,");
               setTimeout(function () {
                 $outro.append($('<br>'));
                 $outro.append("including ");
@@ -75,8 +75,8 @@ function ($, BaseSlideGenerator, TTSService) {
             self = this;
         
         var text = "So as you can see, " +
-                   this.startTopic.first_name + ", " +
-                   "you are connected to everything in this world," +
+                   this.startTopic.first_name || this.startTopic.label +
+                   self.startTopic.first_name ? ", you are " : " is " + "connected to everything in this world," +
                    "including " + this.endTopic.label + "!";
         
         tts.getSpeech(text, 'en_GB', function (response) {

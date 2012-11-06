@@ -1,14 +1,14 @@
 define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
-	"use strict";
+  "use strict";
 
-/***** Configuration *****/
+  /***** Configuration *****/
 
   var defaultProperties = [ 'email', 'user_hometown', 'user_interests',
-                            'user_likes', 'user_photos', 'user_birthday',
-                            'user_about_me' ];
+  'user_likes', 'user_photos', 'user_birthday',
+  'user_about_me' ];
 
 
-/***** Facebook loader *****/
+  /***** Facebook loader *****/
 
   /* Internal reference to window.FB, will be initialized in fbAsyncInit. */
   var FB;
@@ -32,14 +32,16 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     });
 
     // Execute pending callbacks
-    onFacebookReady.callbacks.forEach(function (callback) { callback(); });
+    onFacebookReady.callbacks.forEach(function (callback) {
+      callback();
+    });
     delete onFacebookReady.callbacks;
   };
   // Load the Facebook API script
   $.getScript('http://connect.facebook.net/en_US/all.js');
 
 
-/***** FacebookConnector class *****/
+  /***** FacebookConnector class *****/
 
   /* Simplified interface to the Facebook API. */
   function FacebookConnector() {
@@ -56,7 +58,9 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
     /* Connect to Facebook. */
     connect: function (callback) {
       FB.login($.proxy(this.connectionCallback, this),
-              { scope: defaultProperties.join() });
+      {
+        scope: defaultProperties.join()
+      });
     },
 
     /* Handle a Facebook connection callback. */
@@ -104,7 +108,9 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
       // Replace the member function by a delayed version of itself
       FacebookConnector.prototype[name] = function () {
         var args = arguments, self = this;
-        onFacebookReady(function () { origMember.apply(self, args); });
+        onFacebookReady(function () {
+          origMember.apply(self, args);
+        });
       };
     }
   });

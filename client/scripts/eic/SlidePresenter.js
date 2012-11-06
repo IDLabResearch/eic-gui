@@ -13,7 +13,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
     this.$audioContainer.jPlayer({
       ready: function () {},
       errorAlerts: true,
-      swfPath: "/js",
+      swfPath: "/lib",
       supplied: "mp3"
     });
   }
