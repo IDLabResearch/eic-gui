@@ -33,7 +33,14 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
         if (self.generator.hasNext()) {
           console.log('[' + Math.round(+new Date() / 1000) + '] Loading new slide');
           nextSlide = self.generator.next();
-          showNext();
+
+          // If the next has audio, but playback is still going on
+          if (nextSlide.audioURL && !self.$audioContainer.data().jPlayer.status.paused)
+            // Wait until playback has ended to show the next slide
+            self.$audioContainer.one($.jPlayer.event.ended, showNext);
+          else
+            // The next slide can start, since no audio will overlap
+            showNext();
         }
         // else, wait for new slides to arrive
         else {
