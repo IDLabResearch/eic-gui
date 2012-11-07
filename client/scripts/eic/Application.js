@@ -40,11 +40,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
             function (startTopic) {
               self.intro = new IntroductionSlideGenerator(profile, startTopic);
               self.intro.init();
-              
               self.beginTopic = startTopic;
-              
-              // add introduction generator
-              self.generator.addGenerator();
             },
             function (error) {
               self.generator.addGenerator(new ErrorSlideGenerator(error));
