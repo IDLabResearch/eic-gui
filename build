@@ -32,6 +32,9 @@ else
   mv output/stylesheets/main_full.css output/stylesheets/main.css
 fi
 
+echo Copying fonts
+cp client/stylesheets/*.otf client/stylesheets/*.ttf output/stylesheets
+
 echo Copying image files
 cp -r client/images output
 
