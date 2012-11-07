@@ -20,7 +20,7 @@ function ($, BaseSlideGenerator) {
         return;
 
       console.log('LoadingSlideGenerator is still waiting.');
-      var $title = $('<h1>').text("Buffering, please wait…"),
+      var $title = $('<h1>').text("Loading your personal movie…"),
           slide = this.createBaseSlide('title', $title, 500);
 
       return slide;
