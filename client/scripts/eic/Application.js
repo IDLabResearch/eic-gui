@@ -38,12 +38,13 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
           self.profile = profile;
           self.topicSelector.selectTopic().then(
             function (startTopic) {
+              self.intro = new IntroductionSlideGenerator(profile, startTopic);
+              self.intro.init();
+              
+              self.beginTopic = startTopic;
+              
               // add introduction generator
-              self.generator.addGenerator(new IntroductionSlideGenerator(profile, startTopic));
-
-              // add topic-to-topic generator
-              self.topicToTopic = new TopicToTopicSlideGenerator(startTopic);
-              self.generator.addGenerator(self.topicToTopic);
+              self.generator.addGenerator();
             },
             function (error) {
               self.generator.addGenerator(new ErrorSlideGenerator(error));
@@ -288,6 +289,8 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
                     $('#begintopic').show();
                     self.disableElement($('#step_1 .next'), true);
                     $('#facebook').html(fbContent);
+                    delete self.intro;
+                    delete self.profile;
                   })
                   );
                 return false;
@@ -358,15 +361,12 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
         $slides.hide();
         $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
 
-        // Fix the end topic and create final generators for the slide show
-        if (this.topicToTopic)
-          this.topicToTopic.setEndTopic(this.endTopic);
-        else if (this.beginTopic){
-          // add topic-to-topic generator
-          this.topicToTopic = new TopicToTopicSlideGenerator(this.beginTopic);
-          this.generator.addGenerator(this.topicToTopic);
-          this.topicToTopic.setEndTopic(this.endTopic);
-        }
+        if (this.intro)
+          this.generator.addGenerator(this.intro);
+        
+        this.topicToTopic = new TopicToTopicSlideGenerator(this.beginTopic);
+        this.generator.addGenerator(this.topicToTopic);
+        this.topicToTopic.setEndTopic(this.endTopic);
 
         this.generator.addGenerator(new OutroductionSlideGenerator(this.profile || this.beginTopic, this.endTopic));
 
