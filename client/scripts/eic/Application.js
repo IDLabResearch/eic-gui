@@ -271,7 +271,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
         $('a[href=#]').prop('href', 'javascript:;');
 
         // Update the controls when the user connects to Facebook
-        self.facebookConnector.once('connected', function (event, profile) {
+        self.facebookConnector.on('connected', function (event, profile) {
           $('#begintopic').hide();
           // Update connection status.
           $('#facebook').empty().append(
