@@ -1,9 +1,9 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
+define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
   'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
   'eic/generators/ErrorSlideGenerator',
   'eic/SlidePresenter', 'eic/TopicSelector'],
-  function ($, autocompleteTopic, FacebookConnector,
+  function ($, autocompleteTopic, drawPiece, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
     TopicToTopicSlideGenerator, CombinedSlideGenerator,
     ErrorSlideGenerator,
@@ -38,7 +38,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
           self.profile = profile;
           self.topicSelector.selectTopic().then(
             function (startTopic) {
-              self.intro = new IntroductionSlideGenerator(profile, startTopic);
+              self.intro = new IntroductionSlideGenerator(startTopic, profile);
               self.intro.init();
               self.beginTopic = startTopic;
             },
@@ -50,17 +50,13 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
       },
       drawPieces: function ($title, nr, img, fontsize) {
         for (var i = 0; i < nr; i++) {
-          var x =  i * (pieceWidth - 0.22 * pieceWidth),
-          y = ((i % 2) * 0.215 * pieceWidth);
-
-          this.drawPiece($title, {
+          drawPiece($title, {
             x: i,
             y: 0,
             size: pieceWidth,
             scaleY: (1 - 2 * (i % 2)),
             img: img
           });
-
 
           var $content = $title
           .children('.content');
@@ -71,28 +67,6 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
           });
         }
       },
-      drawPiece: function ($elem, options) {
-        var x =  options.x * (options.size - 0.22 * options.size) + ((1 - (options.y % 2)) * 0.215 * options.size),
-        y = options.y * (options.size - 0.22 * options.size) + ((options.x % 2) * 0.215 * options.size);
-
-        $elem
-        .width(x + options.size)
-        .height(options.size);
-
-        return $('<div />')
-        .addClass('piece')
-        .css({
-          width: options.size,
-          height: options.size,
-          position: 'absolute',
-          left: x,
-          top: y,
-          '-webkit-transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
-          'background': 'url(' + options.img + ') no-repeat',
-          'background-size': '100% 100%'
-        })
-        .appendTo($elem.children('.pieces'));
-      },
       drawBigPieces: function ($title) {
         var new_width = pieceWidth * 4;
         var step = 1;
@@ -100,7 +74,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
         for (var i = 0; i < 2; i++) {
           for (var j = 0; j < 2; j++) {
 
-            var piece = this.drawPiece($title, {
+            var piece = drawPiece($title, {
               x: i,
               y: j,
               size: new_width,
@@ -359,6 +333,11 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
 
         if (this.intro)
           this.generator.addGenerator(this.intro);
+        else {
+          this.intro = new IntroductionSlideGenerator(this.beginTopic);
+          this.intro.init();
+          this.generator.addGenerator(this.intro);
+        }
 
         this.topicToTopic = new TopicToTopicSlideGenerator(this.beginTopic);
         this.generator.addGenerator(this.topicToTopic);
@@ -371,6 +350,8 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/FacebookConnector',
         presenter.start();
       }
     };
+    
+    
 
     return Application;
   });

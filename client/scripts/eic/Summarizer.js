@@ -37,6 +37,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             glue = result.topics[i].topic.label + sentence.value + result.topics[i - 1].topic.label + '. ';
             break;
           }
+          result.topics[i].topic.previous =  result.topics[i - 1].topic.label;
           result.topics[i].text = glue + result.topics[i].text;
         }
 

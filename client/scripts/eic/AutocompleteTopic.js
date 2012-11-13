@@ -28,10 +28,12 @@ define(['lib/jquery', 'lib/jquery.ui.autocomplete', 'config/URLs'],
           $(this).trigger('change');
         },
         focus: function (event, ui) {
-          $(this).data('uri', ui.item.label.toUpperCase() === $(this).val().toUpperCase() ? ui.item && ui.item.uri : '');
+          if (ui.item)
+            $(this).data('uri', ui.item.label.toUpperCase() === $(this).val().toUpperCase() ? ui.item && ui.item.uri : '');
         },
         change: function (event, ui) {
-          $(this).data('uri', ui.item.label.toUpperCase() === $(this).val().toUpperCase() ? ui.item && ui.item.uri : '');
+          if (ui.item)
+            $(this).data('uri', ui.item.label.toUpperCase() === $(this).val().toUpperCase() ? ui.item && ui.item.uri : '');
         }
       });
     }
