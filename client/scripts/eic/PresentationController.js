@@ -1,13 +1,12 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookConnector',
+define(['lib/jquery', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
   'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
   'eic/generators/ErrorSlideGenerator',
   'eic/SlidePresenter', 'eic/TopicSelector'],
-  function ($, autocompleteTopic, drawPiece, FacebookConnector,
+  function ($, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
     TopicToTopicSlideGenerator, CombinedSlideGenerator,
-    ErrorSlideGenerator,
-    SlidePresenter, TopicSelector) {
+    ErrorSlideGenerator, SlidePresenter, TopicSelector) {
     "use strict";
 
     function PresentationController() {
