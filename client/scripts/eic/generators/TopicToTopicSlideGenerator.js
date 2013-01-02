@@ -44,7 +44,7 @@ define(['lib/jquery',
                 },
                 error: function () {
                   console.log("No path found.");
-                  self.addGenerator(new ErrorSlideGenerator('No path between you and ' + self.endTopic.label + ' could be found.'));
+                  self.addGenerator(new ErrorSlideGenerator('No path between ' + self.startTopic.label + ' and ' + self.endTopic.label + ' could be found.'));
                   self.loader.stopWaiting();
                 },
                 success: function (path) {
