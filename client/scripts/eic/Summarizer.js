@@ -1,5 +1,6 @@
-define(['lib/jquery', 'config/URLs'], function ($, urls) {
+define(['lib/jquery', 'eic/Logger', 'config/URLs'], function ($, Logger, urls) {
   "use strict";
+  var logger = new Logger("Summarizer");
 
   var maxSentences = 1;
 
@@ -17,7 +18,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
   Summarizer.prototype = {
     summarize : function (data) {
 
-      console.log('Summarization has started!');
+      logger.log('Started summarization');
 
       var path = data.path;
       var self = this;
@@ -50,7 +51,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
 
         function retrieveTranscription(index, edge) {
           var  property = edge.uri.substr(edge.uri.lastIndexOf('/') + 1);
-          console.log('Extracting sentence for ' + edge.uri);
+          logger.log('Extracting sentence for', edge.uri);
           //Split the string with caps
           var parts = property.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1);
 
@@ -75,8 +76,8 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
             $(self).trigger('generated', formatResult(self.result));
           }
 
-          console.log('Property: ' + property);
-          console.log('Generated sentence ' + index + ': ' + self.result.links[index][0].value);
+          logger.log('Property', property);
+          logger.log('Generated sentence', index, ':', self.result.links[index][0].value);
         }
 
         $(edges).each(retrieveTranscription);
@@ -93,7 +94,7 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
           },
           success: function (abstracts) {
             if (abstracts.length === 0)
-              console.log('No abstracts found!');
+              logger.log('No abstracts found');
 
             function retrieveAbstract(index, vertice) {
               var uri = vertice.uri || '';
@@ -130,14 +131,14 @@ define(['lib/jquery', 'config/URLs'], function ($, urls) {
                 $(self).trigger('generated', formatResult(self.result));
               }
 
-              console.log('Resource: ' + vertice);
-              console.log('Extracted text: ' + desc);
+              logger.log('Resource', vertice);
+              logger.log('Extracted text', desc);
             }
 
             $(vertices).each(retrieveAbstract);
           },
           error: function (err) {
-            console.log('Error retrieving abstracts: ' + err);
+            logger.log('Error retrieving abstracts', err);
           }
         });
       }

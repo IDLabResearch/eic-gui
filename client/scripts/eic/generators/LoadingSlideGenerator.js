@@ -1,6 +1,7 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
-function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/Logger', 'eic/generators/BaseSlideGenerator'],
+function ($, Logger, BaseSlideGenerator) {
   "use strict";
+  var logger = new Logger("LoadingSlideGenerator");
 
   /** Generator that creates waiting slides. */
   function LoadingSlideGenerator() {
@@ -19,7 +20,7 @@ function ($, BaseSlideGenerator) {
       if (!this.hasNext())
         return;
 
-      console.log('LoadingSlideGenerator is still waiting.');
+      logger.log('Still waiting');
       var $title = $('<h1>').text("Loading your personal movie…"),
           slide = this.createBaseSlide('title', $title, 500);
 
@@ -27,7 +28,7 @@ function ($, BaseSlideGenerator) {
     },
 
     stopWaiting: function () {
-      console.log('LoadingSlideGenerator stops waiting.');
+      logger.log('Stopped waiting');
       this.waiting = false;
     },
   });

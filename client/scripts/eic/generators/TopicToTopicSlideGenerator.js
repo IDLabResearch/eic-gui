@@ -43,7 +43,6 @@ define(['lib/jquery',
                   to: this.endTopic.uri
                 },
                 error: function () {
-                  console.log("No path found.");
                   self.addGenerator(new ErrorSlideGenerator('No path between ' + self.startTopic.label + ' and ' + self.endTopic.label + ' could be found.'));
                   self.loader.stopWaiting();
                 },

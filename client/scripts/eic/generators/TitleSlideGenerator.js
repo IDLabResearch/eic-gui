@@ -12,7 +12,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/PiecesUI'],
     /** Generator that creates a title slide for a topic. */
     function TitleSlideGenerator(topic, duration) {
       BaseSlideGenerator.call(this);
-      console.log(topic);
       if (typeof topic === "string")
         topic = {
           label: topic

@@ -1,12 +1,13 @@
-define(['lib/jquery', 'eic/FacebookConnector',
+define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
   'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CompositeSlideGenerator',
   'eic/generators/ErrorSlideGenerator', 'eic/SlidePresenter', 'eic/TopicSelector'],
-  function ($, FacebookConnector,
+  function ($, Logger, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
     TopicToTopicSlideGenerator, CompositeSlideGenerator,
     ErrorSlideGenerator, SlidePresenter, TopicSelector) {
     "use strict";
+    var logger = new Logger("PresentationController");
 
     function PresentationController() {
       this.facebookConnector = new FacebookConnector();
@@ -23,12 +24,14 @@ define(['lib/jquery', 'eic/FacebookConnector',
         // Select the topic when the user connects to Facebook
         // and prepare the introduction slide.
         this.facebookConnector.on('connected', function (event, profile) {
+          logger.log("Connected to Facebook as", profile.name);
           self.profile = profile;
           self.topicSelector.selectTopic().then(
             function (startTopic) { self.startTopic = startTopic; },
             function (error) { self.startTopic = new Error(error); });
         });
         this.facebookConnector.on('disconnected', function () {
+          logger.log("Disconnected from Facebook");
           delete self.profile;
           delete self.startTopic;
         });

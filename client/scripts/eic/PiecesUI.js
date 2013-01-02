@@ -274,7 +274,6 @@ define(['lib/jquery', 'eic/AutocompleteTopic'],
           label: $('#starttopic').val(),
           uri: $('#starttopic').data('uri') || ''
         };
-        console.log("start", this.controller.startTopic);
         var valid = this.controller.startTopic.uri.length > 0;
         // Enable second step if the topic is valid.
         this.disableElement($('#step_1 .next'), !valid);

@@ -1,6 +1,7 @@
-define(['lib/jquery', 'lib/jvent', 'config/URLs'],
-  function ($, EventEmitter, urls) {
+define(['lib/jquery', 'eic/logger', 'lib/jvent', 'config/URLs'],
+  function ($, Logger, EventEmitter, urls) {
     "use strict";
+    var logger = new Logger("TTSService");
 
     function TTSService() {
       EventEmitter.call(this);
@@ -21,7 +22,7 @@ define(['lib/jquery', 'lib/jvent', 'config/URLs'],
       },
       getSpeech: function (text, lang, callback) {
         var self = this;
-        console.log('Requesting audio URL...');
+        logger.log('Requesting audio URL');
         $.ajax({
           url: urls.speech,
           type: 'GET',
@@ -38,15 +39,16 @@ define(['lib/jquery', 'lib/jvent', 'config/URLs'],
             if (data.res === 'OK') {
               if (callback)
                 callback(data);
-              console.log('Audio URL ' + data.snd_url + ' was fetched!');
+              logger.log('Received audio URL', data.snd_url);
               self.emit('speechReady', data);
             }
             else {
-              console.log(data.err_code);
+              logger.log('Error receiving speech', data.err_code);
               self.emit('speechError', data);
             }
           },
           error: function (error) {
+            logger.log('Error receiving speech', error);
             self.emit('speechError', error);
           }
         });
