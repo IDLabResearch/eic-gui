@@ -16,7 +16,12 @@ define(function () {
       var text = pad(elapsed + '', 6).replace(/(\d{3})$/, ".$1s:\t") +
                  "[" + pad(this.module, longestModuleLength) + "]";
       var logItems = Array.prototype.concat.apply([text], arguments);
-      console.log.apply(console, logItems);
+      try {
+      	console.log.apply(console, logItems);
+      }
+      catch(e) {
+      	console.log(logItems);
+      }
     },
   };
 
