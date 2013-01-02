@@ -45,7 +45,7 @@
       stopped : Event\\
       duration : int\\
   }{}
-  \umlclass[x=1,y=-4]{CombinedSlideGenerator}{
+  \umlclass[x=1,y=-4]{CompositeSlideGenerator}{
       generators : SlideGenerator[]
     }{
       addGenerator(Generator) : void\\
@@ -64,7 +64,7 @@
 
   \umluniaggreg[mult1=1,mult2=1]{SlidePresenter}{SlideGenerator}
   \umlunicompo[mult1=*,mult2=1]{SlideGenerator}{Slide}
-  \umlinherit[geometry=|-|]{CombinedSlideGenerator}{SlideGenerator}
+  \umlinherit[geometry=|-|]{CompositeSlideGenerator}{SlideGenerator}
   \umlinherit{TitleSlideGenerator}{SlideGenerator}
   \umlinherit[geometry=|-|]{TopicSlideGenerator}{SlideGenerator}
   \umldep[geometry=|-|]{TopicSlideGenerator}{Topic}

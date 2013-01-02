@@ -1,5 +1,5 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.dynamic-dom.min','lib/prefixfree.jquery'],
-  function ($, autocompleteTopic, drawPiece) {
+define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.dynamic-dom.min', 'lib/prefixfree.jquery'],
+  function ($, autocompleteTopic) {
     "use strict";
 
     var pieceWidth = 120;
@@ -21,9 +21,32 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.
 
         this.drawBigPieces($('#steps'));
       },
+      drawPiece: function ($elem, options) {
+        var x = options.x * (options.size - 0.22 * options.size) +
+                ((1 - (options.y % 2)) * 0.215 * options.size),
+            y = options.y * (options.size - 0.22 * options.size) +
+                ((options.x % 2) * 0.215 * options.size);
+
+        $elem.width(x + options.size).height(options.size);
+
+        return $('<div />')
+          .addClass('piece')
+          .css({
+            width: options.size,
+            height: options.size,
+            position: 'absolute',
+            left: x,
+            top: y,
+            'transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
+            'background': 'url(' + options.img + ') no-repeat',
+            'background-size': '100% 100%'
+          })
+          .appendTo($elem.children('.pieces'));
+      },
+
       drawPieces: function ($title, nr, img, fontsize) {
         for (var i = 0; i < nr; i++) {
-          drawPiece($title, {
+          this.drawPiece($title, {
             x: i,
             y: 0,
             size: pieceWidth,
@@ -47,7 +70,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.
         for (var i = 0; i < 2; i++) {
           for (var j = 0; j < 2; j++) {
 
-            var piece = drawPiece($title, {
+            var piece = this.drawPiece($title, {
               x: i,
               y: j,
               size: new_width,
@@ -251,7 +274,6 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.
           label: $('#starttopic').val(),
           uri: $('#starttopic').data('uri') || ''
         };
-        console.log("start", this.controller.startTopic);
         var valid = this.controller.startTopic.uri.length > 0;
         // Enable second step if the topic is valid.
         this.disableElement($('#step_1 .next'), !valid);
@@ -297,7 +319,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.
           top:  400 - (pieceWidth * 8 * 2),
           transform: 'rotate(0deg) scale(3, 3)'
         });
-      },
+      }
     };
 
     return PiecesUI;

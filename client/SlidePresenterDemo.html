@@ -5,7 +5,7 @@
   <title>Everything Is Connected — Slide Presenter demo</title>
   <script>
     function startApplication($, eic) {
-      var generators = new eic.CombinedSlideGenerator();
+      var generators = new eic.CompositeSlideGenerator();
       var presenter = new eic.SlidePresenter('#main .slides', generators);
       $('#start').click(function() {
         var topics = $('#topics').val().trim().split(/,\s*/);

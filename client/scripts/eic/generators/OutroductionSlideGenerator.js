@@ -1,7 +1,7 @@
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/TTSService'],
 function ($, BaseSlideGenerator, TTSService) {
   "use strict";
-  
+
   /*
    * CLEANUP
    * Add Path
@@ -13,7 +13,7 @@ function ($, BaseSlideGenerator, TTSService) {
       throw "The OutroductionSlideGenerator has no starttopic";
 
     BaseSlideGenerator.call(this);
-    
+
     this.startTopic = startTopic;
     this.endTopic = endTopic;
     this.duration = duration || 1000;
@@ -35,19 +35,17 @@ function ($, BaseSlideGenerator, TTSService) {
         return this.done !== true;
       },
 
-      getDuration: function () {return this.duration;},
-      
       /** Advances to the outro slide. */
       next: function () {
         if (!this.hasNext())
           return;
-        
+
         var self = this,
             $outro = $('<h1>').text("As you can see, "),
             slide = this.createBaseSlide('outro', $outro, this.duration);
         slide.once('started', function () {
           setTimeout(function () {
-            $outro.append($('<span>').text(self.startTopic.label || self.startTopic.first_name + ','));
+            $outro.append($('<span>').text(self.startTopic.first_name ? self.startTopic.first_name + ", " : self.startTopic.label));
             setTimeout(function () {
               $outro.append($('<br>'));
               $outro.append((self.startTopic.first_name ? "you are " : "is ") + "connected to everything in this world,");
@@ -65,54 +63,54 @@ function ($, BaseSlideGenerator, TTSService) {
           }, 1000);
         });
         slide.audioURL = this.audioURL;
-        
+
         this.done = true;
 
         return slide;
       },
-      
+
       createSpeech: function () {
         var tts = new TTSService(),
             self = this;
-        
+
         var text = "So as you can see, " +
                    (this.startTopic.first_name || this.startTopic.label) +
                    (this.startTopic.first_name ? ", you are " : " is ") + "connected to everything in this world," +
                    "including " + this.endTopic.label + "!";
-        
+
         tts.getSpeech(text, 'en_GB', function (response) {
           self.audioURL = response.snd_url;
         });
       }
     });
-  
-  function addNavigation($container){
+
+  function addNavigation($container) {
     var $nav = $('<div />')
     .addClass('navigation')
     .appendTo($container);
-    
+
     $('<span>')
     .addClass('button')
     .appendTo($nav)
-    .click(function(){
+    .click(function () {
       window.location.reload();
     })
     .text('Try again!');
-    
+
 //    $('<span>')
 //    .addClass('button')
 //    .appendTo($nav)
 //    .click(function(){
-//      
+//
 //    })
 //    .text('Disconnect from Facebook');
-    
+
   }
-  
+
   function addShares($container, self) {
     var $buttons = $('<div>', {'class': 'share'});
     $container.append($('<h2>').text('Share:'), $buttons);
-    
+
     /** Add Facebook button */
 //    var $fblike = $('<div>').addClass("fb-like")
 //                            .attr('data-href', "OUR URL")
@@ -125,8 +123,8 @@ function ($, BaseSlideGenerator, TTSService) {
 //    window.FB.XFBML.parse();
 
     /** Add Tweet button */
-    var tweetmessage = (self.startTopic.first_name ? 'I am ' : self.startTopic.label + ' is ') + 'connected to '+self.endTopic.label+' through #LinkedData! Find out how you are #connected at http://everythingisconnected.be. #iswc2012';
-    
+    var tweetmessage = (self.startTopic.first_name ? 'I am ' : self.startTopic.label + ' is ') + 'connected to ' + self.endTopic.label + ' through #LinkedData! Find out how you are #connected at http://everythingisconnected.be. #iswc2012';
+
     var $tweet = $('<a>')
     .attr('href', 'https://twitter.com/share?text=' + tweetmessage)
                          .attr('data-lang', "en")

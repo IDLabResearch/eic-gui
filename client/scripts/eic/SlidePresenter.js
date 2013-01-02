@@ -1,6 +1,7 @@
-define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
+define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min'], function ($, Logger, JPlayer) {
   "use strict";
-  
+  var logger = new Logger("SlidePresenter");
+
   /*
    * CLEANUP
    **/
@@ -15,7 +16,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
       errorAlerts: true,
       swfPath: "/scripts/lib",
       supplied: "mp3",
-      wmode:"window"
+      wmode: "window"
     });
   }
 
@@ -32,7 +33,7 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
       function loadNext() {
         // if slides are available, load them
         if (self.generator.hasNext()) {
-          console.log('[' + Math.round(+new Date() / 1000) + '] Loading new slide');
+          logger.log('Loading new slide');
           nextSlide = self.generator.next();
 
           // If the next has audio, but playback is still going on
@@ -46,12 +47,12 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
         // else, wait for new slides to arrive
         else {
           self.generator.once('newSlides', loadNext);
-          console.log('[' + Math.round(+new Date() / 1000) + '] No new slides!');
+          logger.log('No pending slides');
         }
       }
 
       function showNext() {
-        console.log('[' + Math.round(+new Date() / 1000) + '] Showing new slide');
+        logger.log('Showing next slide');
         // remove children that are still transitioning out
         self.$container.children('.transition-out').remove();
         // start the transition of other children
@@ -72,9 +73,9 @@ define(['lib/jquery', 'lib/jplayer.min'], function ($, JPlayer) {
 
         // if slide contains a description, send it to TTS service
         if (currentSlide.audioURL) {
-          console.log("URL " + currentSlide.audioURL + " detected in slide!");
+          logger.log("Audio found in slide", currentSlide.audioURL);
           self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
-          console.log("Playing " + currentSlide.audioURL);
+          logger.log("Playing", currentSlide.audioURL);
         }
         if (nextSlide.duration)
           window.setTimeout(loadNext, nextSlide.duration);

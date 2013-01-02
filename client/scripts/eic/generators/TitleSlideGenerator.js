@@ -1,5 +1,5 @@
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
-  function ($, BaseSlideGenerator, drawPiece) {
+define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/PiecesUI'],
+  function ($, BaseSlideGenerator, PiecesUI) {
     "use strict";
 
     /*
@@ -12,12 +12,11 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
     /** Generator that creates a title slide for a topic. */
     function TitleSlideGenerator(topic, duration) {
       BaseSlideGenerator.call(this);
-      console.log(topic);
       if (typeof topic === "string")
         topic = {
           label: topic
         };
-    
+
       this.topic = topic;
       this.duration = duration || defaultDuration;
     }
@@ -36,22 +35,22 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
             return;
 
           var $title = $('<div />').addClass('title');
-          
+
           var $content = $('<div />')
           .addClass('content')
           .appendTo($title);
-          
+
           $('<div />').addClass('pieces').appendTo($title);
-          
+
           var slide = this.createBaseSlide('titleSlide', $title, this.duration);
-      
+
           var pieceWidth = 350;
           var labels = [
-          this.topic.previous || '', 
-          this.topic.label
+            this.topic.previous || '',
+            this.topic.label
           ];
           for (var i = 0; i < labels.length; i++) {
-            var piece = drawPiece($title, {
+            var piece = PiecesUI.prototype.drawPiece($title, {
               x: i,
               y: 0,
               size: pieceWidth,
@@ -59,10 +58,10 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
               scaleY: (1 - 2 * (i % 2)),
               img: i === 1 ? 'images/piece5.svg' : 'images/piece6.svg'
             })
-            .attr('id','title_piece_'+i);
-            
+            .attr('id', 'title_piece_' + i);
+
             piece.css('display', labels[i] ? 'block' : 'none');
-                      
+
             $('<div />')
             .appendTo($content)
             .text(labels[i])
@@ -74,25 +73,26 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
               width: pieceWidth - (pieceWidth * 0.22),
               'font-size':   pieceWidth / 8,
               'line-height': 1,
-              'text-align':'left'
+              'text-align': 'left'
             })
-            .attr('id','title_label_'+i);
+            .attr('id', 'title_label_' + i);
           }
-          
+
           slide.once('started', function () {
             $('#title_piece_1, #title_label_1')
             .css({
+
               'animation-name': 'slide2',
               'animation-duration': '0.5s',
               'transition-timing-function': 'linear'
-            })
+            });
           });
-                
+
           this.done = true;
 
           return slide;
-        },
+        }
       });
-  
+
     return TitleSlideGenerator;
   });

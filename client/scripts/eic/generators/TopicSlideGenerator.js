@@ -1,21 +1,20 @@
-define(['lib/jquery',
-  'eic/TTSService',
-  'eic/generators/CombinedSlideGenerator',
-  'eic/generators/GoogleImageSlideGenerator',
-  'eic/generators/GoogleMapsSlideGenerator',
-  'eic/generators/DateSlideGenerator',
-  'eic/generators/TitleSlideGenerator',
-  'eic/generators/YouTubeSlideGenerator'],
-  function ($, TTSService, CombinedSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+define(['lib/jquery', 'eic/Logger', 'eic/TTSService',
+  'eic/generators/CompositeSlideGenerator', 'eic/generators/GoogleImageSlideGenerator',
+  'eic/generators/GoogleMapsSlideGenerator', 'eic/generators/DateSlideGenerator',
+  'eic/generators/TitleSlideGenerator', 'eic/generators/YouTubeSlideGenerator'],
+  function ($, Logger, TTSService,
+    CompositeSlideGenerator, GoogleImageSlideGenerator,
+    GoogleMapsSlideGenerator, DateSlideGenerator,
+    TitleSlideGenerator, YouTubeSlideGenerator) {
     "use strict";
-    
+    var logger = new Logger("TopicSlideGenerator");
+
     /*
     * CLEANUP
     **/
 
     function TopicSlideGenerator(topic, description) {
-      CombinedSlideGenerator.call(this);
-      this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
+      CompositeSlideGenerator.call(this);
 
       this.generators = [];
       this.topic = topic;
@@ -26,7 +25,7 @@ define(['lib/jquery',
     }
 
     $.extend(TopicSlideGenerator.prototype,
-             CombinedSlideGenerator.prototype,
+             CompositeSlideGenerator.prototype,
       {
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {
@@ -40,7 +39,7 @@ define(['lib/jquery',
         init: function () {
           if (this.inited)
             return;
-            
+
           //Create all generators depending on the type of the topic
           switch (this.topic.type) {
           case "date":
@@ -56,38 +55,36 @@ define(['lib/jquery',
             this.addGenerator(new YouTubeSlideGenerator(this.topic));
             break;
           }
-          
+
           var tts = new TTSService(),
               self = this;
-          
           tts.once('speechReady', function (event, data) {
-            self.durationLeft = data.snd_time;
+            self.durationLeft = Math.floor(data.snd_time);
             self.audioURL = data.snd_url;
-            console.log('[' + Math.round(+new Date() / 1000) + ']Speech for topic ' + self.topic.label + ' received!');
-            //When speech is received, 'remind' the presenter that the slides are ready
-            self.emitNewSlidesEvent();
+            logger.log('Received speech for topic', self.topic.label);
+            // When speech is received, 'remind' the presenter that the slides are ready
+            self.emit('newSlides');
           });
+          logger.log('Getting speech for topic', this.topic.label);
           tts.getSpeech(this.description, 'en_GB');
 
-          console.log('[' + Math.round(+new Date() / 1000) + ']Getting speech for topic ' + this.topic.label + ' from service');
-          
           this.inited = true;
         },
-        
+
         next: function () {
           var slide;
-        
+
           if (this.first) {
             // make sure first slide is always a titleslide
             slide = new TitleSlideGenerator(this.topic).next();
             slide.audioURL = this.audioURL;
-            
+
             // prepare other generators
             this.generators.forEach(function (g) { g.prepare(); });
-            
+
             this.first = false;
-            
-            console.log('[' + Math.round(+new Date() / 1000) + ']First slide ' + this.topic.label + ' added!');
+
+            logger.log('Added first slide on ', this.topic.label);
 
           }
           else {
@@ -97,7 +94,7 @@ define(['lib/jquery',
               generator = this.generators[Math.floor(Math.random() * this.generators.length)];
             } while (!generator.hasNext());
             slide = generator.next();
-            
+
             // shorten the slide if it would take too long
             if (slide.duration > this.durationLeft)
               slide.duration = Math.min(slide.duration, this.durationLeft + 1000);
@@ -105,10 +102,9 @@ define(['lib/jquery',
             else if (this.generators.length <= 1 && !this.hasNext())
               slide.duration = this.durationLeft;
           }
-          
-          this.durationLeft -= slide.duration;
 
-          console.log('[' + Math.round(+new Date() / 1000) + ']New slide: duration ' + slide.duration + 'ms, ' + this.durationLeft + 'ms left!');
+          this.durationLeft -= slide.duration;
+          logger.log('New slide: duration ', slide.duration, 'ms,', this.durationLeft, 'ms left');
 
           return slide;
         },
