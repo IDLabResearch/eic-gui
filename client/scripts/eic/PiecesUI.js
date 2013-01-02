@@ -61,7 +61,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
               size: new_width,
               scaleX: (1 - 2 * (j % 2)),
               scaleY: (1 - 2 * (i % 2)),
-              img: (i === 0 && j === 1) ? 'images/piece4.svg' : 'images/piece3.svg'
+              img: (i === 0 && j === 1) ? 'images/piece4.svg' : 'images/piece3.svg' //Add white piece
             })
             .attr('id', 'piece_' + step)
             .hide();
