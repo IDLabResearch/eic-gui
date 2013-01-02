@@ -29,7 +29,7 @@
 		* me.on("ready", startDoingStuff);
 		*/
 		this.addListener = this.on = function (event, listener) { // Event: 'newListener'
-		  if(!event) {
+		  if(!event || !listener) {
 		    console.log(arguments)
 		    return;
 		  }

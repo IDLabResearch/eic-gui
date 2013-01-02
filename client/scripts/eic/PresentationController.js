@@ -1,13 +1,12 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookConnector',
+define(['lib/jquery', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
   'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
   'eic/generators/ErrorSlideGenerator',
   'eic/SlidePresenter', 'eic/TopicSelector'],
-  function ($, autocompleteTopic, drawPiece, FacebookConnector,
+  function ($, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
     TopicToTopicSlideGenerator, CombinedSlideGenerator,
-    ErrorSlideGenerator,
-    SlidePresenter, TopicSelector) {
+    ErrorSlideGenerator, SlidePresenter, TopicSelector) {
     "use strict";
 
     function PresentationController() {
@@ -27,15 +26,19 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
           self.profile = profile;
           self.topicSelector.selectTopic().then(
             function (startTopic) {
-              self.intro = new IntroductionSlideGenerator(startTopic, profile);
-              self.intro.init();
               self.startTopic = startTopic;
+              self.intro = new IntroductionSlideGenerator(startTopic, profile);
+              // Start initializing right away, avoiding delay when starting the movie
+              self.intro.init();
             },
             function (error) {
               self.intro = new ErrorSlideGenerator(error);
-              self.intro.init();
-              self.startTopic = null;
+              self.startTopic = error;
             });
+        });
+        this.facebookConnector.on('disconnected', function () {
+          delete self.intro;
+          delete self.startTopic;
         });
       },
 
@@ -46,35 +49,32 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
 
       // Starts the movie about the connection between the user and the topic.
       playMovie: function () {
+        if (!this.startTopic) throw "No start topic selected.";
+        if (!this.endTopic) throw "No end topic selected.";
+
+        // Create the slides panel
         var $slides = $('<div>').addClass('slides'),
         $audio = $('<div>').addClass('audio'),
         $wrapper = $('<div>').addClass('slides-wrapper')
-        .append($slides).append($audio);
+                             .append($slides).append($audio);
 
-        // Hide the main panel.
+        // Hide the main panel and show the slides panel.
         $('#screen').append($wrapper);
+        $wrapper.hide().fadeIn($.proxy($slides.hide(), 'fadeIn', 1000));
 
-        // Show the slides panel.
-        $slides.hide();
-        $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
-
-        if (this.intro)
-          this.generator.addGenerator(this.intro);
-        else {
+        // Create the introduction if it does not exist yet
+        if (!this.intro)
           this.intro = new IntroductionSlideGenerator(this.startTopic);
-          this.intro.init();
-          this.generator.addGenerator(this.intro);
-        }
 
-        this.topicToTopic = new TopicToTopicSlideGenerator(this.startTopic);
-        this.generator.addGenerator(this.topicToTopic);
-        this.topicToTopic.setEndTopic(this.endTopic);
-
-        this.generator.addGenerator(new OutroductionSlideGenerator(this.profile || this.startTopic, this.endTopic));
+        // Add introduction, body, and outroduction generators
+        this.generator.addGenerators([
+          this.intro,
+          new TopicToTopicSlideGenerator(this.startTopic, this.endTopic),
+          new OutroductionSlideGenerator(this.profile || this.startTopic, this.endTopic)
+        ]);
 
         // Start the slide show.
-        var presenter = new SlidePresenter($slides, this.generator, $audio);
-        presenter.start();
+        new SlidePresenter($slides, this.generator, $audio).start();
       }
     };
 

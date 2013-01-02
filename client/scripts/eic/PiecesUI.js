@@ -1,13 +1,5 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookConnector',
-  'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
-  'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
-  'eic/generators/ErrorSlideGenerator',
-  'eic/SlidePresenter', 'eic/TopicSelector'],
-  function ($, autocompleteTopic, drawPiece, FacebookConnector,
-    IntroductionSlideGenerator, OutroductionSlideGenerator,
-    TopicToTopicSlideGenerator, CombinedSlideGenerator,
-    ErrorSlideGenerator,
-    SlidePresenter, TopicSelector) {
+define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
+  function ($, autocompleteTopic, drawPiece) {
     "use strict";
 
     var pieceWidth = 120;
@@ -286,8 +278,17 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
 
         this.animate($('#steps'), 'moveToScreen', 0.7,
           function () {
+            // Remove the input controls
             $('#frame').remove();
-            self.controller.playMovie();
+            // Try to start the movie
+            try {
+              self.controller.playMovie();
+            }
+            // Controller errors are emergency cases we cannot handle gracefully
+            catch (error) {
+              window.alert("Unexpected error: " + error);
+              window.location.reload();
+            }
           })
         .css({
           width: '0px',

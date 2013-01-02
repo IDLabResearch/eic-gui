@@ -46,6 +46,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
   /* Simplified interface to the Facebook API. */
   function FacebookConnector() {
     EventEmitter.call(this);
+    this.status = "disconnected";
   }
 
   FacebookConnector.prototype = {
@@ -57,6 +58,7 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 
     /* Connect to Facebook. */
     connect: function (callback) {
+      this.once("disconnected", callback);
       FB.login($.proxy(this.connectionCallback, this),
       {
         scope: defaultProperties.join()
@@ -65,20 +67,28 @@ define(['lib/jquery', 'lib/jvent'], function ($, EventEmitter) {
 
     /* Handle a Facebook connection callback. */
     connectionCallback: function (response) {
+      // Only act on status changes
+      if (response.status === this.status)
+        return;
+      this.status = response.status;
+
       // In case of connection, raise "connected" event with profile argument
-      if (response.status == "connected") {
+      if (response.status === "connected") {
         var self = this;
         this.getProfile(function (profile) {
           profile.connector = self;
-          self.emit('connected', profile);
+          self.emit("connected", profile);
         });
       }
     },
 
     /* Disconnect from Facebook. */
     disconnect: function (callback) {
+      var self = this;
+      this.once("disconnected", callback);
       FB.logout(function (response) {
-        callback(0, response);
+        self.status = "disconnected";
+        self.emit("disconnected");
       });
     },
 
