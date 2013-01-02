@@ -19,5 +19,8 @@
     'lib/jplayer.min': {
       deps: ['lib/jquery']
     },
+    'lib/prefixfree.jquery': {
+      deps: ['lib/prefixfree.min']
+    },
   },
 })

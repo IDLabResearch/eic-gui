@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.dynamic-dom.min', 'lib/prefixfree.jquery'],
+define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
   function ($, autocompleteTopic) {
     "use strict";
 
@@ -144,15 +144,18 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.dynamic-dom.min',
         });
 
         //Shows the stepsmenu
-        $('#play').mouseover(function () {
-          $(this).hide();
+        $('#play').on('mouseover click', show_steps);
+        $('#frame').on('click', show_steps);
+        
+        function show_steps() {
+          $('#play').hide();
 
           self.animate($('#piece_1'), 'rotateout', 0.3,
             function () {
               $('#step_1').show();
             })
           .show();
-        });
+        }
 
         $('#step_1 .next:not(.disabled)').live('click', function () {
           self.disableElement($('#step_1 .button, #step_1 input'), true);
