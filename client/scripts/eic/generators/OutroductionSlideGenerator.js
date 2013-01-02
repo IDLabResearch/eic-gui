@@ -45,7 +45,7 @@ function ($, BaseSlideGenerator, TTSService) {
             slide = this.createBaseSlide('outro', $outro, this.duration);
         slide.once('started', function () {
           setTimeout(function () {
-            $outro.append($('<span>').text(self.startTopic.label || self.startTopic.first_name + ','));
+            $outro.append($('<span>').text(self.startTopic.first_name ? self.startTopic.first_name + ", " : self.startTopic.label));
             setTimeout(function () {
               $outro.append($('<br>'));
               $outro.append((self.startTopic.first_name ? "you are " : "is ") + "connected to everything in this world,");
