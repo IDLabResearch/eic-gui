@@ -27,9 +27,11 @@
     },
   });
 
-  require(['eic/Application'], function (Application) {
-    new Application().init();
-    
+  require(['eic/PresentationController', 'eic/PiecesUI'], function (PresentationController, PiecesUI) {
+    var controller = new PresentationController(),
+        view = new PiecesUI(controller);
+    controller.init();
+    view.init();
   });
 })(requirejs);
 

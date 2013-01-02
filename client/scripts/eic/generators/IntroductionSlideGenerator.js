@@ -9,17 +9,10 @@ define([ 'lib/jquery',
     GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService) {
     "use strict";
 
-    /*
-   * CLEANUP
-   * Male/female does not work
-   **/
-
     /** Generator that creates introductory slides */
     function IntroductionSlideGenerator(startTopic, profile) {
-      //      if (profile.type !== 'facebook')
-      //        throw "The IntroductionSlideGenerator only works with Facebook profiles.";
       if (!startTopic)
-        throw "The OutroductionSlideGenerator has no starttopic";
+        throw "The IntroductionSlideGenerator has no starttopic";
 
       CombinedSlideGenerator.call(this);
       this.slides = [];
@@ -41,7 +34,7 @@ define([ 'lib/jquery',
             else {
               this.createSpeech();
               this.createIntroSlideGenerators();
-            } 
+            }
             this.inited = true;
           }
         },
@@ -80,7 +73,7 @@ define([ 'lib/jquery',
           var text = "Once upon a time, " +
           (this.profile ? this.profile.first_name : 'you') + " wondered how " +
           (this.profile ? this.profile.personalPronoun : this.startTopic.label) + " was connected to everything in this world. ";
-                 
+
           if (this.profile)
             text += "You see, according to " + this.profile.possessivePronoun + " Facebook page, " +
             this.profile.first_name + " likes " + this.startTopic.label + ".";

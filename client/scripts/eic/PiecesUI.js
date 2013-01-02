@@ -12,14 +12,14 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
 
     var pieceWidth = 120;
 
-    function Application() {
-      this.facebookConnector = new FacebookConnector();
-      this.topicSelector = new TopicSelector(this.facebookConnector);
-      this.generator = new CombinedSlideGenerator();
+    function PiecesUI(presentationController) {
+      this.controller = presentationController;
     }
 
-    Application.prototype = {
+    PiecesUI.prototype = {
       init: function () {
+        this.initControls();
+
         this.drawPieces($('#title_1'), 5, 'images/piece3.svg');
         this.drawPieces($('#title_2'), 1, 'images/piece2.svg');
         this.drawPieces($('#title_3'), 5, 'images/piece3.svg');
@@ -28,25 +28,6 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
         $('#frame').show();
 
         this.drawBigPieces($('#steps'));
-
-        var self = this;
-        this.initControls();
-        this.facebookConnector.init();
-
-        // Select the topic when the user connects to Facebook
-        this.facebookConnector.once('connected', function (event, profile) {
-          self.profile = profile;
-          self.topicSelector.selectTopic().then(
-            function (startTopic) {
-              self.intro = new IntroductionSlideGenerator(startTopic, profile);
-              self.intro.init();
-              self.beginTopic = startTopic;
-            },
-            function (error) {
-              self.generator.addGenerator(new ErrorSlideGenerator(error));
-            });
-        });
-
       },
       drawPieces: function ($title, nr, img, fontsize) {
         for (var i = 0; i < nr; i++) {
@@ -229,34 +210,34 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
         var fbContent = $('#facebook').html();
 
         // Initialize the controls of each step.
-        $('#facebook-connect').live('click', $.proxy(this, 'connectToFacebook'));
+        $('#facebook-connect').live('click', $.proxy(this.controller, 'connectToFacebook'));
 
-        $('#begintopic').on('change keyup', $.proxy(this, 'updateBeginTopic'));
+        $('#starttopic').on('change keyup', $.proxy(this, 'updateStartTopic'));
         $('#endtopic').on('change keyup', $.proxy(this, 'updateEndTopic'));
 
         // Make sure the topic is empty (browsers can cache text).
-        $('#begintopic').val('');
+        $('#starttopic').val('');
         $('#endtopic').val('');
 
-        autocompleteTopic($('#begintopic'));
+        autocompleteTopic($('#starttopic'));
         autocompleteTopic($('#endtopic'));
 
         // Don't let empty links trigger a location change.
         $('a[href=#]').prop('href', 'javascript:;');
 
         // Update the controls when the user connects to Facebook
-        self.facebookConnector.on('connected', function (event, profile) {
-          $('#begintopic').hide();
+        this.controller.facebookConnector.on('connected', function (event, profile) {
+          $('#starttopic').hide();
           // Update connection status.
           $('#facebook').empty().append(
             'Connected as <span class="profile_name">' + profile.name + '</span> <br>',
             $('<a>', {
               text: 'Disconnect',
               click: function () {
-                self.facebookConnector.disconnect(
+                self.controller.facebookConnector.disconnect(
                   //$.proxy(window.location, 'reload')
                   $.proxy(function () {
-                    $('#begintopic').show();
+                    $('#starttopic').show();
                     self.disableElement($('#step_1 .next'), true);
                     $('#facebook').html(fbContent);
                     delete self.intro;
@@ -271,32 +252,31 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
           self.disableElement($('#step_1 .next'), false);
         });
       },
-      // Lets the user connect with a Facebook account.
-      connectToFacebook: function () {
-        //$('#facebook').text('Connecting…');
-        this.facebookConnector.connect();
-      },
+
       // Updates the start topic.
-      updateBeginTopic: function () {
-        this.beginTopic = {
-          label: $('#begintopic').val(),
-          uri: $('#begintopic').data('uri') || ''
+      updateStartTopic: function () {
+        this.controller.startTopic = {
+          label: $('#starttopic').val(),
+          uri: $('#starttopic').data('uri') || ''
         };
-        var valid = this.beginTopic.uri.length > 0;
-        //Enable second step if the topic is valid.
+        console.log("start", this.controller.startTopic);
+        var valid = this.controller.startTopic.uri.length > 0;
+        // Enable second step if the topic is valid.
         this.disableElement($('#step_1 .next'), !valid);
       },
+
       // Updates the goal topic.
       updateEndTopic: function () {
-        this.endTopic = {
+        this.controller.endTopic = {
           label: $('#endtopic').val(),
           uri: $('#endtopic').data('uri') || ''
         };
-        var valid = this.endTopic.uri.length > 0;
+        var valid = this.controller.endTopic.uri.length > 0;
 
-        //Enable third step if the topic is valid.
+        // Enable third step if the topic is valid.
         this.disableElement($('#step_3 .next'), !valid);
       },
+
       drawScreen: function ($screen) {
         var self = this;
         $screen.show();
@@ -307,7 +287,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
         this.animate($('#steps'), 'moveToScreen', 0.7,
           function () {
             $('#frame').remove();
-            self.playMovie();
+            self.controller.playMovie();
           })
         .css({
           width: '0px',
@@ -317,41 +297,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'eic/FacebookCon
           '-webkit-transform': 'rotate(0deg) scale(3, 3)'
         });
       },
-      // Starts the movie about the connection between the user and the topic.
-      playMovie: function () {
-        var $slides = $('<div>').addClass('slides'),
-        $audio = $('<div>').addClass('audio'),
-        $wrapper = $('<div>').addClass('slides-wrapper')
-        .append($slides).append($audio);
-
-        // Hide the main panel.
-        $('#screen').append($wrapper);
-
-        // Show the slides panel.
-        $slides.hide();
-        $wrapper.hide().fadeIn($.proxy($slides, 'fadeIn', 1000));
-
-        if (this.intro)
-          this.generator.addGenerator(this.intro);
-        else {
-          this.intro = new IntroductionSlideGenerator(this.beginTopic);
-          this.intro.init();
-          this.generator.addGenerator(this.intro);
-        }
-
-        this.topicToTopic = new TopicToTopicSlideGenerator(this.beginTopic);
-        this.generator.addGenerator(this.topicToTopic);
-        this.topicToTopic.setEndTopic(this.endTopic);
-
-        this.generator.addGenerator(new OutroductionSlideGenerator(this.profile || this.beginTopic, this.endTopic));
-
-        // Start the slide show.
-        var presenter = new SlidePresenter($slides, this.generator, $audio);
-        presenter.start();
-      }
     };
-    
-    
 
-    return Application;
+    return PiecesUI;
   });
