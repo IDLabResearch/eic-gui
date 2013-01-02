@@ -25,19 +25,11 @@ define(['lib/jquery', 'eic/FacebookConnector',
         this.facebookConnector.on('connected', function (event, profile) {
           self.profile = profile;
           self.topicSelector.selectTopic().then(
-            function (startTopic) {
-              self.startTopic = startTopic;
-              self.intro = new IntroductionSlideGenerator(startTopic, profile);
-              // Start initializing right away, avoiding delay when starting the movie
-              self.intro.init();
-            },
-            function (error) {
-              self.intro = new ErrorSlideGenerator(error);
-              self.startTopic = error;
-            });
+            function (startTopic) { self.startTopic = startTopic; },
+            function (error) { self.startTopic = new Error(error); });
         });
         this.facebookConnector.on('disconnected', function () {
-          delete self.intro;
+          delete self.profile;
           delete self.startTopic;
         });
       },
@@ -51,6 +43,7 @@ define(['lib/jquery', 'eic/FacebookConnector',
       playMovie: function () {
         if (!this.startTopic) throw "No start topic selected.";
         if (!this.endTopic) throw "No end topic selected.";
+        if (!this.intro) throw "The introduction was not initialized";
 
         // Create the slides panel
         var $slides = $('<div>').addClass('slides'),
@@ -61,10 +54,6 @@ define(['lib/jquery', 'eic/FacebookConnector',
         // Hide the main panel and show the slides panel.
         $('#screen').append($wrapper);
         $wrapper.hide().fadeIn($.proxy($slides.hide(), 'fadeIn', 1000));
-
-        // Create the introduction if it does not exist yet
-        if (!this.intro)
-          this.intro = new IntroductionSlideGenerator(this.startTopic);
 
         // Add introduction, body, and outroduction generators
         this.generator.addGenerators([
@@ -77,6 +66,31 @@ define(['lib/jquery', 'eic/FacebookConnector',
         new SlidePresenter($slides, this.generator, $audio).start();
       }
     };
+
+    /* Properties */
+
+    // The startTopic property also initializes the introduction,
+    // so the movie can be buffered earlier and thus start faster.
+    Object.defineProperty(PresentationController.prototype, "startTopic", {
+      get: function () { return this._startTopic; },
+      set: function (startTopic) {
+        this._startTopic = startTopic;
+
+        // If no topic was selected, delete the introduction
+        if (!startTopic) {
+          delete this.intro;
+        }
+        // If the topic is an error, show the error slide
+        else if (startTopic instanceof Error) {
+          this.intro = new ErrorSlideGenerator(startTopic);
+        }
+        else {
+          // Start initializing the intro right away, avoiding delay when starting the movie
+          this.intro = new IntroductionSlideGenerator(startTopic, this.profile);
+          this.intro.init();
+        }
+      }
+    });
 
     return PresentationController;
   });
