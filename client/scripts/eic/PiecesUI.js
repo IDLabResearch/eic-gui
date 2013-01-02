@@ -1,5 +1,5 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
-  function ($, autocompleteTopic, drawPiece) {
+define(['lib/jquery', 'eic/AutocompleteTopic'],
+  function ($, autocompleteTopic) {
     "use strict";
 
     var pieceWidth = 120;
@@ -21,9 +21,32 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
 
         this.drawBigPieces($('#steps'));
       },
+      drawPiece: function ($elem, options) {
+        var x = options.x * (options.size - 0.22 * options.size) +
+                ((1 - (options.y % 2)) * 0.215 * options.size),
+            y = options.y * (options.size - 0.22 * options.size) +
+                ((options.x % 2) * 0.215 * options.size);
+
+        $elem.width(x + options.size).height(options.size);
+
+        return $('<div />')
+          .addClass('piece')
+          .css({
+            width: options.size,
+            height: options.size,
+            position: 'absolute',
+            left: x,
+            top: y,
+            '-webkit-transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
+            'background': 'url(' + options.img + ') no-repeat',
+            'background-size': '100% 100%'
+          })
+          .appendTo($elem.children('.pieces'));
+      },
+
       drawPieces: function ($title, nr, img, fontsize) {
         for (var i = 0; i < nr; i++) {
-          drawPiece($title, {
+          this.drawPiece($title, {
             x: i,
             y: 0,
             size: pieceWidth,
@@ -47,7 +70,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
         for (var i = 0; i < 2; i++) {
           for (var j = 0; j < 2; j++) {
 
-            var piece = drawPiece($title, {
+            var piece = this.drawPiece($title, {
               x: i,
               y: j,
               size: new_width,

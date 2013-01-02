@@ -51,17 +51,14 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
           })
           .success(function (response) {
             response.responseData.results.forEach(function (result) {
-              //*** HACK: change this to something else :)
-              //if (!(result.uri.indexOf('oliverscornwall.com'))) {
-                // preload the image to avoid broken images on slides
-                var image = new Image();
-                $(image).load(function () {
-                  // add the image if it loads and we still need slides
-                  if (self.slides.length < self.maxResults)
-                    self.addImageSlide(result.url);
-                });
-                image.src = result.url;
-              //}
+              // preload the image to avoid broken images on slides
+              var image = new Image();
+              $(image).load(function () {
+                // add the image if it loads and we still need slides
+                if (self.slides.length < self.maxResults)
+                  self.addImageSlide(result.url);
+              });
+              image.src = result.url;
             });
           });
           this.inited = true;
