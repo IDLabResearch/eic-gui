@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/logger', 'lib/jvent', 'config/URLs'],
+define(['lib/jquery', 'eic/Logger', 'lib/jvent', 'config/URLs'],
   function ($, Logger, EventEmitter, urls) {
     "use strict";
     var logger = new Logger("TTSService");
