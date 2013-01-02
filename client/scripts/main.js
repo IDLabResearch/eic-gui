@@ -23,11 +23,11 @@
       },
       'lib/jplayer.min': {
         deps: ['lib/jquery']
-      },
+      }
     },
   });
 
-  require(['eic/PresentationController', 'eic/PiecesUI'], function (PresentationController, PiecesUI) {
+  require(['eic/PresentationController', 'eic/PiecesUI', 'lib/prefixfree.min'], function (PresentationController, PiecesUI) {
     var controller = new PresentationController(),
         view = new PiecesUI(controller);
     controller.init();

@@ -17,13 +17,6 @@
   transition: transform @transform;
 }
 
-.transform (@transform) {
-  -moz-transform: @transform;
-  -webkit-transform: @transform;
-  -o-transform: @transform;
-  -ms-transform: @transform;
-  transform: @transform;
-}
 
 .center-child-vertically() {
   display: table;
@@ -159,6 +152,7 @@
   }
   
   .zoom {
-    .transform(scale(2) rotate(10deg));
+    transform: scale(2) rotate(10deg);
+    .transition(30s linear, 50% 50%);
   }
 }

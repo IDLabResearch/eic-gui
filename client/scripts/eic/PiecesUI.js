@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
+define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece', 'lib/prefixfree.dynamic-dom.min','lib/prefixfree.jquery'],
   function ($, autocompleteTopic, drawPiece) {
     "use strict";
 
@@ -93,9 +93,9 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
           window.setTimeout(callback, duration * 1000);
 
         return $elem.css({
-          '-webkit-animation-name': name,
-          '-webkit-animation-duration': duration + 's',
-          '-webkit-transition-timing-function': 'linear'
+          'animation-name': name,
+          'animation-duration': duration + 's',
+          'transition-timing-function': 'linear'
         });
       },
       initControls: function () {
@@ -137,9 +137,9 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
 
           self.animate($('#steps'), 'rotate1to2', 0.3)
           .css({
-            'left': -200,
-            'top': 250,
-            '-webkit-transform': 'rotate(-95deg)'
+            left: -200,
+            top: 250,
+            transform: 'rotate(-95deg)'
           });
 
           self.animate($('#piece_3, #step_3'), 'slide2', 0.5)
@@ -154,9 +154,9 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
               $('#piece_3, #step_3').hide();
             })
           .css({
-            'left': 0,
-            'top': 0,
-            '-webkit-transform': 'rotate(-5deg)'
+            left: 0,
+            top: 0,
+            transform: 'rotate(-5deg)'
           });
 
           self.animate($('#piece_3, #step_3'), 'slide2rv', 0.5);
@@ -169,9 +169,9 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
 
             self.animate($('#steps'), 'rotate2to3', 0.3)
             .css({
-              'left': 350,
-              'top': -200,
-              '-webkit-transform': 'rotate(95deg)'
+              left: 350,
+              top: -200,
+              transform: 'rotate(95deg)'
             });
 
             self.animate($('#piece_4, #step_4'), 'slide3', 0.5)
@@ -187,9 +187,9 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
                 $('#piece_4, #step_4').hide();
               })
             .css({
-              'left': -200,
-              'top': 250,
-              '-webkit-transform': 'rotate(-95deg)'
+              left: -200,
+              top: 250,
+              transform: 'rotate(-95deg)'
             });
 
             self.animate($('#piece_4, #step_4'), 'slide3rv', 0.5);
@@ -295,7 +295,7 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
           height: '0px',
           left: -3 * 0.88 * pieceWidth - 5,
           top:  400 - (pieceWidth * 8 * 2),
-          '-webkit-transform': 'rotate(0deg) scale(3, 3)'
+          transform: 'rotate(0deg) scale(3, 3)'
         });
       },
     };

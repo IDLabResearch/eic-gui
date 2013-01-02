@@ -18,7 +18,7 @@ define(['lib/jquery'],
         position: 'absolute',
         left: x,
         top: y,
-        '-webkit-transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
+        'transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
         'background': 'url(' + options.img + ') no-repeat',
         'background-size': '100% 100%'
       })

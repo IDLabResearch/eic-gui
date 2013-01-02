@@ -35,9 +35,6 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
           if (!this.hasNext())
             return;
 
-          //          var $title = $('<h1>').text(this.topic.label),
-          //          slide = this.createBaseSlide('title', $title, this.duration);
-
           var $title = $('<div />').addClass('title');
           
           var $content = $('<div />')
@@ -85,9 +82,9 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/DrawPiece'],
           slide.once('started', function () {
             $('#title_piece_1, #title_label_1')
             .css({
-              '-webkit-animation-name': 'slide2',
-              '-webkit-animation-duration': '0.5s',
-              '-webkit-transition-timing-function': 'linear'
+              'animation-name': 'slide2',
+              'animation-duration': '0.5s',
+              'transition-timing-function': 'linear'
             })
           });
                 

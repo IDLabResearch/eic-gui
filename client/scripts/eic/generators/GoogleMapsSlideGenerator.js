@@ -40,6 +40,7 @@ function ($, BaseSlideGenerator) {
                               src: "https://maps.google.com/maps" +
                                    "?t=h&z=14&output=embed&iwloc=near" +
                                    "&q=" + encodeURIComponent(this.topic.label) +
+                                   "&zoom=10" +
                                    "&hnear=" + encodeURIComponent(this.topic.label)
                              }),
           slide = this.createBaseSlide('map', $iframe, defaultDuration);

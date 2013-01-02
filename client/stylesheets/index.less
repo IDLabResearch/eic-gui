@@ -22,7 +22,7 @@
         padding: 30px 30px 30px 30px;
         width: 280px;
         text-align: center;
-        -webkit-transform: rotate(-15deg);
+        transform: rotate(-15deg);
       }
 
       #subtitle em {
@@ -54,24 +54,24 @@
       #title_1 {
         top:40px;
         left:20px;
-        -webkit-transform: rotate(-7deg);
+        transform: rotate(-7deg);
       }
       #title_2 {
         top: -40px;
         left: 520px;
-        -webkit-transform: rotate(-5deg);
+        transform: rotate(-5deg);
       }
       #title_3 {
         top: -20px;
         right: -300px;
-        -webkit-transform: rotate(10deg);
+        transform: rotate(10deg);
       }
 
       #play {
         position: absolute;
         bottom: 50px;
         right: 160px;
-        -webkit-transform: rotate(-10deg);
+        transform: rotate(-10deg);
         cursor: pointer;
       }
 
@@ -97,7 +97,7 @@
         position: absolute;
         top: 0px;
         left: 0px;
-        -webkit-transform: rotate(5deg);
+        transform: rotate(5deg);
         z-index: 2;
       }
 
@@ -156,12 +156,12 @@
 
       #step_3 {
         text-align: right;
-        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
       }
 
       #step_4 {
         text-align: left;
-        -webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg);
       }
 
       #step_1 .number, #step_3 .number  {
@@ -173,7 +173,7 @@
       }
 
       #piece_1 .close {
-        position:absolute;
+        position: absolute;
         color: #fff;
         font-family: BebasN;
         font-size: 40px;
@@ -187,7 +187,7 @@
         text-decoration: none;
         display: inline-block;
         padding: 4px 10px;
-        -webkit-border-radius: 5px;
+        border-radius: 5px;
         font: normal 14px/16px Helvetica, Arial, sans-serif;
         font-weight: bold;
         cursor: pointer;
@@ -225,93 +225,93 @@
         font-family: sans-serif;
       }
 
-      @-webkit-keyframes rotate1to2 {
+      @keyframes rotate1to2 {
         from {
-        left:0;
-        top:0;
-        -webkit-transform: rotate(5deg);
+        left: 0px;
+        top: 0px;
+        transform: rotate(5deg);
       }
       }
 
-      @-webkit-keyframes rotate2to3 {
+      @keyframes rotate2to3 {
         from {
-        left:-200;
-        top:250;
-        -webkit-transform: rotate(185deg);
+        left: -200px;
+        top:  250px;
+        transform: rotate(185deg);
       }
       }
 
-      @-webkit-keyframes rotate2to1 {
+      @keyframes rotate2to1 {
         from {
-        left:-200;
-        top:250;
-        -webkit-transform: rotate(-95deg);
+        left: -200px;
+        top: 250px;
+        transform: rotate(-95deg);
       }
       }
 
-      @-webkit-keyframes rotate3to2 {
+      @keyframes rotate3to2 {
         from {
-        left:200;
-        top:-250;
-        -webkit-transform: rotate(-185deg);
+        left: 200px;
+        top: -250px;
+        transform: rotate(-185deg);
       }
       }
 
-      @-webkit-keyframes slide2 {
+      @keyframes slide2 {
         from {
         left: 600px;
       }
       }
 
-      @-webkit-keyframes slide3 {
+      @keyframes slide3 {
         from {
         top: 600px;
       }
       }
 
-      @-webkit-keyframes slide2rv {
+      @keyframes slide2rv {
         to {
         left: 1000px;
       }
       }
 
-      @-webkit-keyframes slide3rv {
+      @keyframes slide3rv {
         to {
         top: 1000px;
       }
       }
 
-      @-webkit-keyframes rotateout {
+      @keyframes rotateout {
         from {
-        -webkit-transform: rotate(-10deg);
+        transform: rotate(-10deg);
         width: 120px;
         height: 120px;
         top: 420px;
         left: 550px;
       }
       }
-      @-webkit-keyframes rotatein {
+      @keyframes rotatein {
         to {
-        -webkit-transform: rotate(-10deg) rotateX(360deg);
+        transform: rotate(-10deg) rotateX(360deg);
         width: 120px;
         height: 120px;
         top: 420px;
         left: 550px;
-        display:none;
+        display: none;
       }
       }
 
-      @-webkit-keyframes moveToScreen {
+      @keyframes moveToScreen {
         from {
-        left:200px;
-        top:-250px;
+        left: 200px;
+        top: -250px;
         width: 854.4px;
         height: 480px;
-        -webkit-transform: rotate(175deg) scale(1,1);
+        transform: rotate(175deg) scale(1,1);
       }
       }
 
-      @-webkit-keyframes drop {
+      @keyframes drop {
         from {
         opacity: 0;
         width: 600px;
@@ -319,7 +319,7 @@
       }
       }
 
-      @-webkit-keyframes fadeIn {
+      @keyframes fadeIn {
         from {
         opacity: 0;
       }
@@ -328,11 +328,11 @@
       @font-face {
         font-family: BebasN;
         src: url('BebasNeue.otf');
-        font-weight:normal;
+        font-weight: normal;
       }
 
       @font-face {
         font-family: JennaSue;
         src: url('JennaSue.ttf');
-        font-weight:normal;
+        font-weight: normal;
       }
