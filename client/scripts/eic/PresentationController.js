@@ -1,8 +1,7 @@
 define(['lib/jquery', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
   'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
-  'eic/generators/ErrorSlideGenerator',
-  'eic/SlidePresenter', 'eic/TopicSelector'],
+  'eic/generators/ErrorSlideGenerator', 'eic/SlidePresenter', 'eic/TopicSelector'],
   function ($, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
     TopicToTopicSlideGenerator, CombinedSlideGenerator,
@@ -12,8 +11,9 @@ define(['lib/jquery', 'eic/FacebookConnector',
     function PresentationController() {
       this.facebookConnector = new FacebookConnector();
       this.topicSelector = new TopicSelector(this.facebookConnector);
-      this.generator = new CombinedSlideGenerator();
     }
+
+    /* Member functions */
 
     PresentationController.prototype = {
       init: function () {
@@ -47,23 +47,24 @@ define(['lib/jquery', 'eic/FacebookConnector',
 
         // Create the slides panel
         var $slides = $('<div>').addClass('slides'),
-        $audio = $('<div>').addClass('audio'),
-        $wrapper = $('<div>').addClass('slides-wrapper')
-                             .append($slides).append($audio);
+            $audio = $('<div>').addClass('audio'),
+            $wrapper = $('<div>').addClass('slides-wrapper')
+                                 .append($slides).append($audio);
 
-        // Hide the main panel and show the slides panel.
+        // Hide the main panel and show the slides panel
         $('#screen').append($wrapper);
         $wrapper.hide().fadeIn($.proxy($slides.hide(), 'fadeIn', 1000));
 
         // Add introduction, body, and outroduction generators
-        this.generator.addGenerators([
-          this.intro,
+        var generator = new CombinedSlideGenerator();
+        generator.addGenerators([
+          this.intro, // created by setting the startTopic property
           new TopicToTopicSlideGenerator(this.startTopic, this.endTopic),
           new OutroductionSlideGenerator(this.profile || this.startTopic, this.endTopic)
         ]);
 
         // Start the slide show.
-        new SlidePresenter($slides, this.generator, $audio).start();
+        new SlidePresenter($slides, generator, $audio).start();
       }
     };
 
@@ -75,20 +76,16 @@ define(['lib/jquery', 'eic/FacebookConnector',
       get: function () { return this._startTopic; },
       set: function (startTopic) {
         this._startTopic = startTopic;
+        delete this.intro;
 
-        // If no topic was selected, delete the introduction
-        if (!startTopic) {
-          delete this.intro;
-        }
         // If the topic is an error, show the error slide
-        else if (startTopic instanceof Error) {
+        if (startTopic instanceof Error)
           this.intro = new ErrorSlideGenerator(startTopic);
-        }
-        else {
-          // Start initializing the intro right away, avoiding delay when starting the movie
+        // Otherwise, create an actual introduction slide
+        else
           this.intro = new IntroductionSlideGenerator(startTopic, this.profile);
-          this.intro.init();
-        }
+        // Initialize the intro right away, avoiding delay when starting the movie
+        this.intro.init();
       }
     });
 
