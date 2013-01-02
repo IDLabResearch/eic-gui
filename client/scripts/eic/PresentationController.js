@@ -18,6 +18,7 @@ define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
 
     PresentationController.prototype = {
       init: function () {
+        logger.log("Initializing");
         var self = this;
         this.facebookConnector.init();
 
@@ -59,6 +60,7 @@ define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
         $wrapper.hide().fadeIn($.proxy($slides.hide(), 'fadeIn', 1000));
 
         // Add introduction, body, and outroduction generators
+        logger.log("Creating slides from", this.startTopic.label, "to", this.endTopic.label);
         var generator = new CompositeSlideGenerator();
         generator.addGenerators([
           this.intro, // created by setting the startTopic property
@@ -78,6 +80,7 @@ define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
     Object.defineProperty(PresentationController.prototype, "startTopic", {
       get: function () { return this._startTopic; },
       set: function (startTopic) {
+        logger.log("Start topic set to", startTopic.label);
         this._startTopic = startTopic;
         delete this.intro;
 
