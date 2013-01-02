@@ -59,7 +59,7 @@ define(['lib/jquery', 'eic/Logger', 'eic/TTSService',
           var tts = new TTSService(),
               self = this;
           tts.once('speechReady', function (event, data) {
-            self.durationLeft = data.snd_time;
+            self.durationLeft = Math.floor(data.snd_time);
             self.audioURL = data.snd_url;
             logger.log('Received speech for topic', self.topic.label);
             // When speech is received, 'remind' the presenter that the slides are ready
