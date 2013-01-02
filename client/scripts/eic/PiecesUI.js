@@ -278,8 +278,17 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'eic/DrawPiece'],
 
         this.animate($('#steps'), 'moveToScreen', 0.7,
           function () {
+            // Remove the input controls
             $('#frame').remove();
-            self.controller.playMovie();
+            // Try to start the movie
+            try {
+              self.controller.playMovie();
+            }
+            // Controller errors are emergency cases we cannot handle gracefully
+            catch (error) {
+              window.alert("Unexpected error: " + error);
+              window.location.reload();
+            }
           })
         .css({
           width: '0px',
