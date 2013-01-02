@@ -1,11 +1,11 @@
 define([ 'lib/jquery',
-  'eic/generators/CombinedSlideGenerator',
+  'eic/generators/CompositeSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/FBProfilePhotosGenerator',
   'eic/generators/GoogleImageSlideGenerator',
   'eic/generators/GoogleMapsSlideGenerator',
   'eic/TTSService'],
-  function ($, CombinedSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
+  function ($, CompositeSlideGenerator, TitleSlideGenerator, FBProfilePhotosGenerator,
     GoogleImageSlideGenerator, GoogleMapsSlideGenerator, TTSService) {
     "use strict";
 
@@ -14,14 +14,14 @@ define([ 'lib/jquery',
       if (!startTopic)
         throw "The IntroductionSlideGenerator has no starttopic";
 
-      CombinedSlideGenerator.call(this);
+      CompositeSlideGenerator.call(this);
       this.slides = [];
       this.profile = profile;
       this.startTopic = startTopic;
     }
 
     $.extend(IntroductionSlideGenerator.prototype,
-      CombinedSlideGenerator.prototype,
+      CompositeSlideGenerator.prototype,
       {
         init: function () {
           if (!this.inited) {
@@ -40,7 +40,7 @@ define([ 'lib/jquery',
         },
 
         next: function () {
-          var slide = CombinedSlideGenerator.prototype.next.apply(this);
+          var slide = CompositeSlideGenerator.prototype.next.apply(this);
           if (this.audioURL) {
             slide.audioURL = this.audioURL;
             delete this.audioURL;

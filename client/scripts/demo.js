@@ -24,7 +24,7 @@
     'eic/TTSService',
     'eic/generators/BaseSlideGenerator',
     'eic/generators/IntroductionSlideGenerator',
-    'eic/generators/CombinedSlideGenerator',
+    'eic/generators/CompositeSlideGenerator',
     'eic/generators/GoogleImageSlideGenerator',
     'eic/generators/TitleSlideGenerator',
     'eic/generators/TopicSlideGenerator',

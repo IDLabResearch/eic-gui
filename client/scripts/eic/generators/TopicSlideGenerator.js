@@ -1,12 +1,12 @@
 define(['lib/jquery',
   'eic/TTSService',
-  'eic/generators/CombinedSlideGenerator',
+  'eic/generators/CompositeSlideGenerator',
   'eic/generators/GoogleImageSlideGenerator',
   'eic/generators/GoogleMapsSlideGenerator',
   'eic/generators/DateSlideGenerator',
   'eic/generators/TitleSlideGenerator',
   'eic/generators/YouTubeSlideGenerator'],
-  function ($, TTSService, CombinedSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
+  function ($, TTSService, CompositeSlideGenerator, GoogleImageSlideGenerator, GoogleMapsSlideGenerator, DateSlideGenerator, TitleSlideGenerator, YouTubeSlideGenerator) {
     "use strict";
     
     /*
@@ -14,7 +14,7 @@ define(['lib/jquery',
     **/
 
     function TopicSlideGenerator(topic, description) {
-      CombinedSlideGenerator.call(this);
+      CompositeSlideGenerator.call(this);
       this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
 
       this.generators = [];
@@ -26,7 +26,7 @@ define(['lib/jquery',
     }
 
     $.extend(TopicSlideGenerator.prototype,
-             CombinedSlideGenerator.prototype,
+             CompositeSlideGenerator.prototype,
       {
         /** Checks whether at least one child generator has a next slide. */
         hasNext: function () {

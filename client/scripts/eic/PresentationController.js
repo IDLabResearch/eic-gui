@@ -1,10 +1,10 @@
 define(['lib/jquery', 'eic/FacebookConnector',
   'eic/generators/IntroductionSlideGenerator', 'eic/generators/OutroductionSlideGenerator',
-  'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CombinedSlideGenerator',
+  'eic/generators/TopicToTopicSlideGenerator', 'eic/generators/CompositeSlideGenerator',
   'eic/generators/ErrorSlideGenerator', 'eic/SlidePresenter', 'eic/TopicSelector'],
   function ($, FacebookConnector,
     IntroductionSlideGenerator, OutroductionSlideGenerator,
-    TopicToTopicSlideGenerator, CombinedSlideGenerator,
+    TopicToTopicSlideGenerator, CompositeSlideGenerator,
     ErrorSlideGenerator, SlidePresenter, TopicSelector) {
     "use strict";
 
@@ -56,7 +56,7 @@ define(['lib/jquery', 'eic/FacebookConnector',
         $wrapper.hide().fadeIn($.proxy($slides.hide(), 'fadeIn', 1000));
 
         // Add introduction, body, and outroduction generators
-        var generator = new CombinedSlideGenerator();
+        var generator = new CompositeSlideGenerator();
         generator.addGenerators([
           this.intro, // created by setting the startTopic property
           new TopicToTopicSlideGenerator(this.startTopic, this.endTopic),

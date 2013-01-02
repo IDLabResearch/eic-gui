@@ -2,7 +2,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
   "use strict";
 
   /** Generator that provides slides from child generators */
-  function CombinedSlideGenerator(generators) {
+  function CompositeSlideGenerator(generators) {
     BaseSlideGenerator.call(this);
     this.emitNewSlidesEvent = $.proxy(this, 'emit', 'newSlides');
 
@@ -12,7 +12,7 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
         this.addGenerator(generators[i], true);
   }
 
-  $.extend(CombinedSlideGenerator.prototype,
+  $.extend(CompositeSlideGenerator.prototype,
            BaseSlideGenerator.prototype,
   {
     /** Checks whether at least one child generator has a next slide. */
@@ -60,5 +60,5 @@ define(['lib/jquery', 'eic/generators/BaseSlideGenerator'], function ($, BaseSli
     },
   });
   
-  return CombinedSlideGenerator;
+  return CompositeSlideGenerator;
 });
