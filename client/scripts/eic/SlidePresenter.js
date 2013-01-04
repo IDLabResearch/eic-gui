@@ -1,4 +1,4 @@
-define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min'], function ($, Logger, JPlayer) {
+define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function ($, Logger, JPlayer, urls) {
   "use strict";
   var logger = new Logger("SlidePresenter");
 
@@ -14,7 +14,7 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min'], function ($, Logger, JPl
     this.$audioContainer.jPlayer({
       ready: function () {},
       errorAlerts: true,
-      swfPath: "/scripts/lib",
+      swfPath: urls.jplayerSWF,
       supplied: "mp3",
       wmode: "window"
     });
