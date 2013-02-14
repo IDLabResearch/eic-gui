@@ -1,3 +1,8 @@
+/*!
+ * EIC LoadingSlideGenerator
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(['lib/jquery', 'eic/Logger', 'eic/generators/BaseSlideGenerator'],
 function ($, Logger, BaseSlideGenerator) {
   "use strict";

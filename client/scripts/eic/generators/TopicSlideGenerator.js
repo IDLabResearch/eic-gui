@@ -1,3 +1,8 @@
+/*!
+ * EIC TopicSlideGenerator
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(['lib/jquery', 'eic/Logger', 'eic/TTSService',
   'eic/generators/CompositeSlideGenerator', 'eic/generators/GoogleImageSlideGenerator',
   'eic/generators/GoogleMapsSlideGenerator', 'eic/generators/DateSlideGenerator',

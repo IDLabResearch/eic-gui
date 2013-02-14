@@ -1,3 +1,8 @@
+/*!
+ * EIC Logger
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(function () {
   "use strict";
 

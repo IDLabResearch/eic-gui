@@ -1,3 +1,8 @@
+/*!
+ * EIC OutroductionSlideGenerator
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(['lib/jquery', 'eic/generators/BaseSlideGenerator', 'eic/TTSService'],
 function ($, BaseSlideGenerator, TTSService) {
   "use strict";

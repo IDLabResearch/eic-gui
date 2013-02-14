@@ -1,3 +1,8 @@
+/*!
+ * EIC PiecesUI
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
   function ($, autocompleteTopic) {
     "use strict";

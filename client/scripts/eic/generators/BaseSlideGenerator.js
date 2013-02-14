@@ -1,3 +1,8 @@
+/*!
+ * EIC BaseSlideGenerator
+ * Copyright 2012, Multimedia Lab - Ghent University - iMinds
+ * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
+ */
 define(['lib/jquery', 'lib/jvent'],
 function ($, EventEmitter) {
   "use strict";
