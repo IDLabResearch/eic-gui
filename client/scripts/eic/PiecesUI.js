@@ -6,6 +6,15 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
 
     function PiecesUI(presentationController) {
       this.controller = presentationController;
+      
+//      $(window).on('resize', function(){
+//        var sX = ($(this).width() / 800);
+//        var sY = ($(this).height() / 600);
+//        if (sX > sY)
+//          $('body').css('transform', 'scale(' + sY + ','  + sY + ')');
+//        else
+//          $('body').css('transform', 'scale(' + sX + ','  + sX + ')');
+//      });
     }
 
     PiecesUI.prototype = {
@@ -23,25 +32,25 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
       },
       drawPiece: function ($elem, options) {
         var x = options.x * (options.size - 0.22 * options.size) +
-                ((1 - (options.y % 2)) * 0.215 * options.size),
-            y = options.y * (options.size - 0.22 * options.size) +
-                ((options.x % 2) * 0.215 * options.size);
+        ((1 - (options.y % 2)) * 0.215 * options.size),
+        y = options.y * (options.size - 0.22 * options.size) +
+        ((options.x % 2) * 0.215 * options.size);
 
         $elem.width(x + options.size).height(options.size);
 
         return $('<div />')
-          .addClass('piece')
-          .css({
-            width: options.size,
-            height: options.size,
-            position: 'absolute',
-            left: x,
-            top: y,
-            'transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
-            'background': 'url(' + options.img + ') no-repeat',
-            'background-size': '100% 100%'
-          })
-          .appendTo($elem.children('.pieces'));
+        .addClass('piece')
+        .css({
+          width: options.size,
+          height: options.size,
+          position: 'absolute',
+          left: x,
+          top: y,
+          'transform': 'scale(' + (options.scaleX || 1) + ','  + (options.scaleY || 1) + ')',
+          'background': 'url(' + options.img + ') no-repeat',
+          'background-size': '100% 100%'
+        })
+        .appendTo($elem.children('.pieces'));
       },
 
       drawPieces: function ($title, nr, img, fontsize) {

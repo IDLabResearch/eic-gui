@@ -12,7 +12,9 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
     this.generator = generator;
 
     this.$audioContainer.jPlayer({
-      ready: function () {},
+      ready: function () {
+        
+      },
       errorAlerts: true,
       swfPath: urls.jplayerSWF,
       supplied: "mp3",
