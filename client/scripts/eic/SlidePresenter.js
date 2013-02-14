@@ -2,24 +2,22 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
   "use strict";
   var logger = new Logger("SlidePresenter");
 
+  // Init jPlayer
+  var $audioContainer = $('<div>').addClass('audio').appendTo($('body'));
+  $audioContainer.jPlayer({
+    errorAlerts: true,
+    swfPath: urls.jplayerSWF,
+    supplied: "mp3",
+    wmode: "window"
+  });
+
   /*
    * CLEANUP
    **/
 
-  function SlidePresenter(container, generator, audioContainer) {
+  function SlidePresenter(container, generator) {
     this.$container = $(container);
-    this.$audioContainer = $(audioContainer);
     this.generator = generator;
-
-    this.$audioContainer.jPlayer({
-      ready: function () {
-        
-      },
-      errorAlerts: true,
-      swfPath: urls.jplayerSWF,
-      supplied: "mp3",
-      wmode: "window"
-    });
   }
 
   SlidePresenter.prototype = {
@@ -39,9 +37,9 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
           nextSlide = self.generator.next();
 
           // If the next has audio, but playback is still going on
-          if (nextSlide.audioURL && !self.$audioContainer.data().jPlayer.status.paused)
+          if (nextSlide.audioURL && !$audioContainer.data().jPlayer.status.paused)
             // Wait until playback has ended to show the next slide
-            self.$audioContainer.one($.jPlayer.event.ended, showNext);
+            $audioContainer.one($.jPlayer.event.ended, showNext);
           else
             // The next slide can start, since no audio will overlap
             showNext();
@@ -76,7 +74,7 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
         // if slide contains a description, send it to TTS service
         if (currentSlide.audioURL) {
           logger.log("Audio found in slide", currentSlide.audioURL);
-          self.$audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
+          $audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
           logger.log("Playing", currentSlide.audioURL);
         }
         if (nextSlide.duration)

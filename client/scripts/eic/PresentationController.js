@@ -51,9 +51,8 @@ define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
 
         // Create the slides panel
         var $slides = $('<div>').addClass('slides'),
-            $audio = $('<div>').addClass('audio'),
             $wrapper = $('<div>').addClass('slides-wrapper')
-                                 .append($slides).append($audio);
+                                 .append($slides);
 
         // Hide the main panel and show the slides panel
         $('#screen').append($wrapper);
@@ -69,7 +68,7 @@ define(['lib/jquery', 'eic/Logger', 'eic/FacebookConnector',
         ]);
 
         // Start the slide show.
-        new SlidePresenter($slides, generator, $audio).start();
+        new SlidePresenter($slides, generator).start();
       }
     };
 
