@@ -1,7 +1,5 @@
-# Everything Is Connected
-=======
-Everything Is Connected User Interface
-=======
+# Everything Is Connected User Interface
+
 
 This application is developed by Multimedia Lab <http://www.mmlab.be>
 
