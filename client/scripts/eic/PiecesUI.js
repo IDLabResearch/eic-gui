@@ -11,7 +11,33 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
 
     function PiecesUI(presentationController) {
       this.controller = presentationController;
-      
+        // If the Hash already contains variables, let's play the video.
+        // Split the hash in variables
+        var tempitems = location.hash.substr(1,location.hash.length-1).split("&");
+        var items = [];
+        for(var i = 0; i < tempitems.length ; i ++){
+            var pair = tempitems[i].split("=");
+            items[pair[0]] = pair[1];
+        }
+
+        if(typeof items["start"] !== 'undefined' && typeof items["start-uri"] !== 'undefined'){
+            this.controller.startTopic = {
+                label: decodeURIComponent(items["start"]),
+                uri: decodeURIComponent(items["start-uri"])
+            };
+        }
+
+        if(typeof items["end"] !== 'undefined' && typeof items["end-uri"] !== 'undefined'){
+            this.controller.endTopic = {
+                label: decodeURIComponent(items["end"]),
+                uri: decodeURIComponent(items["end-uri"])
+            };
+        }
+
+        if(typeof items["start"] !== 'undefined' && typeof items["end"] !== 'undefined'){
+            this.drawScreen($('#screen'));
+        }
+
 //      $(window).on('resize', function(){
 //        var sX = ($(this).width() / 800);
 //        var sY = ($(this).height() / 600);
@@ -291,6 +317,8 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
           label: $('#starttopic').val(),
           uri: $('#starttopic').data('uri') || ''
         };
+        location.hash = "#start=" + encodeURIComponent($('#starttopic').val()) + "&start-uri=" + encodeURIComponent($('#starttopic').data('uri') || '');
+        this.hash = location.hash;
         var valid = this.controller.startTopic.uri.length > 0;
         // Enable second step if the topic is valid.
         this.disableElement($('#step_1 .next'), !valid);
@@ -303,7 +331,8 @@ define(['lib/jquery', 'eic/AutocompleteTopic', 'lib/prefixfree.jquery'],
           uri: $('#endtopic').data('uri') || ''
         };
         var valid = this.controller.endTopic.uri.length > 0;
-
+        location.hash = this.hash + "&end=" + encodeURIComponent($('#endtopic').val()) + "&end-uri=" + encodeURIComponent($('#endtopic').data('uri') || '');
+        
         // Enable third step if the topic is valid.
         this.disableElement($('#step_3 .next'), !valid);
       },
