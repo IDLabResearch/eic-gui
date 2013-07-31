@@ -4,7 +4,6 @@
 
 To install Everything is Connected on your machine you need:
  * Node.js
- * make
 
 Install Everything is connected as follows
 
