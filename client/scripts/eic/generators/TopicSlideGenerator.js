@@ -1,5 +1,8 @@
 /*!
  * EIC TopicSlideGenerator
+ * 
+ * This class creates all slides for a perticular topic. It's responsible of the sound attachment.
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */

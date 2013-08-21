@@ -1,5 +1,8 @@
 /*!
  * EIC BaseSlideGenerator
+ * 
+ * This class is the base for any SlideGenerator
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */

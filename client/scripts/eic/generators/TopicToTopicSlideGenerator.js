@@ -1,5 +1,9 @@
 /*!
  * EIC TopicToTopicSlideGenerator
+ * 
+ * This class requests a path based on two endpoints, 
+ * and calls other SlideGenerators to create a sequence of slides. 
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */

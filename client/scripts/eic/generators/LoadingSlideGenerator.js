@@ -1,5 +1,8 @@
 /*!
  * EIC LoadingSlideGenerator
+ * 
+ * This class creates a loading slide for when waiting for service response
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */

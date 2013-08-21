@@ -1,5 +1,8 @@
 /*!
  * EIC FBProfilePhotosGenerator
+ * 
+ * This class generates slides from a users facebook profile, and show some pictures.
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */

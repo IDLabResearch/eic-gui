@@ -1,5 +1,8 @@
 /*!
  * EIC CompositeSlideGenerator
+ * 
+ * This class can hold several SlideGenerators and conbine their outputs
+ * 
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */
