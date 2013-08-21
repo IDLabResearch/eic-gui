@@ -63,6 +63,7 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
         // start the transition of other children
         var children = self.$container.children();
         children.addClass('transition-out');
+        //Remove from DOM when CSS transition is over
         window.setTimeout(function () {
           children.remove();
         }, 1000);
@@ -74,14 +75,16 @@ define(['lib/jquery', 'eic/Logger', 'lib/jplayer.min', 'config/URLs'], function 
         // stop the previous slide
         if (currentSlide)
           currentSlide.stop();
+        
         currentSlide = nextSlide;
 
-        // if slide contains a description, send it to TTS service
+        // if slide contains a audio url attached, play it
         if (currentSlide.audioURL) {
           logger.log("Audio found in slide", currentSlide.audioURL);
           $audioContainer.jPlayer("setMedia", {mp3: currentSlide.audioURL}).jPlayer("play");
           logger.log("Playing", currentSlide.audioURL);
         }
+        //Make sure next slide plays after current one is expired
         if (nextSlide.duration)
           window.setTimeout(loadNext, nextSlide.duration);
       }
