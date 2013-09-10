@@ -153,40 +153,15 @@ function ($, BaseSlideGenerator) {
     }
     var inspected = 0;
     var resultCounter = startResults;
-    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResult + '&orderby=' + self.orderMethod + '&alt=jsonc&q=' + self.topic.label)
+    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResult + '&orderby=' + self.orderMethod + '&alt=jsonc&q=' + self.topic.label + "&format=5")
      .success(function (response) {
-        var nrOfItems = response.data.items.length;
-        response.data.items.forEach(function (item) {
-          if (inspected >= skip && item.restrictions === undefined) {
-            $.ajax('http://www.youtube.com/get_video_info?video_id=' + item.id + '&el=embedded')
-            .success(function (res) {
-              if (res.substr(0, 11) != 'status=fail' && resultCounter != self.maxVideoCount) {
-                self.addVideoSlide(item.id, item.duration * 1000);
-                resultCounter++;
-              }
-            })
-            .always(function (res) {
-              inspected++;
-              if (resultCounter != self.maxVideoCount) {
-                checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
-              }
-            });
-          } else {
-            inspected++;
-            if (resultCounter != self.maxVideoCount) {
-              checkStatus(self, inspected, nrOfItems, maxResult, resultCounter);
-            }
-          }
-        });
+        var items = response.data.items,
+            itemCount = Math.min(items.length, self.maxVideoCount);
+        for (var i = 0; i < itemCount; i++)
+          self.addVideoSlide(items[i].id, items[i].duration * 1000);
       });
   }
-  
-  function checkStatus(self, inspected, nrOfItems, maxResult, foundResults) {
-    if (inspected == nrOfItems && nrOfItems == maxResult && maxResult != 50) {
-      searchVideos(self, foundResults, maxResult * 2, inspected);
-    }
-  }
-  
+
   return YouTubeSlideGenerator;
 });
 
