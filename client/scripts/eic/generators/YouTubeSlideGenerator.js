@@ -49,7 +49,7 @@ function ($, BaseSlideGenerator) {
         return;
       
       var self = this;
-      $.getScript("http://www.youtube.com/player_api", function () {
+      $.getScript("https://www.youtube.com/iframe_api", function () {
         searchVideos(self, 0, self.maxVideoCount, 0);
       });
       
@@ -75,7 +75,7 @@ function ($, BaseSlideGenerator) {
         // as soon as the video plays, pause it...
         player.addEventListener('onStateChange', function () {
           // ...but only if we're still in preparation mode (and not playing for real)
-          if (self.status === "preparing" && player.getPlayerState() == window.YT.PlayerState.PLAYING)
+          if (self.status === "preparing" && player.getPlayerState() == YT.PlayerState.PLAYING)
             player.pauseVideo();
         });
       }
@@ -99,7 +99,7 @@ function ($, BaseSlideGenerator) {
                                  .css({ width: 0, height: 0, overflow: 'hidden' });
       $('body').append($container);
       // create the player in the container
-      var player = this.player = new window.YT.Player(playerId, {
+      var player = this.player = new YT.Player(playerId, {
         playerVars: {
           autoplay: 0,
           controls: 0,
