@@ -1,14 +1,24 @@
 /*!
  * EIC YouTubeSlideGenerator
- * 
+ *
  * This class generates slides that contain YouTube videos
- * 
+ *
+ * The videos are discovered using version 3 of the Youtube API. See
+ * https://developers.google.com/youtube/v3/
+ *
+ * An API key needs to be configured in config/APIKeys under the property
+ * "youtube". How to obtain such a key is described in
+ * https://developers.google.com/youtube/v3/getting-started
+ *
  * Copyright 2012, Multimedia Lab - Ghent University - iMinds
  * Licensed under GPL Version 3 license <http://www.gnu.org/licenses/gpl.html> .
  */
-define(['lib/jquery', 'eic/generators/BaseSlideGenerator'],
-function ($, BaseSlideGenerator) {
+define(['lib/jquery', 'eic/Logger', 'eic/generators/BaseSlideGenerator', 'config/APIKeys'],
+function ($, Logger, BaseSlideGenerator, apiKeys) {
   "use strict";
+  var logger = new Logger("YouTubeSlideGenerator");
+
+  var apiKey = apiKeys.youtube;
   
   /*
    * CLEANUP
@@ -147,24 +157,80 @@ function ($, BaseSlideGenerator) {
     },
   });
   
+  /** Search videos based on the topic's label
+   * This uses the search to get a list of matching videos and then the video
+   * resource to query their length.
+   *
+   * https://developers.google.com/youtube/v3/docs/search/list
+   * https://developers.google.com/youtube/v3/docs/videos
+   */
   function searchVideos(self, startResults, maxResult, skip) {
     if (maxResult > 50) { //YouTube API restriction
       maxResult = 50;
     }
     var inspected = 0;
     var resultCounter = startResults;
-    $.ajax('https://gdata.youtube.com/feeds/api/videos?v=2&max-results=' + maxResult + '&orderby=' + self.orderMethod + '&alt=jsonc&q=' + self.topic.label + "&format=5")
-     .success(function (response) {
-        var items = response.data.items,
+    var query_data = {
+      part: 'snippet',
+      maxResults: maxResult,
+      order: self.orderMethod,
+      type: 'video',
+      videoEmbeddable: 'true',
+      key: apiKey,
+      q: self.topic.label
+    };
+    logger.log("Searching on Youtube for ", query_data);
+    $.ajax({
+      url: 'https://www.googleapis.com/youtube/v3/search',
+      data: query_data,
+      dataType: 'json',
+      jsonp: false
+    }).done(function (data) {
+      var ids = data.items.map(function (item) { return item.id.videoId; });
+      $.ajax({
+        url: 'https://www.googleapis.com/youtube/v3/videos',
+        data: {
+          part: 'contentDetails',
+          id: ids.join(','),
+          key: apiKey
+        },
+        dataType: 'json',
+        jsonp: false
+      }).done(function (data) {
+        var items = data.items,
             itemCount = Math.min(items.length, self.maxVideoCount);
-        for (var i = 0; i < itemCount; i++)
-          self.addVideoSlide(items[i].id, items[i].duration * 1000);
+        for (var i = 0; i < itemCount; i++) {
+          var duration_iso = items[i].contentDetails.duration;
+          var duration_ms = parseISO8601Duration(duration_iso);
+          logger.log("Discovered video with id", items[i].id, "and duration", duration_iso, "==", duration_ms, "ms");
+          self.addVideoSlide(items[i].id, duration_ms);
+        }
       });
+    });
+  }
+
+  /** Convert ISO8601 duration to ms
+   * This is an incomplete implementation which likely works only for youtube.
+   */
+  function parseISO8601Duration(duration_iso) {
+    // Poor man's parsing of ISO 8601 duration
+    var duration_regex = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+    var match = duration_regex.exec(duration_iso);
+    var duration_ms;
+    if (match) {
+      duration_ms = 0;
+      if (match[1]) { duration_ms += parseInt(match[1], 10) * 3600 * 1000; }
+      if (match[2]) { duration_ms += parseInt(match[2], 10) * 60 * 1000; }
+      if (match[3]) { duration_ms += parseInt(match[3], 10) * 1000; }
+    }
+    if (!duration_ms) {
+      logger.log("Could not parse duration " + duration_iso + ". Assuming 1 day.");
+      duration_ms = 24 * 3600 * 1000;
+    }
+    return duration_ms;
   }
 
   return YouTubeSlideGenerator;
 });
-
-
 
 
